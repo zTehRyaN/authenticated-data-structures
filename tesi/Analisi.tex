@@ -200,15 +200,16 @@
 %		Qui si parla della skiplist autenticata, facendo chiaramente riferimento alla skiplist base, sia nella definizione,
 %		sia nella descrizione delle operazioni
 
-	Una skip list autentiticata, come detto, è una particolare implementazione di un ADS, che si basa su skip list, e sulla quale è applicata una funzione crittografica di hash $ h $. Ad ogni nodo dunque sarà associato un valore, e la funzione $ h $ non farà altro che calcolare il root hash di struttura. Quest'ultimo sarà rigidamente dipendente sia dai valori di ogni nodo che dalla loro posizione reciproca. Da questo calcolo sono esclusi i nodi sentinella.
+	Una skip list autentiticata, come detto, è una particolare implementazione di un ADS, che si basa su skip list, e sulla quale è applicata una funzione crittografica di hash $ h $. La struttura dunque aggiungerà alla funzione di memorizzare un insieme di valori, in maniera ordinata, le caratteristiche tipiche di un ADS. Ogni nodo conterrà un hash dei dati di alcuni altri nodi adiacenti. Intuitivamente, il suo hash potrebbe essere in funzione di $ w = right(v) $ e $ u = down(u) $. Questo schema confluirà nel root hash, ovvero nel $ digest $ dell'intera skip list, il quale sarà memorizzato nello $start node$.
+	Il root hash, per definizione e per costruzione, sarà rigidamente dipendente sia dai valori di ogni nodo che dalla loro posizione reciproca. Da questo calcolo sono esclusi i nodi sentinella.
 	
 		\subsubsection{Schema hashing}
 	
-	%		In questa sottosezione ci si riallaccia alla sezione sull'Hashing Commutativo e semplicemente
+	%		In questa sottosezione ci si riallaccia alla sezione sull'Hashing non-commutativo e semplicemente
 	%		si definisce la sua applicazione alla skiplist autenticata. Nella sezione sopra l'argomento è affrontato in maniera più
 	%		teorica, preliminare, e isolata. Qui invece si sottolinea l'aspetto pratico sulla struttura dati.
 	
-	
+		Il calcolo 
 	
 		\subsubsection{Operazioni}
 		
