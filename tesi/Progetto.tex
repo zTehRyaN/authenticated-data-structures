@@ -1,0 +1,79 @@
+\section{Class Diagrams}
+
+	Sottolineare il target di tecnologie per cui è effettuata la progettazione. Queste non verranno citate all'interno del capitolo
+	di Progetto ma il seguente capitolo di Realizzazione, introducendo banalmente le tecnologie utilizzate, dovrà poter
+	calzare perfettamente e dovrà facilmente potersi riallacciare a quanto detto in questo capitolo.
+
+	In questa sezione si ripercorrono gli stessi argomenti della parte di analisi, in parallelo, ma focalizzandosi sulle scelte di
+	progetto. Queste dovranno essere motivate e lo scopo di questa porzione di testo è di definire le varie parti e la loro 
+	collaborazione. Il livello di dettaglio non sarà massimo in quanto nelle successive sezioni si entrerà nello specifico.
+
+	{Diagrammi} Class diagrams UML o analoghi più efficaci per il comportamento dinamico
+	{Immagini}
+
+\section{API}
+
+	{Analisi prettamente tecnologica}
+	
+	Qui, sulla base di quanto detto nella sezione di analisi, si inizia a mettere insieme le varie parti per descrivere più
+	nel dettaglio l'API dal punto di vista progettuale. Già nella prima parte di analisi è stato introdotto a grandi linee il funzionamento.
+	
+	Il focus è sulle scelte progettuali. Evidenziare dunque i punti di forza e le scelte a livello di pattern.
+	
+	\subsection{Skiplist Autenticata}
+		
+		Qui si entra in dettaglio sulla struttura principale, autenticata. Quindi vengono analizzate più nel dettaglio alcune scelte progettuali
+		su questa struttura
+	
+	\subsection{Schema hashing}
+	
+		Breve sezione che riprende l'argomento dell'hashing e che lo analizza concentrandosi sulle scelte progettuali.
+		
+	\subsection{Proof}
+	
+		Qui si entra in dettaglio sulla struttura secondaria, con dettagli di autenticazione. Quindi vengono analizzate più nel dettaglio alcune scelte progettuali
+		su questa struttura
+	
+\section{Persistenza}
+
+	Introduzione al discorso sulla persistenza, riallacciandosi a ciò che è stato detto nella parte di analisi.
+	
+	VISTO CHE NON SARA' PRESENTE UNA PARTE DI REALIZZAZIONE PER LA PARTE DI PERSISTENZA, E DUNQUE
+	NON SARA' POSSIBILE PARLARE DELLA TECNOLOGIE UTILIZZATE, CERCARE DI SOTTOLINEARLO INDIRETTAMENTE QUI,
+	PUR SEMPRE APPUNTO NON CITANDO ESATTAMENTE LE TECNOLOGIE CHE SI E' PENSATO DI APPLICARE.
+		
+	\subsection{Studi teorici}
+		
+		Qui viene affrontato il problema dal punto di vista teorico, con particolare attenzione a sottolineare i problemi teorici derivati dallo studio 
+		teorico operato per quanto riguarda la persistenza di una struttura dati su base di dati NoSQL. Qui darei un accento più teorico, mentre le 
+		scelte progettuali che ne possono derivare, le descriverei nelle successive sezioni.
+		
+	\subsection{Progettazione}
+	
+	Questa è la sezione in cui si parla di tutto il progetto legato alla persistenza, e di come questo si lega al tutto.
+	E' importante qui accennare tutti gli attori e la loro interazione globale. Il focus è sulle scelte progettuali, e sui
+	pattern applicati, ma saranno descritti al massimo livello di dettaglio solo nelle sottosezioni successive.
+		
+	\subsection{Translator}
+	
+		Entro nel dettaglio del Translator, descrivendo compiti e giustificandolo tramite pattern
+		
+	\subsection{Connector}
+	
+		Entro nel dettaglio del Connector, descrivendo compiti e giustificandolo tramite pattern
+	
+	\subsection{CassandraService}
+	
+		Entro nel dettaglio del Service, descrivendo compiti e giustificandolo tramite pattern.
+		Enfasi su come questa parte sia un centro-stella per le altre parti progettuali
+		
+	\subsection{Comportamento asincrono}
+	
+		In base a quanto detto, sottolineare le decisioni progettuali e di come queste possano essere ottimizzate con
+		comportamento asincrono. Sottolineare bene che uno degli obiettivi è stato quello di minimizzare i round di 
+		query con Cassandra, e che questo è reso possibile da coroutine tipiche di linguaggi di programmazione OO moderni.
+			
+	\subsection{Caching}
+	
+		In questa parte si analizza il problema di caching con relativi problemi di "always-on". Descrivere compiti e giustificazioni
+		tramite pattern e future proofing. Giustificare anceh in funzione del contesto piu generale delle dimensioni dell'ADS (fare calcolo su stime)
