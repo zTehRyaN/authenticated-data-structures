@@ -179,12 +179,20 @@
 		\begin{itemize}
 			\item Le varie query, effettuate dal client, restituiranno oltre ai valori richiesti, anche una prova, detta $ Proof $. Tramite la proof ricevuta e il root hash locale, il client potrà verificare l'integrità del risultato della query.
 			
-			[IMMAGINE presa da appunti]
+			\begin{figure}
+				\centering
+				\includegraphics[scale=0.75]{figure/queryADS.eps}
+				\caption{\textbf{Query}: il client effettua una query e riceve oltre al risultato atteso, una proof per quel risultato. Effettua dunque il calcolo localmente sulla proof e verifica se corrisponde al root hash locale.}\label{fig:4}
+			\end{figure}
 			
 			\item Gli updates tuttavia, andranno a cambiare il $ dataset $ remoto, e dunque l'ADS presente sul cloud. Il client inoltre aggiorna il suo root hash locale con quello nuovo prodotto dall'ADS.
 			
-			[IMMAGINE presa da appunti]
-			
+			\begin{figure}
+				\centering
+				\includegraphics[scale=0.75]{figure/updateADS.eps}
+				\caption{\textbf{Update}: il client richiede al server la proof su un valore da aggiornare. Può, a questo punto, aggiornare il root hash locale e inviare il nuovo valore al server. Suo è, successivamente, il compito di aggiornare l'ADS, $ refresh $ in figura.}\label{fig:5}
+			\end{figure}
+		
 		\end{itemize}
 	
 		Dunque, updates effettuati da un qualsiasi client, su un qualsiasi valore della struttura, si ripercuoteranno sul root hash della struttura, permettendo il rilevamento delle modifiche ad ogni altro client, in tutte le successive query.
