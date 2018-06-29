@@ -170,7 +170,11 @@
 		Una struttura dati autenticata, abbreviato $ ADS $, è una struttura dati che è adatta a controlli sulla sua integrità, cosi come su porzioni di essa. Memorizza valori e associa una funzione crittografica di hash $ h $ con il suo contenuto. L'output prodotto da questa funzione è detto $root hash$ e possiede lunghezza finita. Tramite una ADS, dunque, un client può rilevare piccoli cambiamenti all'interno di un $ dataset $ anche molto grande, in maniera efficiente.
 		La sua applicazione in ambiente cloud risulta particolarmente proficua in quanto generalmente permette di ottenere elevate garanzie su sicurezza, autenticazione e verifica di integrità dei dati. Tutto questo rispettando la dicotomia tra l'ambiente di storage locale, limitato ma fidato, $ trusted $, e l'ambiente cloud, virtualmente illimitato, ma non fidato. Il razionale alla base consiste nel memorizzare un grande $ dataset$ sul cloud, equipaggiato dunque con una ADS, e mantenere soltanto il root hash localmente.
 		
-		[IMMAGINE trusted/untrusted presa da appunti]
+		\begin{figure}
+			\centering
+			\includegraphics[scale=0.75]{figure/trusted-untrusted.eps}
+			\caption{\textbf{Caso d'uso di ADS}: l'ADS può essere caricato sul cloud e applicato su uno $ storage $ regolare, mentre il client memorizza localmente il Root Hash. Lo storage non dovrebbe essere a conoscenza dell'ADS.}\label{fig:3}
+		\end{figure}
 		
 		\begin{itemize}
 			\item Le varie query, effettuate dal client, restituiranno oltre ai valori richiesti, anche una prova, detta $ Proof $. Tramite la proof ricevuta e il root hash locale, il client potrà verificare l'integrità del risultato della query.
