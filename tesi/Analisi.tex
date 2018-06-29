@@ -209,34 +209,74 @@
 	%		si definisce la sua applicazione alla skiplist autenticata. Nella sezione sopra l'argomento è affrontato in maniera più
 	%		teorica, preliminare, e isolata. Qui invece si sottolinea l'aspetto pratico sulla struttura dati.
 	
-		Il calcolo 
+		Il calcolo del root hash dunque è strettamente legato allo schema di hashing scelto, ovvero alla modalità secondo cui i singoli nodi calcolano il loro hash locale in funzione dei nodi adiacenti. Per questa analisi, si è deciso di seguire lo schema suggerito da Tamassia(2), con alcune piccole variazioni. 
+		Sia $ f(v) $ la funzione di hash di ogni singolo nodo, allora varrà che:
+		
+		\begin{enumerate}
+			\item Se $ u = null $, e cioè se il nodo $ v $ si trova sulla $ base list $:
+				\begin{itemize}
+					\item (a) Se $ w $ è un nodo $ tower $, allora $ f(v) = h(elem(v)) $.
+					\item (b) Se $ w $ è un nodo $ plateau $, allora  $ f(v) = h(h(elem(v)), f(w)) $.
+				\end{itemize}
+			\item Se $ u \ne null $, e cioè se il nodo $ v $ \underline{non} si trova sulla $ base list $:
+				\begin{itemize}
+					\item (a) Se $ w $ è un nodo $ tower $, allora $ f(v) = f(u) $. 
+					\item (b) Se $ w $ è un nodo $ plateau $, allora  $ f(v) = h(f(u), f(w)) $. 
+				\end{itemize}
+		\end{enumerate}
+	
+		[Immagine molto semplice di una skiplist con solo valori in cui si evidenzia la posizione del roothash e il fatto che gli altri confluiscano ad esso, con frecce di flusso]
 	
 		\subsubsection{Operazioni}
 		
-%			E' stata dedicata una sottosottosezione dedicata per la descrizione delle varie operazioni. Sezione analoga a quella sulla
-%			skiplist semplice. Ovviamente questa è sempre una parte di analisi pertanto le varie spiegazione saranno puramente concettuali,
+%			Sezione analoga a quella sulla skiplist semplice. Ovviamente questa è sempre una parte di analisi pertanto le varie spiegazione saranno puramente concettuali,
 %			algoritmiche e legate a formule, e non comprenderanno scelte di progettazione.
+
+			In quanto ADS, la skip list autenticata offrirà due tipologie di operazione:
 			
-	\subsection{Update}
+			\begin{itemize}
+				\item \textbf{Update}, ovvero la possibilità di fare inserimenti o cancellazioni.
+				\item \textbf{Query}, con la possibilità di ottenere un valore e verificare la sua integrità.
+			\end{itemize}
+			
+	\subsubsection{Update}
 	
 %		In questa parte si parla della principale operazione di questa struttura, in funzione proprio dell'utilizzo che se ne fa
 %		{Citazione del protocollo}
-			
+
+		{AGGIUNGERE CITAZIONE PROTOCOLLO E TESI GIANMARIA}
+
+		In base a quanto osservabile dai casi d'uso, l'$ update $ è l'operazione di primaria importanza. Nel momento in cui si vuole modificare, aggiungere o cancellare un valore nello $ storage $, la skip list autenticata deve aggiornarsi internamente, proprio a causa di questa modifica. Questo è possibile tramite l'operazione di update. Il client dunque, interagento con la struttura, dovrà specificare il tipo di operazione da svolgere (modifica, aggiunta o cancellazione) e il valore diretto interessato. 
+		A seguito dell'invocazione di questa operazione sull'ADS, i valori di hash dei singoli nodi devono essere aggiornati per riflettere il cambiamento che è avvenuto, e con essi il $ root hash $.
+		Nel caso di inserimento o cancellazione, la prima parte di esecuzione dell'operazione è identica a quella di una skip list semplice. Successivamente all'aggiunta/cancellazione del nodo interessato, viene utilizzata la pila precedentemente costituita per aggiornare gli hash dei nodi. Saranno infatti solamente i nodi presenti nella pila, ed eventualmente i suoi vicini di destra, grazie allo schema di hashing precedentemente presentato, a dover essere aggiornati. Pertanto ripercorrendo a ritroso tramite operazioni di $ pop $ la pila, la struttura dovrà ricalcolare le varie $ f(v) $ di questi nodi e nel caso di inserimento, dei nodi costituenti la nuova torre.
+		L'aggiunta in termini di costo computazionale dovuta a questa ulteriore operazione di aggiornamento degli hash, è proporzionale al numero di elementi presenti nella pila. Con alta probabilità l'operazione sarà eseguita in $\mathcal{O}(log{}n)$.
+		
+		[IMMAGINE CON DUE SKIPLIST PICCOLE AFFIANCATE IN CUI SI EVIDENZIA UN UPDATE DI MODIFICA CON FLUSSI]
+					
 	\subsection{Proof}
-	
-%		MODELLO FUNZIONALE, rimandando a parte successiva 
-%			
+		
 %		In questa sottosezione si parla del concetto di Proof, sia da un punto di vista concettuale, sottolineando la sua utilità
 %		e riallacciandosi a ciò che è stato detto in parti precedenti, sia da un punto di vista pratico. La parte implementativa con
 %		le varie scelte sarà affrontata nel capitolo dedicato al Progetto.
 %		{Anche qui supporto di citazione del protocollo}
+
+		{AGGIUNGERE CITAZIONE PROTOCOLLO E TESI GIANMARIA}
+
+		Prima di analizzare l'operazione di query, è necessario soffermarsi sul concetto di $ proof $, sopra solo accennato. La proof non è altro che un insieme di $ step $ da percorrere, secondo un preciso schema che rispecchia lo schema di hashing presente nella struttura dati autenticata, per ottenere il $ root hash $. Essa è utilizzato per ottenere una prova, appunto, della validità di un particolare elemento restituito da una query. Infatti oltre a ricevere un generico valore $ x $, il client ottiene anche una $ Proof(x) $, e potrà dunque verificare localmente la corrispondenza tra il proprio root hash locale, $ trusted Root Hash $, e quello ottenibile seguendo l'opportuna serie di passi sulla proof ottenuta, $ untrusted Root Hash $.
 		
-	\subsection{Verifica}
+		[IMMAGINE DI UNA SKIPLIST SENZA FLUSSI DOVE E' EVIDENZIATA LA PROOF PER UN DETERMINATO VALORE]
+ 		
+	\subsection{Query e Verifica}
 	
-%		Questa è più una sezione in cui si contestualizza il tutto, e si specifica come l'API rende ciò possibile. 
+%		Sezione in cui semplicemente si speiga come avviene una query e come è effettuata la verifica tramite la proof precedentemente descritta
 %		{Citazione di protocollo}
-%		{Immagini}
 %		{Schemi}
+
+		{AGGIUNGERE CITAZIONE PROTOCOLLO E TESI GIANMARIA}
+	
+		Analizzato il concetto di $ proof $ è possibile ora inserirlo nel più ampio contesto di una query. Un client, a seguito dell'esecuzione di una query su un determinato valore $ x $, otterrà una $ Proof(x) $ per quel determinato valore. Il client, che memorizza localmente il $ root hash $ di struttura, ripercorrerà gli $ step $ opportuni sulla proof, grazie alla conoscenza della particolare funzione crittografica di hash $ h $ correntemente attiva sull'ADS. (Deve cioè effettuare operazioni di hash, nel dato ordine, di tutta una sequenza di hash.) Otterrà dunque il $ root hash $ presente sul cloud e potrà verificare che questo corrisponda a quello locale. Nel caso in cui questo non accada, vorrà dire che l'integrità del valore ottenuto non è garantita, in quando sono state effettuate delle modifiche sulla struttura, ovvero sul $ dataset $. 
+			
+		[IMMAGINE CON UNA SKIPLIST DA UN LATO E DALL'ALTRO IL RISULTATO DI UNA QUERY OVVERO IL VALORE E LA PROOF, DOVE VIENE FATTO VEDERE IL CHECK SU UGUAGLIANZA DEI ROOTHASH]
 	
 \section{Persistenza}
 
