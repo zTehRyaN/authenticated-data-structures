@@ -161,12 +161,29 @@
 		Una struttura dati autenticata, abbreviato $ ADS $, è una struttura dati che è adatta a controlli sulla sua integrità, cosi come su porzioni di essa. Memorizza valori e associa una funzione crittografica di hash $ h $ con il suo contenuto. L'output prodotto da questa funzione è detto $root hash$ e possiede lunghezza finita. Tramite una ADS, dunque, un client può rilevare piccoli cambiamenti all'interno di un $ dataset $ anche molto grande, in maniera efficiente.
 		La sua applicazione in ambiente cloud risulta particolarmente proficua in quanto generalmente permette di ottenere elevate garanzie su sicurezza, autenticazione e verifica di integrità dei dati. Tutto questo rispettando la dicotomia tra l'ambiente di storage locale, limitato ma fidato, $ trusted $, e l'ambiente cloud, virtualmente illimitato, ma non fidato. Il razionale alla base consiste nel memorizzare un grande $ dataset$ sul cloud, equipaggiato dunque con una ADS, e mantenere soltanto il root hash localmente.
 		
+		[IMMAGINE trusted/untrusted presa da appunti]
+		
 		\begin{itemize}
 			\item Le varie query, effettuate dal client, restituiranno oltre ai valori richiesti, anche una prova, detta $ Proof $. Tramite la proof ricevuta e il root hash locale, il client potrà verificare l'integrità del risultato della query.
+			
+			[IMMAGINE presa da appunti]
+			
 			\item Gli updates tuttavia, andranno a cambiare il $ dataset $ remoto, e dunque l'ADS presente sul cloud. Il client inoltre aggiorna il suo root hash locale con quello nuovo prodotto dall'ADS.
+			
+			[IMMAGINE presa da appunti]
+			
 		\end{itemize}
 	
-		Dunque, updates effettuati da un qualsiasi client, su un qualsiasi valore della struttura, si ripercuoteranno sul root hash della struttura, permettendone il rilevamento, per ogni client, in tutte le successive query.
+		Dunque, updates effettuati da un qualsiasi client, su un qualsiasi valore della struttura, si ripercuoteranno sul root hash della struttura, permettendo il rilevamento delle modifiche ad ogni altro client, in tutte le successive query.
+		
+		Le più diffuse implementazioni di strutture dati autenticate sono:
+		
+		\begin{itemize}
+			\item Merkle Hash Tree (MHT);
+			\item Skip list autenticate.
+		\end{itemize}
+	
+		Il funzionamento di quest'ultima sarà approfondito nei successivi paragrafi.
 	
 \section{API}
 
@@ -176,13 +193,16 @@
 %	nel dettaglio l'API. Già nella prima parte è stato introdotto a grandi linee il funzionamento. Qui viene ripreso e
 %	approfondito, anche e sopratutto grazie alle sottosezioni successive. 
 	
-	\subsection{Skiplist Autenticata}
+	\subsection{Skip List Autenticata}
 	
 %		MODELLO FUNZIONALE, rimandando a parte successiva 
 %		
 %		Qui si parla della skiplist autenticata, facendo chiaramente riferimento alla skiplist base, sia nella definizione,
 %		sia nella descrizione delle operazioni
-%		
+
+	
+	
+	
 		\subsubsection{Operazioni}
 		
 %			E' stata dedicata una sottosottosezione dedicata per la descrizione delle varie operazioni. Sezione analoga a quella sulla
