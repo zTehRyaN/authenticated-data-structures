@@ -52,7 +52,11 @@
 	Per comodità delle future analisi si è deciso di adottare una terminologia simile allo scritto di Goodrich e Tamassia (2), a cui ci si rifarà anceh nel successivo sottoparagrafo, in cui per ogni nodo $ v $ della sottosequenza $ L_{i} $, è detto $ elem(v) $ l'elemento memorizzato in $ v $. Inoltre è detto $ down(v) $ il nodo della sottosequenza $ L_{i-1} $ che memorizza lo stesso valore di $ v $, a meno che non si tratti della $base list$, poiché in questo caso $down(v) = \boldmath{null}$.
 	Inoltre è detto $right(v)$ il nodo della sottosequenza $ L_{i} $ immediatamente alla destra di $v$, a meno che non si tratti di una sentinella di tipo $\infty$, per la quale $right(v) = \boldmath{null}$.
 		
-	{IMMAGINE SKIPLIST SIMILE A PAPER MA CON NUMERI DI METRO NEW YORK}
+	\begin{figure}
+		\centering
+		\includegraphics[scale=0.6]{figure/skiplist.eps}
+		\caption{Esempio di una Skip List}\label{fig:1}
+	\end{figure}
 		
 	\subsection{Operazioni principali}
 	
@@ -101,7 +105,11 @@
 			
 			La ricerca consiste dunque in un $ hop forward $ e un $ drop down $, fintanto che risulti possibile effettuare $ dropdown $.  Con questa sequenza di passi si raggiungerà un nodo sulla $ base list $: se vale che $ elem(v) = x $ allora la skip list contiene l'elemento $ x $. Se questa condizione non risulta vera, allora il nodo raggiunto tramite questa sequenza di passi sarà il nodo sulla $ base list $ con il valore più grande minore di $ x $. Per costruzione $ right(v) $ è il nodo sulla $ base list $ il cui elemento è il più piccolo maggiore di $ x $.
 			
-			{FIGURA CHE RICOPIA LA SKIP LIST DELLA FIGURA PRECEDENTE MA EVIDENZIANDO I NODI TOCCATI DALLA RICERCA}
+			\begin{figure}
+				\centering
+				\includegraphics[scale=0.6]{figure/search-66.eps}
+				\caption{Esempio di una Skip List}\label{fig:1}
+			\end{figure}
 			
 			Il costo computazionale dell'operazione di ricerca è dato dalla somma dei costi di attraversamento di tutti i livelli. Tuttavia ogni livello, tranne il primo, subisce un attraversamento parziale, in quanto il nodo di partenza non è il primo nodo della sequenza.
 			
