@@ -105,13 +105,14 @@
 			
 			La ricerca consiste dunque in un $ hop forward $ e un $ drop down $, fintanto che risulti possibile effettuare $ dropdown $.  Con questa sequenza di passi si raggiungerà un nodo sulla $ base list $: se vale che $ elem(v) = x $ allora la skip list contiene l'elemento $ x $. Se questa condizione non risulta vera, allora il nodo raggiunto tramite questa sequenza di passi sarà il nodo sulla $ base list $ con il valore più grande minore di $ x $. Per costruzione $ right(v) $ è il nodo sulla $ base list $ il cui elemento è il più piccolo maggiore di $ x $.
 			
+			Il costo computazionale dell'operazione di ricerca è dato dalla somma dei costi di attraversamento di tutti i livelli. Tuttavia ogni livello, tranne il primo, subisce un attraversamento parziale, in quanto il nodo di partenza non è il primo nodo della sequenza.
+			
+			
 			\begin{figure}
 				\centering
 				\includegraphics[scale=0.6]{figure/search-66.eps}
-				\caption{Esempio di una Skip List}\label{fig:1}
+				\caption{\textbf{Ricerca dell'elemento 66} nella Skip List della figura \ref{fig:1}. I nodi visitati e i collegamenti attraversati sono evidenziati con linee più spesse. Si noti che la ricerca, fallimentare, dell'elemento 70 produrrebbe lo stesso risultato.}\label{fig:2}
 			\end{figure}
-			
-			Il costo computazionale dell'operazione di ricerca è dato dalla somma dei costi di attraversamento di tutti i livelli. Tuttavia ogni livello, tranne il primo, subisce un attraversamento parziale, in quanto il nodo di partenza non è il primo nodo della sequenza.
 			
 			{EVENTUALE DIMOSTRAZIONE MIT}
 			
