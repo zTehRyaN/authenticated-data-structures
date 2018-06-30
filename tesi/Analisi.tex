@@ -4,7 +4,7 @@
 %	1. I vari casi d'uso funzione delle specifiche richieste per l'API
 %	2. I vari casi d'uso con estensioni di una eventuale applicazione di persistenza all'API
 
-% DIRE CHE L'UTILIZZO SARA' CONCORRENTE
+	
 
 
 \section{Modello di Dominio}
@@ -221,7 +221,7 @@
 %		Qui si parla della skiplist autenticata, facendo chiaramente riferimento alla skiplist base, sia nella definizione,
 %		sia nella descrizione delle operazioni
 
-	Una skip list autentiticata, come detto, è una particolare implementazione di un ADS, che si basa su skip list, e sulla quale è applicata una funzione crittografica di hash $ h $. La struttura dunque aggiungerà alla funzione di memorizzare un insieme di valori, in maniera ordinata, le caratteristiche tipiche di un ADS. Ogni nodo conterrà un hash dei dati di alcuni altri nodi adiacenti. Intuitivamente, il suo hash potrebbe essere in funzione di $ w = right(v) $ e $ u = down(u) $. Questo schema confluirà nel root hash, ovvero nel $ digest $ dell'intera skip list, il quale sarà memorizzato nello $start node$.
+	Una skip list autentiticata, come detto, è una particolare implementazione di un ADS, che si basa su skip list, e sulla quale è applicata una funzione crittografica di hash $ h $. La struttura dunque aggiungerà alla funzione di memorizzare un insieme di valori, in maniera ordinata, le caratteristiche tipiche di un ADS. Per permettere dunque sia l'ordinamento dei dati, sia l'applicazione di $ h $, si prende in esame una struttura  basata su coppie chiave-valore, entrambe di dimensione fissata a priori. In questo modo le chiavi permetteranno l'ordinamento dei dati, e i valori permetteranno l'applicazione dello schema di hashing, approfondito nel prossimo paragrafo. Ogni nodo conterrà, oltre alla chiave relativa alla torre su cui giace, un hash dei dati di alcuni altri nodi adiacenti. Intuitivamente, il suo hash potrebbe essere in funzione di $ w = right(v) $ e $ u = down(u) $. Questo schema confluirà nel root hash, ovvero nel $ digest $ dell'intera skip list, il quale sarà memorizzato nello $start node$.
 	Il root hash, per definizione e per costruzione, sarà rigidamente dipendente sia dai valori di ogni nodo che dalla loro posizione reciproca. Da questo calcolo sono esclusi i nodi sentinella.
 	
 		\subsubsection{Schema hashing}
