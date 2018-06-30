@@ -4,6 +4,8 @@
 %	1. I vari casi d'uso funzione delle specifiche richieste per l'API
 %	2. I vari casi d'uso con estensioni di una eventuale applicazione di persistenza all'API
 
+	\subsection{API}
+
 	La realizzazione dell'API, $ Application Programming Interface $, è da contestualizzarsi all'interno dell'attività progettuale di tirocinio, svolta assieme al collega Gianmaria Del Monte. Il sistema preso qui in esame, è uno studio e realizzazione di protocollo efficiente per l'integrità dei dati su Cloud nell'ambito di un progetto di ricerca(6) del professor Maurizio Pizzonia, svolto a più livelli di astrazione. Si richiama qui la parte svolta dal collega, di cui sul suo scritto(7) è operata una descrizione più dettagliata, con lo scopo di definire casi d'uso e requisiti necessari.
 	
 	Il contesto, in breve, prevede un numero variabile di $ client $, con una disponibilità limitata in termini di memorizzazione, $ storage $, ma che necessita di salvare una grande mole di dati. Questo sarà reso possibile da un $ server $, considerata parte non fidata, il cui compito comprenderebbe anche l'attuazione del protocollo, delegando a particolari client, detti $ autenticatori $, il compito di autenticare le richieste provenienti dai client. Questi ultimi provvederanno all'autenticazione tramite firme, con una criptazione asimmetrica, verificabili tramite dei $ certificati $, noti a tutti i client. L'autenticazione di un valore relativo ad una richiesta di un client, tuttavia, dipenderebbe dall'avvenuta firma delle richieste precedenti.
@@ -26,7 +28,15 @@
  		\item Una struttura dati autenticata in grado di effettuare una serie di update, e in grado di restituire una $ Proof $ cumulativa per questi update.
 	\end{itemize}
 	
-	REQUISITI
+	Oltre a i requisiti funzionali di cui sopra, altre specifiche di cui si è tenuto conto riguardano aspetti di $ usabilità $, nel fornire un'interfaccia di chiara e facile interpretazione ai fini dell'utilizzo dell'API, di $ prestazioni $, al fine di mirare al curve fitting con la complessità logaritmica, e di $ sostenibilità $, per garantire alta manutenibilità, verificabilità e configurabilità della API.
+	
+	Infine è doveroso menzionare i vincoli di progetto:
+	\begin{itemize}
+		\item Compatibilità della libreria con utilizzo concorrente.
+		\item Linguaggio di programmazione JVM-Oriented.
+	\end{itemize}
+
+	\subsection{Persistenza}
 
 \section{Modello di Dominio}
 
