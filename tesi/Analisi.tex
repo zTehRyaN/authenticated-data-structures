@@ -4,6 +4,21 @@
 %	1. I vari casi d'uso funzione delle specifiche richieste per l'API
 %	2. I vari casi d'uso con estensioni di una eventuale applicazione di persistenza all'API
 
+	La realizzazione dell'API, $ Application Programming Interface $, è da contestualizzarsi all'interno dell'attività progettuale di tirocinio, svolta assieme al collega Gianmaria Del Monte. Il sistema preso qui in esame, è uno studio e realizzazione di protocollo efficiente per l'integrità dei dati su Cloud nell'ambito di un progetto di ricerca(6) del professor Maurizio Pizzonia, svolto a più livelli di astrazione. Si richiama qui la parte svolta dal collega, di cui sul suo scritto(7) è operata una descrizione più dettagliata, con lo scopo di definire casi d'uso e requisiti necessari.
+	
+	Il contesto, in breve, prevede un numero variabile di $ client $, con una disponibilità limitata in termini di memorizzazione, $ storage $, ma che necessita di salvare una grande mole di dati. Questo sarà reso possibile da un $ server $, considerata parte non fidata, il cui compito comprenderebbe anche l'attuazione del protocollo, delegando a particolari client, detti $ autenticatori $, il compito di autenticare le richieste provenienti dai client. Questi ultimi provvederanno all'autenticazione tramite firme, con una criptazione asimmetrica, verificabili tramite dei $ certificati $, noti a tutti i client. L'autenticazione di un valore relativo ad una richiesta di un client, tuttavia, dipenderebbe dall'avvenuta firma delle richieste precedenti.
+	La forza del protocollo sta nella possibilità di attuazione di una architettura parallela di $ autenticatori $, i quali sarebbero in grado di autenticare un valore $ r_{i} $, anche se il valore precedente $ r_{i-1} $ non è ancora stato firmato. Dunque intuitivamente, l'autenticazione può avvenire in maniera $ condizionata $ rispetto alla $ catena $ di valori precedenti, permettendo al server di richiedere una autenticazione quando la precedente non è ancora finita.
+	
+	Fatte queste premesse, di seguito si elencano i casi d'uso della libreria(7):
+	
+	\begin{itemize}
+		\item Una struttura dati autenticata, impostata come $ key-value store $, in grado di fornire operazioni di lettura e di scrittura, per ADSManager
+		\item Una forma di prova di validità, nel seguito $ Proof $, per una o più chiavi presenti nella struttura
+		\item Possibilità di ottenere dalla struttura dati autenticata il $ digest $, nel seguito $ root Hash $, relativo a tutte le coppie chiave-valore presenti
+		\item Possibilità di ottenere dalla $ Proof $, il $ root Hash $ relativo alla chiave o all'insieme di chiavi sulle quali è costruita, per ProofVerifier
+		\item Capacità della $ Proof $ di aggiornarsi rispetto agli update che avvengono sulla struttura dati autenticata principale, per poter fornire il $ root Hash $ aggiornato, per RootHashCalculator.
+ 		\item Una struttura dati autenticata in grado di effettuare una serie di update, e in grado di restituire una $ Proof $ cumulativa per questi update.
+	\end{itemize}
 	
 
 
