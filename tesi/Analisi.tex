@@ -253,7 +253,13 @@
 %	nel dettaglio l'API. Già nella prima parte è stato introdotto a grandi linee il funzionamento. Qui viene ripreso e
 %	approfondito, anche e sopratutto grazie alle sottosezioni successive. 
 
-	Riallacciandomi a quanto detto nella sezione riguardante il modello di dominio, è possibile a questo punto aggiungere informazioni più precise. L'entità rappresentante la struttura dati autenticata, in base a vincoli di progetto, dovrà basarsi sulla Skip List. Si tratterà, dunque, di un $ key-value store $ capace di offrire servizi di update e query, generando anche le opportune $ Proof $ in base al particolare tipo di richiesta del client. L'elemento costituente della Skip List Autenticata, sarà un nodo, in grado sia di memorizzare la chiave relativa alla torre in cui si trova, sia gli hash dei nodi adiacenti. In questo modo la struttura potrà comportarsi come un'ADS a tutti gli effetti, in ottemperanza con i requisiti e con i casi d'uso. Il funzionamento preciso dell'API sarà affrontato con il dovuto dettaglio nella sezione di Progetto, mentre qui si vuole soprattutto spiegare il funzionamento concettuale e la collaborazione tra le parti.
+	Riallacciandomi a quanto detto nella sezione riguardante il modello di dominio, è possibile a questo punto aggiungere informazioni più precise. L'API girerà sul server, e dovrà consentire la gestione della simbiosi tra lo storage e appunto l'ADS. L'entità rappresentante la struttura dati autenticata, in base a vincoli di progetto, dovrà basarsi sulla Skip List. Si tratterà, dunque, di un $ key-value store $ capace di offrire servizi di update e query, generando anche le opportune $ Proof $ in base al particolare tipo di richiesta del client. L'elemento costituente della Skip List Autenticata, sarà un nodo, in grado sia di memorizzare la chiave relativa alla torre in cui si trova, sia gli hash dei nodi adiacenti. In questo modo la struttura potrà comportarsi come un'ADS a tutti gli effetti, in ottemperanza con i requisiti e con i casi d'uso. Il funzionamento preciso dell'API sarà affrontato con il dovuto dettaglio nella sezione di Progetto, mentre qui si vuole soprattutto spiegare il funzionamento concettuale e la collaborazione tra le parti.
+	
+	\begin{figure}
+		\centering
+		\includegraphics[scale=0.75]{figure/global.eps}
+		\caption{}\label{fig:8}
+	\end{figure}
 	
 	\subsection{Skip List Autenticata}
 	
