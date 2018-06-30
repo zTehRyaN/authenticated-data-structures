@@ -1,8 +1,8 @@
 \section{Casi d'Uso}
 
 %	Vengono qui descritti:
-%	1. I vari casi d'uso funzione delle specifiche richieste per l'API
-%	2. I vari casi d'uso con estensioni di una eventuale applicazione di persistenza all'API
+%	1subs. I vari casi d'uso funzione delle specifiche richieste per l'API
+%	2subs. I vari casi d'uso con estensioni di una eventuale applicazione di persistenza all'API
 
 	\subsection{API}
 
@@ -46,6 +46,9 @@
 
 %	In base ai casi d'uso e, in qualche modo, ai requisiti sopra citati viene illustrato un analogo di modello di dominio.
 	
+ 	Si procede, dunque, in questa sezione, dipendentemente dai casi d'uso e dai requisiti funzionali e non, sopra esposti, all'enumerazione dei concetti significativi nell'ambito di un modello di dominio. I concetti qui esposti, saranno poi più dettagliatamente spiegati nei successivi paragrafi, ma sono qui anticipati con lo scopo di fornire una rappresentazione visuale di entità concettuali rilevanti.
+ 	Ebbene, sicuramente sarà necessaria una classe che rappresenti la struttura dati autenticata, la quale dovrà essere in grado di offrire servizi di lettura e scrittura, rispettivamente di query e update. Essa inoltre deve essere in grado di fornire le $ Proof $ necessarie ai client o agli autenticatori per effettuare le prove di integrità dei dati. Allo stesso tempo la $ Proof $ deve saper fornire il $ root Hash $ relativo alle chiavi sulle quali è definita, e deve saper applicare degli update sulle suddette chiavi. Inoltre, intuitivamente, sarà necessario che due $ Proof $ per due diversi insiemi di chiavi, possano unirsi, tramite un $ merge $ dando vita ad una $ Proof $ valida per entrambi gli insieme di chiavi di partenza.
+ 	
 	
 \section{Skiplist}
 
