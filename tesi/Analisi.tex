@@ -336,7 +336,11 @@
 
 		Prima di analizzare l'operazione di query, è necessario soffermarsi sul concetto di $ proof $, sopra solo accennato. La proof non è altro che un insieme di $ step $ da percorrere, secondo un preciso schema che rispecchia lo schema di hashing presente nella struttura dati autenticata, per ottenere il $ root hash $. Essa è utilizzato per ottenere una prova, appunto, della validità di un particolare elemento restituito da una query. Infatti oltre a ricevere un generico valore $ x $, corrispondente ad una chiave $ k $, il client ottiene anche una $ Proof(k) $, e potrà dunque verificare localmente la corrispondenza tra il proprio root hash locale, $ trusted Root Hash $, e quello ottenibile seguendo l'opportuna serie di passi sulla proof ottenuta, $ untrusted Root Hash $.
 		
-		[IMMAGINE DI UNA SKIPLIST SENZA FLUSSI DOVE E' EVIDENZIATA LA PROOF PER UN DETERMINATO VALORE]
+	\begin{figure}
+		\centering
+		\includegraphics[scale=0.8]{figure/proofExample.eps}
+		\caption{\textbf{Esempio di una proof}: i nodi costituenti la proof per la chiave 'key 3' sono evidenziati, così come i collegamenti necessari a ripercorrere gli $ step $ per ottenere il root hash. Si osservi che la proof sarebbe stata la stessa per la chiave 'key 4' .}\label{fig:9}
+	\end{figure}
  		
 	\subsection{Query e Verifica}
 	
@@ -348,7 +352,6 @@
 	
 		Analizzato il concetto di $ proof $ è possibile ora inserirlo nel più ampio contesto di una query. Un client, a seguito dell'esecuzione di una query su una determinata coppia chiave-valore $ (k,x) $, otterrà una $ Proof(k) $ relativa a quella chiave. Il client, che memorizza localmente il $ root hash $ di struttura, ripercorrerà gli $ step $ opportuni sulla proof, grazie alla conoscenza della particolare funzione crittografica di hash $ h $ correntemente attiva sull'ADS. (Deve cioè effettuare operazioni di hash, nel dato ordine, di tutta una sequenza di hash.) Otterrà dunque il $ root hash $ presente sul cloud e potrà verificare che questo corrisponda a quello locale. Nel caso in cui questo non accada, vorrà dire che l'integrità del valore ottenuto non è garantita, in quando sono state effettuate delle modifiche sulla struttura, ovvero sul $ dataset $. 
 			
-		[IMMAGINE CON UNA SKIPLIST DA UN LATO E DALL'ALTRO IL RISULTATO DI UNA QUERY OVVERO IL VALORE E LA PROOF, DOVE VIENE FATTO VEDERE IL CHECK SU UGUAGLIANZA DEI ROOTHASH]
 	
 \section{Persistenza}
 
