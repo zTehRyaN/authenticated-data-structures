@@ -33,6 +33,7 @@
 	Infine è doveroso menzionare i vincoli di progetto:
 	\begin{itemize}
 		\item Compatibilità della libreria con utilizzo concorrente.
+		\item Utilizzo della Skip List come struttura di base per realizzare l'ADS.
 		\item Linguaggio di programmazione JVM-Oriented.
 	\end{itemize}
 
@@ -47,7 +48,7 @@
 %	In base ai casi d'uso e, in qualche modo, ai requisiti sopra citati viene illustrato un analogo di modello di dominio.
 	
  	Si procede, dunque, in questa sezione, dipendentemente dai casi d'uso e dai requisiti funzionali e non, sopra esposti, all'enumerazione dei concetti significativi nell'ambito di un modello di dominio. I concetti qui esposti, saranno poi più dettagliatamente spiegati nei successivi paragrafi, ma sono qui anticipati con lo scopo di fornire una rappresentazione visuale di entità concettuali rilevanti.
- 	Ebbene, sicuramente sarà necessaria una classe che rappresenti la struttura dati autenticata, la quale dovrà essere in grado di offrire servizi di lettura e scrittura, rispettivamente di query e update. Essa inoltre deve essere in grado di fornire le $ Proof $ necessarie ai client o agli autenticatori per effettuare le prove di integrità dei dati. Allo stesso tempo la $ Proof $ deve saper fornire il $ root Hash $ relativo alle chiavi sulle quali è definita, e deve saper applicare degli update sulle suddette chiavi. Inoltre, intuitivamente, sarà necessario che due $ Proof $ per due diversi insiemi di chiavi, possano unirsi, tramite un $ merge $ dando vita ad una $ Proof $ valida per entrambi gli insieme di chiavi di partenza.
+ 	Ebbene, sicuramente sarà necessaria un'entità che rappresenti la struttura dati autenticata, la quale dovrà essere in grado di offrire servizi di lettura e scrittura, rispettivamente di query e update. Essa inoltre deve essere in grado di fornire le $ Proof $ necessarie ai client o agli autenticatori per effettuare le prove di integrità dei dati. Allo stesso tempo la $ Proof $ deve saper fornire il $ root Hash $ relativo alle chiavi sulle quali è definita, e deve saper applicare degli update sulle suddette chiavi. Inoltre, intuitivamente, sarà necessario che due $ Proof $ per due diversi insiemi di chiavi, possano unirsi, tramite un $ merge $ dando vita ad una $ Proof $ valida per entrambi gli insieme di chiavi di partenza.
  	
 	
 \section{Skiplist}
@@ -251,6 +252,8 @@
 %	Qui, sulla base di quanto detto precedentemente, si inizia a mettere insieme le varie parti per descrivere più
 %	nel dettaglio l'API. Già nella prima parte è stato introdotto a grandi linee il funzionamento. Qui viene ripreso e
 %	approfondito, anche e sopratutto grazie alle sottosezioni successive. 
+
+	Riallacciandomi a quanto detto nella sezione riguardante il modello di dominio, è possibile a questo punto aggiungere informazioni più precise. L'entità rappresentante la struttura dati autenticata, in base a vincoli di progetto, dovrà basarsi sulla Skip List. Si tratterà, dunque, di un $ key-value store $ capace di offrire servizi di update e query, generando anche le opportune $ Proof $ in base al particolare tipo di richiesta del client. L'elemento costituente della Skip List Autenticata, sarà un nodo, in grado sia di memorizzare la chiave relativa alla torre in cui si trova, sia gli hash dei nodi adiacenti. In questo modo la struttura potrà comportarsi come un'ADS a tutti gli effetti, in ottemperanza con i requisiti e con i casi d'uso. Il funzionamento preciso dell'API sarà affrontato con il dovuto dettaglio nella sezione di Progetto, mentre qui si vuole soprattutto spiegare il funzionamento concettuale e la collaborazione tra le parti.
 	
 	\subsection{Skip List Autenticata}
 	
