@@ -9,6 +9,12 @@
 	Il contesto, in breve, prevede un numero variabile di $ client $, con una disponibilità limitata in termini di memorizzazione, $ storage $, ma che necessita di salvare una grande mole di dati. Questo sarà reso possibile da un $ server $, considerata parte non fidata, il cui compito comprenderebbe anche l'attuazione del protocollo, delegando a particolari client, detti $ autenticatori $, il compito di autenticare le richieste provenienti dai client. Questi ultimi provvederanno all'autenticazione tramite firme, con una criptazione asimmetrica, verificabili tramite dei $ certificati $, noti a tutti i client. L'autenticazione di un valore relativo ad una richiesta di un client, tuttavia, dipenderebbe dall'avvenuta firma delle richieste precedenti.
 	La forza del protocollo sta nella possibilità di attuazione di una architettura parallela di $ autenticatori $, i quali sarebbero in grado di autenticare un valore $ r_{i} $, anche se il valore precedente $ r_{i-1} $ non è ancora stato firmato. Dunque intuitivamente, l'autenticazione può avvenire in maniera $ condizionata $ rispetto alla $ catena $ di valori precedenti, permettendo al server di richiedere una autenticazione quando la precedente non è ancora finita.
 	
+	\begin{figure}
+		\centering
+		\includegraphics[scale=0.6]{figure/semicircles.eps}
+		\caption{Il server riceve e accumula un certo numero di updates e richiede poi l'autenticazione tramite una authentication request, riceverà poi una authentication reply non appena sarà avvenuta l'autenticazione}\label{fig:7}
+	\end{figure}
+	
 	Fatte queste premesse, di seguito si elencano i casi d'uso della libreria(7):
 	
 	\begin{itemize}
@@ -20,7 +26,7 @@
  		\item Una struttura dati autenticata in grado di effettuare una serie di update, e in grado di restituire una $ Proof $ cumulativa per questi update.
 	\end{itemize}
 	
-
+	REQUISITI
 
 \section{Modello di Dominio}
 
