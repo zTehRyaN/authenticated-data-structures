@@ -39,7 +39,7 @@
 			\item \textbf{V}: il tipo dei valori presenti nello \textit{storage}. 
 		\end{itemize}
 	
-		Questa scelta rende l'interfaccia applicabile indipendentemente dalla scelte dei suddetti tipi, caratteristica utile per garantire flessibilità. 
+		Questa scelta rende l'interfaccia applicabile parametricamente rispetto alla scelta dei suddetti tipi, caratteristica utile per garantire flessibilità. 
 
 		Le operazioni fornite dall'ADS, sulla base di requisiti e casi d'uso già discussi in fase di analisi, sono:
 		\begin{itemize}
@@ -67,11 +67,25 @@
 	%
 	%	Sezione in cui si motiva pattern per interfaccia e si evidenzia collegamento funzionale con casi d'uso e requisiti, in termini solo di funzionalità offerte
 		
+		L'interfaccia della Proof, è stata resa parametrica rispetto a tre valori:
 		
 		\begin{itemize}
-			\item \textit{rootHash()}: restituisce il root hash
-			\item \textit{rootHash(list)}: restituisce il root hash relativo alle coppie chiave-valore presenti in $list$; sovrascrive la proof corrente
+			\item \textbf{H}: il tipo dei vari \textit{hash} presenti all'interno dei nodi della Proof.
+			\item \textbf{K}: il tipo delle \textit{chiavi} dei nodi.
+			\item \textbf{V}: il tipo dei valori presenti nello \textit{storage}. 
 		\end{itemize}
+		
+		Questa scelta rende l'interfaccia applicabile parametricamente rispetto alla scelta dei suddetti tipi, caratteristica utile per garantire flessibilità. 
+		
+		Le operazioni fornite dalla Proof, sulla base di requisiti e casi d'uso già discussi in fase di analisi, sono:
+		\begin{itemize}
+			\item \textit{keys}: insieme contenente tutte le chiavi per cui è valida la Proof.
+			\item \textit{rootHash()}: restituisce il \textit{Root Hash} della Proof. Questa, assieme alla successiva, sono requisiti funzionali già discussi in fase di analisi.
+			\item \textit{rootHash(list)}: applica gli aggiornamenti specificati nella lista di coppie chiave-valore \textit{list} e successivamente calcola e restituisce il nuovo \textit{Root Hash}.
+			\item \textit{union(proof)}: effettua il \textit{merge} di due Proof relative allo stesso istante temporale della stessa struttura da cui sono state generate.
+		\end{itemize}
+		
+		Di fondamentale importanza è il requisito relativo alla possibilità di utilizzo della Proof in ambito concorrente. Deve essere possibile, dunque, poter operare operazioni in parallelo sulla Proof, senza che ci siano conflitti dovuti alla concorrenza. Pertanto è stato deciso di applicare un principio tipico del paradigma di programmazione funzionale, secondo cui i valori non vengono trovati cambiando lo stato della Proof stessa, ma costruendo nuovi stati a partire dai precedenti. Per questo motivo le operazioni di scrittura, ovvero quelle che modificherebbero lo stato della struttura, lo fanno in maniera totalmente compatibile con quanto detto. Una spiegazione più dettagliata di come questo sia stato realizzato è posticipata in paragrafi successivi.
 		
 		L'interfaccia, e dunque la classi che implementeranno quest'ultima, deve implementare a sua voltal'interfaccia \textit{Serializable}, in quanto dovrà avere la caratteristica di essere, appunto, serializzabile. Questo è motivato dal fatto che implementazioni di questa interfaccia saranno inserite all'interno di messaggi che dovranno essere spediti su rete, nell'ambito dell'utilizzo di questa API.
 	
