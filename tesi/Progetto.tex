@@ -31,15 +31,50 @@
 	%
 	%	Sezione in cui si motiva pattern per interfaccia e si evidenzia collegamento funzionale con casi d'uso e requisiti, in termini solo di funzionalità offerte
 	
+		L'interfaccia dell'ADS, è stata resa parametrica rispetto a tre valori:
 		
+		\begin{itemize}
+			\item \textbf{H}: il tipo dei vari \textit{hash} presenti all'interno dei nodi della struttura.
+			\item \textbf{K}: il tipo delle \textit{chiavi} dei nodi.
+			\item \textbf{V}: il tipo dei valori presenti nello \textit{storage}. 
+		\end{itemize}
+	
+		Questa scelta rende l'interfaccia applicabile indipendentemente dalla scelte dei suddetti tipi, caratteristica utile per garantire flessibilità. 
+
+		Le operazioni fornite dall'ADS, sulla base di requisiti e casi d'uso già discussi in fase di analisi, sono:
+		\begin{itemize}
+			\item \textbf{\textit{getWithProof(k)}}: restituisce il valore $ v $ associato alla chiave $ k $, assieme alla \textit{Proof} per quella chiave. Questa operazione è necessaria per permettere di ottenere la Proof relativa ad una specifica coppia chiave-valore $ (k,v) $.
+			\item\textbf{ \textit{getProof(keys)}}: restituisce la Proof relativa alle chiavi contenute nella lista \textit{keys}. Estende le possibilità di \textit{getWithProof(k)}, restituendo in un solo round una Proof cumulativa per un'insieme di chiavi $ keys $, valida e utilizzabile per tutte le stesse. 
+			\item \textbf{\textit{getValue(key)}}: data una chiave $ k $, restituisce il valore $ v $ associato ad essa. Questa operazione permette dunque le operazioni di lettura, \textit{read(k)}, richieste dai casi d'uso.
+			\item \textbf{\textit{add(k, v)}}: crea un \textit{delta} rispetto alla struttura corrente, il quale viene memorizzato. Il delta riguarda l'aggiunta o la modifica degli elementi relativi alla chiave $ k $. L'operazione \underline{non} modifica la struttura corrente.
+			\item \textbf{\textit{del(k)}}: crea un \textit{delta} rispetto alla struttura corrente, il quale viene memorizzato. Il delta riguarda la cancellazione degli elementi relativi alla chiave $ k $ L'operazione \underline{non} modifica la struttura corrente.
+			\item \textit{applyDeltas()}: compatta tutti i vari delta relativi alla struttura corrente e li applica in ordine, restituendo una nuova ADS, con le modifiche applicate. Questa operazione permette all'ADS di avere la capacità di aggiornarsi rispetto a richieste di update in arrivo dai client.
+			\item \textit{rootHash()}: calcola e restituisce il \textit{Root Hash} della struttura corrente. Questa operazione permette di ottenere il \textit{digest} dell'intera struttura, come specificato dai requisiti.
+			\item \textit{isEmpty()}: Informa se l'ADS è vuoto o meno.
+		\end{itemize}
+	
+		E' necessario sottolineare riguardo alla prima operazione fornita, che, per \textit{Creator}, sara l'ADS stesso a generare una Proof una o più chiavi, proprio in quanto è l'unica entità a conoscere le informazioni per farlo. A seguito della creazione, essa sarà un entità indipendente, in grado di aggiornarsi in parallelo rispetto agli update. I calcoli e le operazioni poi eseguite sulla Proof, sono indipendenti dall'ADS di partenza.
+		
+		Di fondamentale importanza è il requisito relativo alla possibilità di utilizzo dell'ADS in ambito concorrente. Deve essere possibile, dunque, poter operare operazioni in parallelo sull'ADS, senza che ci siano conflitti dovuti alla concorrenza. Pertanto è stato deciso di applicare un principio tipico del paradigma di programmazione funzionale, secondo cui i valori non vengono trovati cambiando lo stato dell'ADS, ma costruendo nuovi stati a partire dai precedenti. Per questo motivo le operazioni di scrittura, ovvero quelle che modificherebbero lo stato della struttura, lo fanno in maniera totalmente compatibile con quanto detto. Una spiegazione più dettagliata di come questo sia stato realizzato è posticipata in paragrafi successivi.
+		
+		La scelta invece di disaccoppiare il momento dell'individuazione della operazioni di aggiunta, modifica o cancellazione, dal momento della loro effettiva applicazione, è da inquadrare in un contesto più ampio di utilizzo della libreria. Intuitivamente, questa funzionalità è fornita per permettere di gestire meglio gli stati in cui si può trovare la struttura stessa: ad esempio uno stato in cui può ricevere e accumulare update, piuttosto che uno stato in cui questi vengono applicati in blocco. Migliore è di conseguenza la gestione delle operazioni di lettura, in quanto per garantirne la consistenza, esse possono essere collocate in istanti temporali diversi, prima o dopo determinati stati della struttura.
+		
+		L'interfaccia, e dunque la classi che implementeranno quest'ultima, deve implementare a sua volta l'interfaccia \textit{Serializable}, in quanto dovrà avere la caratteristica di essere, appunto, serializzabile. Questo è motivato dal fatto che implementazioni di questa interfaccia saranno inserite all'interno di messaggi che dovranno essere spediti su rete, nell'ambito dell'utilizzo di questa API.
 	
 	\subsection{Interfaccia Proof}
 	
 	%	MODELLO FUNZIONALE, motivare la necessità
 	%
 	%	Sezione in cui si motiva pattern per interfaccia e si evidenzia collegamento funzionale con casi d'uso e requisiti, in termini solo di funzionalità offerte
-
-
+		
+		
+		\begin{itemize}
+			\item \textit{rootHash()}: restituisce il root hash
+			\item \textit{rootHash(list)}: restituisce il root hash relativo alle coppie chiave-valore presenti in $list$; sovrascrive la proof corrente
+		\end{itemize}
+		
+		L'interfaccia, e dunque la classi che implementeranno quest'ultima, deve implementare a sua voltal'interfaccia \textit{Serializable}, in quanto dovrà avere la caratteristica di essere, appunto, serializzabile. Questo è motivato dal fatto che implementazioni di questa interfaccia saranno inserite all'interno di messaggi che dovranno essere spediti su rete, nell'ambito dell'utilizzo di questa API.
+	
 	\subsection{Nodo e schema hashing}
 	
 	%	Parlare dell'elemento alla base di implementazioni realizzate di ADS e Proof.
