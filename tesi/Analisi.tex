@@ -6,29 +6,29 @@
 
 	\subsection{API}
 
-	La realizzazione dell'API, $ Application Programming Interface $, è da contestualizzarsi all'interno dell'attività progettuale di tirocinio, svolta assieme al collega Gianmaria Del Monte. Il sistema preso qui in esame, è uno studio e realizzazione di protocollo efficiente per l'integrità dei dati su Cloud nell'ambito di un progetto di ricerca(6) del professor Maurizio Pizzonia, svolto a più livelli di astrazione. Si richiama qui la parte svolta dal collega, di cui sul suo scritto(7) è operata una descrizione più dettagliata, con lo scopo di definire casi d'uso e requisiti necessari.
+	La realizzazione dell'API, \textit{Application Programming Interface}, è da contestualizzarsi all'interno dell'attività progettuale di tirocinio, svolta assieme al collega Gianmaria Del Monte. Il sistema preso qui in esame, è uno studio e realizzazione di protocollo efficiente per l'integrità dei dati su Cloud nell'ambito di un progetto di ricerca(6) del professor Maurizio Pizzonia, svolto a più livelli di astrazione. Si richiama qui la parte svolta dal collega, di cui sul suo scritto(7) è operata una descrizione più dettagliata, con lo scopo di definire casi d'uso e requisiti necessari.
 	
-	Il contesto, in breve, prevede un numero variabile di $ client $, con una disponibilità limitata in termini di memorizzazione, $ storage $, ma che necessita di salvare una grande mole di dati. Questo sarà reso possibile da un $ server $, considerata parte non fidata, il cui compito comprenderebbe anche l'attuazione del protocollo, delegando a particolari client, detti $ autenticatori $, il compito di autenticare le richieste provenienti dai client. Questi ultimi provvederanno all'autenticazione tramite firme, con una criptazione asimmetrica, verificabili tramite dei $ certificati $, noti a tutti i client. L'autenticazione di un valore relativo ad una richiesta di un client, tuttavia, dipenderebbe dall'avvenuta firma delle richieste precedenti.
-	La forza del protocollo sta nella possibilità di attuazione di una architettura parallela di $ autenticatori $, i quali sarebbero in grado di autenticare un valore $ r_{i} $, anche se il valore precedente $ r_{i-1} $ non è ancora stato firmato. Dunque intuitivamente, l'autenticazione può avvenire in maniera $ condizionata $ rispetto alla $ catena $ di valori precedenti, permettendo al server di richiedere una autenticazione quando la precedente non è ancora finita.
+	Il contesto, in breve, prevede un numero variabile di \textit{client}, con una disponibilità limitata in termini di memorizzazione, \textit{storage}, ma che necessita di salvare una grande mole di dati. Questo sarà reso possibile da un \textit{server}, considerata parte non fidata, il cui compito comprenderebbe anche l'attuazione del protocollo, delegando a particolari client, detti \textit{autenticatori}, il compito di autenticare le richieste provenienti dai client. Questi ultimi provvederanno all'autenticazione tramite firme, con una criptazione asimmetrica, verificabili tramite dei \textit{certificati], noti a tutti i client. L'autenticazione di un valore relativo ad una richiesta di un client, tuttavia, dipenderebbe dall'avvenuta firma delle richieste precedenti.
+	La forza del protocollo sta nella possibilità di attuazione di una architettura parallela di \textit{autenticatori}, i quali sarebbero in grado di autenticare un valore $ r_{i} $, anche se il valore precedente $ r_{i-1} $ non è ancora stato firmato. Dunque intuitivamente, l'autenticazione può avvenire in maniera \textit{condizionata} rispetto alla \textit{catena} di valori precedenti, permettendo al server di richiedere una autenticazione quando la precedente non è ancora finita.
 	
 	\begin{figure}
 		\centering
 		\includegraphics[scale=0.6]{figure/semicircles.eps}
-		\caption{Il server riceve e accumula un certo numero di updates e richiede poi l'autenticazione tramite una authentication request, riceverà poi una authentication reply non appena sarà avvenuta l'autenticazione}\label{fig:7}
+		\caption{Il server riceve e accumula un certo numero di updates e richiede poi l'autenticazione tramite una authentication request, riceverà poi una authentication reply non appena sarà avvenuta l'autenticazione}\label{fig:semicircles}
 	\end{figure}
 	
 	Fatte queste premesse, di seguito si elencano i casi d'uso della libreria(7):
 	
 	\begin{itemize}
-		\item Una struttura dati autenticata, impostata come $ key-value store $, in grado di fornire operazioni di lettura e di scrittura, per ADSManager
-		\item Una forma di prova di validità, nel seguito $ Proof $, per una o più chiavi presenti nella struttura
-		\item Possibilità di ottenere dalla struttura dati autenticata il $ digest $, nel seguito $ root Hash $, relativo a tutte le coppie chiave-valore presenti
-		\item Possibilità di ottenere dalla $ Proof $, il $ root Hash $ relativo alla chiave o all'insieme di chiavi sulle quali è costruita, per ProofVerifier
-		\item Capacità della $ Proof $ di aggiornarsi rispetto agli update che avvengono sulla struttura dati autenticata principale, per poter fornire il $ root Hash $ aggiornato, per RootHashCalculator.
- 		\item Una struttura dati autenticata in grado di effettuare una serie di update, e in grado di restituire una $ Proof $ cumulativa per questi update.
+		\item Una struttura dati autenticata, impostata come \textit{key-value store}, in grado di fornire operazioni di lettura e di scrittura, per ADSManager
+		\item Una forma di prova di validità, nel seguito \textit{Proof}, per una o più chiavi presenti nella struttura
+		\item Possibilità di ottenere dalla struttura dati autenticata il \textit{digest}, nel seguito \textit{root Hash}, relativo a tutte le coppie chiave-valore presenti
+		\item Possibilità di ottenere dalla \textit{Proof}, il \textit{root Hash} relativo alla chiave o all'insieme di chiavi sulle quali è costruita, per ProofVerifier
+		\item Capacità della \textit{Proof} di aggiornarsi rispetto agli update che avvengono sulla struttura dati autenticata principale, per poter fornire il \textit{root Hash} aggiornato, per RootHashCalculator.
+ 		\item Una struttura dati autenticata in grado di effettuare una serie di update, e in grado di restituire una \textit{Proof} cumulativa per questi update.
 	\end{itemize}
 	
-	Oltre a i requisiti funzionali di cui sopra, altre specifiche di cui si è tenuto conto riguardano aspetti di $ usabilità $, nel fornire un'interfaccia di chiara e facile interpretazione ai fini dell'utilizzo dell'API, di $ prestazioni $, al fine di mirare al curve fitting con la complessità logaritmica, e di $ sostenibilità $, per garantire alta manutenibilità, verificabilità e configurabilità della API.
+	Oltre a i requisiti funzionali di cui sopra, altre specifiche di cui si è tenuto conto riguardano aspetti di \textit{usabilità}, nel fornire un'interfaccia di chiara e facile interpretazione ai fini dell'utilizzo dell'API, di \textit{prestazioni}, al fine di mirare al curve fitting con la complessità logaritmica, e di \textit{sostenibilità}, per garantire alta manutenibilità, verificabilità e configurabilità della API.
 	
 	Infine è doveroso menzionare i vincoli di progetto:
 	\begin{itemize}
@@ -48,7 +48,7 @@
 %	In base ai casi d'uso e, in qualche modo, ai requisiti sopra citati viene illustrato un analogo di modello di dominio.
 	
  	Si procede, dunque, in questa sezione, dipendentemente dai casi d'uso e dai requisiti funzionali e non, sopra esposti, all'enumerazione dei concetti significativi nell'ambito di un modello di dominio. I concetti qui esposti, saranno poi più dettagliatamente spiegati nei successivi paragrafi, ma sono qui anticipati con lo scopo di fornire una rappresentazione visuale di entità concettuali rilevanti.
- 	Ebbene, sicuramente sarà necessaria un'entità che rappresenti la struttura dati autenticata, la quale dovrà essere in grado di offrire servizi di lettura e scrittura, rispettivamente di query e update. Essa inoltre deve essere in grado di fornire le $ Proof $ necessarie ai client o agli autenticatori per effettuare le prove di integrità dei dati. Allo stesso tempo la $ Proof $ deve saper fornire il $ root Hash $ relativo alle chiavi sulle quali è definita, e deve saper applicare degli update sulle suddette chiavi. Inoltre, intuitivamente, sarà necessario che due $ Proof $ per due diversi insiemi di chiavi, possano unirsi, tramite un $ merge $ dando vita ad una $ Proof $ valida per entrambi gli insieme di chiavi di partenza.
+ 	Ebbene, sicuramente sarà necessaria un'entità che rappresenti la struttura dati autenticata, la quale dovrà essere in grado di offrire servizi di lettura e scrittura, rispettivamente di query e update. Essa inoltre deve essere in grado di fornire le \textit{Proof} necessarie ai client o agli autenticatori per effettuare le prove di integrità dei dati. Allo stesso tempo la \textit{Proof} deve saper fornire il \textit{root Hash} relativo alle chiavi sulle quali è definita, e deve saper applicare degli update sulle suddette chiavi. Inoltre, intuitivamente, sarà necessario che due \textit{Proof} per due diversi insiemi di chiavi, possano unirsi, tramite un \textit{merge} dando vita ad una \textit{Proof} valida per entrambi gli insieme di chiavi di partenza.
  	
 	
 \section{Skiplist}
@@ -80,21 +80,21 @@
 	La skip list è una struttura dati probabilistica che permette veloci ricerche all'interno di una sequenza ordinata di elementi. Essa mantiene un insieme ordinato di $ n $ elementi in tempo $\mathcal{O}(log{}n)$.
 	
 	Prendendo ad esempio una lista semplice e non ordinata di elementi, si noti che l'operazione di ricerca di un elemento venga soddisfatta in tempo $\mathcal{O}(n)$. Questo vale anche per una lista ordinata di elementi. Questo tuttavia è vero nell'ipotesi in cui sia possibile accedere alla lista solamente tramite un puntatore verso l'inizio della stessa. Nell'ipotesi invece di accesso randomico a qualsiasi elemento, è possibile effettuare un'operazione di ricerca in tempo $\mathcal{O}(log{}n)$. Ebbene questa è l'idea retrostante.
-	Tutto questo è reso possibile grazie ad una gerarchia di sottosequenze, organizzate su più livelli collegati tra loro. Lo sviluppo è in altezza e prevede che il livello più basso, detto $base list$ contenga tutti gli $ n $ elementi, mentre ogni livello superiore è composto da un sottoinsieme degli elementi del livello immediatamente sottostante. Le operazioni di ricerca iniziano dal livello con meno elementi, ovvero quello all'apice della struttura, e procedono per salti, in gergo 'skip', di nodo in nodo, fino a che non vengono trovati due elementi consecutivi, uno minore e uno maggiore o uguale all'elemento ricercato. A questo punto, grazie ai collegamenti inter-livello è possibile spostarsi sulla sottosequenza immediatamente inferiore e proseguire la ricerca. Questo procedimento è ripetuto fino a giungere alla sequenza completa di elementi, ovvero al livello più basso.
+	Tutto questo è reso possibile grazie ad una gerarchia di sottosequenze, organizzate su più livelli collegati tra loro. Lo sviluppo è in altezza e prevede che il livello più basso, detto \textit{base list} contenga tutti gli $ n $ elementi, mentre ogni livello superiore è composto da un sottoinsieme degli elementi del livello immediatamente sottostante. Le operazioni di ricerca iniziano dal livello con meno elementi, ovvero quello all'apice della struttura, e procedono per salti, in gergo 'skip', di nodo in nodo, fino a che non vengono trovati due elementi consecutivi, uno minore e uno maggiore o uguale all'elemento ricercato. A questo punto, grazie ai collegamenti inter-livello è possibile spostarsi sulla sottosequenza immediatamente inferiore e proseguire la ricerca. Questo procedimento è ripetuto fino a giungere alla sequenza completa di elementi, ovvero al livello più basso.
 	Ogni livello inoltre, agli estremi, possiede due sentinelle, ovvero due nodi speciali, marcati con $\infty$ e -$\infty$. Questi formeranno due torri, che racchiudono a destra e a sinistra la struttura contenente gli elementi veri e propri. Si può dimostrare però che ciò non è sempre completamente necessario, ma si tratta più di rigorosità nella formulazione.
-	Il nodo sentinella -$\infty$ della sequenza all'apice della struttura è detto $start node$ ed è il nodo di partenza per ogni operazione.
+	Il nodo sentinella -$\infty$ della sequenza all'apice della struttura è detto \textit{start node} ed è il nodo di partenza per ogni operazione.
 	
 	Il principio secondo cui gli elementi sono saltati, e quindi indirettamente il principio secondo cui un elemento debba o meno essere presente anche nel livello immediatamente superiore, può essere randomico o deterministico. Il primo caso, di più frequente utilizzo, prevede una costruzione della struttura per strati. Il primo, contenente tutti gli $ n $ elementi è una normale lista doppiamente o singolarmente concatenata. Ogni livello superiore poi è costruito a partire da quello sottostante, dove però ogni elemento ha una certa probabilità, fissata a priori, di essere presente. Normalmente la probabilità fissata a priori è $ 1/2 $, a tal punto che in letteratura si parli spesso di 'Fair coin flip'.
 	
-	Prima di procedere con la descrizione dettagliata delle operazioni che fornisce, occorre introdurre ulteriore terminologia. Un nodo di un livello $ L_{i-1} $ contenente un elemento che non è presente al livello $ L_{i} $ è detto $ plateau $. Un nodo che non presenta queste caratteristiche è detto $ tower $. (2)
+	Prima di procedere con la descrizione dettagliata delle operazioni che fornisce, occorre introdurre ulteriore terminologia. Un nodo di un livello $ L_{i-1} $ contenente un elemento che non è presente al livello $ L_{i} $ è detto \textit{plateau}. Un nodo che non presenta queste caratteristiche è detto \textit{tower}. (2)
 	
-	Per comodità delle future analisi si è deciso di adottare una terminologia simile allo scritto di Goodrich e Tamassia (2), a cui ci si rifarà anceh nel successivo sottoparagrafo, in cui per ogni nodo $ v $ della sottosequenza $ L_{i} $, è detto $ elem(v) $ l'elemento memorizzato in $ v $. Inoltre è detto $ down(v) $ il nodo della sottosequenza $ L_{i-1} $ che memorizza lo stesso valore di $ v $, a meno che non si tratti della $base list$, poiché in questo caso $down(v) = \boldmath{null}$.
+	Per comodità delle future analisi si è deciso di adottare una terminologia simile allo scritto di Goodrich e Tamassia (2), a cui ci si rifarà anceh nel successivo sottoparagrafo, in cui per ogni nodo $ v $ della sottosequenza $ L_{i} $, è detto $ elem(v) $ l'elemento memorizzato in $ v $. Inoltre è detto $ down(v) $ il nodo della sottosequenza $ L_{i-1} $ che memorizza lo stesso valore di $ v $, a meno che non si tratti della \textit{base list}, poiché in questo caso $down(v) = \boldmath{null}$.
 	Inoltre è detto $right(v)$ il nodo della sottosequenza $ L_{i} $ immediatamente alla destra di $v$, a meno che non si tratti di una sentinella di tipo $\infty$, per la quale $right(v) = \boldmath{null}$.
 		
 	\begin{figure}
 		\centering
 		\includegraphics[scale=0.6]{figure/skiplist.eps}
-		\caption{Esempio di una Skip List}\label{fig:1}
+		\caption{Esempio di una Skip List}\label{fig:skiplist}
 	\end{figure}
 		
 	\subsection{Operazioni principali}
@@ -119,7 +119,7 @@
 	
 		\subsubsection{Ricerca}
 			
-			L'operazione di ricerca di un elemento $ x $ in una skip list inizia, come tutte le altre, dallo $start node$. La ricerca viene effettuata tramite l'alternanza di due azioni, $ hop forward $ e $ drop down $, che rappresentano rispettivamente il movimento verso destra o verso il basso all'interno della struttura. Esse sono ripetute, sotto determinate condizioni, fino a che la ricerca non sia terminata, indipendentemente dall'esito, che potrà essere positivo o negativo.
+			L'operazione di ricerca di un elemento $ x $ in una skip list inizia, come tutte le altre, dallo \textit{start node}. La ricerca viene effettuata tramite l'alternanza di due azioni, \textit{hop forward} e \textit{drop down}, che rappresentano rispettivamente il movimento verso destra o verso il basso all'interno della struttura. Esse sono ripetute, sotto determinate condizioni, fino a che la ricerca non sia terminata, indipendentemente dall'esito, che potrà essere positivo o negativo.
 			
 			La prima azione menzionata prevede movimenti verso destra fino a che non si raggiunge un nodo il cui valore sia il più grande minore o uguale a $ x $. La seconda azione invece consiste semplicemente in uno spostamento verticale, al nodo immediatamente sottostante, a condizione che questo esista.  In pseudocodice, i passi rilevanti delle due azioni, rispettivamente: 
 			
@@ -142,7 +142,7 @@
 				\end{algorithm}
 			\end{itemize} 
 			
-			La ricerca consiste dunque in un $ hop forward $ e un $ drop down $, fintanto che risulti possibile effettuare $ dropdown $.  Con questa sequenza di passi si raggiungerà un nodo sulla $ base list $: se vale che $ elem(v) = x $ allora la skip list contiene l'elemento $ x $. Se questa condizione non risulta vera, allora il nodo raggiunto tramite questa sequenza di passi sarà il nodo sulla $ base list $ con il valore più grande minore di $ x $. Per costruzione $ right(v) $ è il nodo sulla $ base list $ il cui elemento è il più piccolo maggiore di $ x $.
+			La ricerca consiste dunque in un \textit{hop forward} e un \textit{drop down}, fintanto che risulti possibile effettuare \textit{dropdown}.  Con questa sequenza di passi si raggiungerà un nodo sulla \textit{base list}: se vale che $ elem(v) = x $ allora la skip list contiene l'elemento $ x $. Se questa condizione non risulta vera, allora il nodo raggiunto tramite questa sequenza di passi sarà il nodo sulla \textit{base list} con il valore più grande minore di $ x $. Per costruzione $ right(v) $ è il nodo sulla \textit{base list} il cui elemento è il più piccolo maggiore di $ x $.
 			
 			Il costo computazionale dell'operazione di ricerca è dato dalla somma dei costi di attraversamento di tutti i livelli. Tuttavia ogni livello, tranne il primo, subisce un attraversamento parziale, in quanto il nodo di partenza non è il primo nodo della sequenza.
 			
@@ -150,7 +150,7 @@
 			\begin{figure}
 				\centering
 				\includegraphics[scale=0.6]{figure/search-66.eps}
-				\caption{\textbf{Ricerca dell'elemento 66} nella Skip List della figura \ref{fig:1}. I nodi visitati e i collegamenti attraversati sono evidenziati con linee più spesse. Si noti che la ricerca, fallimentare, dell'elemento 70 produrrebbe lo stesso risultato.}\label{fig:2}
+				\caption{\textbf{Ricerca dell'elemento 66} nella Skip List della figura \ref{fig:skiplist}. I nodi visitati e i collegamenti attraversati sono evidenziati con linee più spesse. Si noti che la ricerca, fallimentare, dell'elemento 70 produrrebbe lo stesso risultato.}\label{fig:2}
 			\end{figure}
 			
 			{EVENTUALE DIMOSTRAZIONE MIT}
@@ -159,14 +159,14 @@
 				
 		\subsubsection{Inserimento}
 		
-			L'operazione di inserimento è sempre preceduta da una operazione di ricerca. Dunque per inserire un elemento $ x $, per prima cosa è effettuata una ricerca su $ x $, con l'unica differenza che ogni volta che viene effettuato un $ hop forward $ o un $ drop down $ rispetto al nodo corrente $ v $, viene aggiunto un elemento in una pila che registri il nodo corrente $ v $ e l'azione associata.
-			Dal momento in cui l'elemento $ x $ non è presente, l'operazione di ricerca restituirà il nodo sulla $base list$ che dovrà essere immediatamente precedente al nodo da inserire. Dunque è inserito il nodo, memorizzato il valore $ x $. Dopodiché, nel caso di skip list randomiche, viene valutata l'altezza della torre, ovvero in quali livelli superiori dovrà essere presente l'elemento, tramite una sequenza di tiri di moneta simulati. Per ogni lancio di moneta, nel caso in cui il risultato sia testa, viene utilizzato la pila per ripercorrere il percorso a ritroso e ottenere la posizione, del livello superiore, in cui dovrà andare il nuovo nodo, tramite opportune operazioni di $ pop $. Il procedimento continua fino a che il risultato non sia croce. Nel caso in cui la torre dovesse superare l'altezza corrente della struttura, si aggiunge un nuovo livello alla struttura, compresi ovviamente i nuovi nodi sentinella.
+			L'operazione di inserimento è sempre preceduta da una operazione di ricerca. Dunque per inserire un elemento $ x $, per prima cosa è effettuata una ricerca su $ x $, con l'unica differenza che ogni volta che viene effettuato un \textit{hop forward} o un \textit{drop down} rispetto al nodo corrente $ v $, viene aggiunto un elemento in una pila che registri il nodo corrente $ v $ e l'azione associata.
+			Dal momento in cui l'elemento $ x $ non è presente, l'operazione di ricerca restituirà il nodo sulla \textit{base list} che dovrà essere immediatamente precedente al nodo da inserire. Dunque è inserito il nodo, memorizzato il valore $ x $. Dopodiché, nel caso di skip list randomiche, viene valutata l'altezza della torre, ovvero in quali livelli superiori dovrà essere presente l'elemento, tramite una sequenza di tiri di moneta simulati. Per ogni lancio di moneta, nel caso in cui il risultato sia testa, viene utilizzato la pila per ripercorrere il percorso a ritroso e ottenere la posizione, del livello superiore, in cui dovrà andare il nuovo nodo, tramite opportune operazioni di \textit{pop}. Il procedimento continua fino a che il risultato non sia croce. Nel caso in cui la torre dovesse superare l'altezza corrente della struttura, si aggiunge un nuovo livello alla struttura, compresi ovviamente i nuovi nodi sentinella.
 			L'operazione di inserimento è, con alta probabilità, pari a $\mathcal{O}(log{}n)$.
 		
 		\subsubsection{Cancellazione}
 		
-			L'operazione di cancellazione di un elemento $ x $ prevede la ricerca di un elemento che sia minore di $ x $ ma maggiore di ogni altro elemento nella $base list$ che sia minore di $ x $. Come per l'operazione di inserimento, viene utilizzata una pila di supporto per tenere traccia dei passi effettuati dalla ricerca. Chiaramente, l'elemento immediatamente successivo al nodo restituito dall'operazione di ricerca, dovrà essere $ x $, poiché in caso contrario l'elemento da cancellare non sarebbe presente nella skip list, scenario di non successo, da segnalare con errore opportunamente.
-			Dunque viene rimosso il nodo interessato, e tutti i nodi sulla stessa torre, ottenendone la posizione grazie ad opportune operazioni di $ pop $ dalla pila precedentemente riempita.
+			L'operazione di cancellazione di un elemento $ x $ prevede la ricerca di un elemento che sia minore di $ x $ ma maggiore di ogni altro elemento nella \textit{base list} che sia minore di $ x $. Come per l'operazione di inserimento, viene utilizzata una pila di supporto per tenere traccia dei passi effettuati dalla ricerca. Chiaramente, l'elemento immediatamente successivo al nodo restituito dall'operazione di ricerca, dovrà essere $ x $, poiché in caso contrario l'elemento da cancellare non sarebbe presente nella skip list, scenario di non successo, da segnalare con errore opportunamente.
+			Dunque viene rimosso il nodo interessato, e tutti i nodi sulla stessa torre, ottenendone la posizione grazie ad opportune operazioni di \textit{pop} dalla pila precedentemente riempita.
 			Nel caso in cui la rimozione dovesse comportare un abbassamento globale della struttura, devono essere eliminati i nodi sentinella interessati.
 			L'operazione di cancellazione è, con alta probabilità, pari a $\mathcal{O}(log{}n)$.
 			
@@ -175,7 +175,7 @@
 	
 %	Qui si parla della tecnica di hashing commutativo
 
-	Si ritiene necessario, a questo punto, introdurre una speciale classe di funzioni: le funzioni crittografiche di hash. Si tratta di algoritmi matematici che mappano, cioè fanno corrispondere, dati di lunghezza arbitraria, comunemente chiamati $ messaggi $, in un stringa binaria di dimensione fissa, detta $ valore di hash $. L'output prodotto è solitamente chiamato $ digest $. (4)
+	Si ritiene necessario, a questo punto, introdurre una speciale classe di funzioni: le funzioni crittografiche di hash. Si tratta di algoritmi matematici che mappano, cioè fanno corrispondere, dati di lunghezza arbitraria, comunemente chiamati \textit{messaggi}, in un stringa binaria di dimensione fissa, detta \textit{valore di hash}. L'output prodotto è solitamente chiamato \textit{digest}. (4)
 	L'hash di un messaggio $ m $ è denotato $ h(m) $ e varranno le seguenti proprietà:
 	
 	\begin{itemize}
@@ -206,17 +206,17 @@
 
 % 		Introduzione su strutture dati autenticate. Magari breve, e mirata a far comprendere i sucessivi paragrafi
 
-		Una struttura dati autenticata, abbreviato $ ADS $, è una struttura dati che è adatta a controlli sulla sua integrità, cosi come su porzioni di essa. Memorizza valori e associa una funzione crittografica di hash $ h $ con il suo contenuto. L'output prodotto da questa funzione è detto $root hash$ e possiede lunghezza finita. Tramite una ADS, dunque, un client può rilevare piccoli cambiamenti all'interno di un $ dataset $ anche molto grande, in maniera efficiente.
-		La sua applicazione in ambiente cloud risulta particolarmente proficua in quanto generalmente permette di ottenere elevate garanzie su sicurezza, autenticazione e verifica di integrità dei dati. Tutto questo rispettando la dicotomia tra l'ambiente di storage locale, limitato ma fidato, $ trusted $, e l'ambiente cloud, virtualmente illimitato, ma non fidato. Il razionale alla base consiste nel memorizzare un grande $ dataset$ sul cloud, equipaggiato dunque con una ADS, e mantenere soltanto il root hash localmente.
+		Una struttura dati autenticata, abbreviato \textit{ADS}, è una struttura dati che è adatta a controlli sulla sua integrità, cosi come su porzioni di essa. Memorizza valori e associa una funzione crittografica di hash $ h $ con il suo contenuto. L'output prodotto da questa funzione è detto \textit{root hash} e possiede lunghezza finita. Tramite una ADS, dunque, un client può rilevare piccoli cambiamenti all'interno di un \textit{dataset} anche molto grande, in maniera efficiente.
+		La sua applicazione in ambiente cloud risulta particolarmente proficua in quanto generalmente permette di ottenere elevate garanzie su sicurezza, autenticazione e verifica di integrità dei dati. Tutto questo rispettando la dicotomia tra l'ambiente di storage locale, limitato ma fidato, \textit{trusted}, e l'ambiente cloud, virtualmente illimitato, ma non fidato. Il razionale alla base consiste nel memorizzare un grande \textit{dataset} sul cloud, equipaggiato dunque con una ADS, e mantenere soltanto il root hash localmente.
 		
 		\begin{figure}
 			\centering
 			\includegraphics[scale=0.75]{figure/trusted-untrusted.eps}
-			\caption{\textbf{Caso d'uso di ADS}: l'ADS può essere caricato sul cloud e applicato su uno $ storage $ regolare, mentre il client memorizza localmente il Root Hash. Lo storage non dovrebbe essere a conoscenza dell'ADS.}\label{fig:3}
+			\caption{\textbf{Caso d'uso di ADS}: l'ADS può essere caricato sul cloud e applicato su uno \textit{storage} regolare, mentre il client memorizza localmente il Root Hash. Lo storage non dovrebbe essere a conoscenza dell'ADS.}\label{fig:3}
 		\end{figure}
 		
 		\begin{itemize}
-			\item Le varie query, effettuate dal client, restituiranno oltre ai valori richiesti, anche una prova, detta $ Proof $. Tramite la proof ricevuta e il root hash locale, il client potrà verificare l'integrità del risultato della query.
+			\item Le varie query, effettuate dal client, restituiranno oltre ai valori richiesti, anche una prova, detta \textit{Proof}. Tramite la proof ricevuta e il root hash locale, il client potrà verificare l'integrità del risultato della query.
 			
 			\begin{figure}
 				\centering
@@ -224,12 +224,12 @@
 				\caption{\textbf{Query}: il client effettua una query e riceve oltre al risultato atteso, una proof per quel risultato. Effettua dunque il calcolo localmente sulla proof e verifica se corrisponde al root hash locale.}\label{fig:4}
 			\end{figure}
 			
-			\item Gli updates tuttavia, andranno a cambiare il $ dataset $ remoto, e dunque l'ADS presente sul cloud. Il client inoltre aggiorna il suo root hash locale con quello nuovo prodotto dall'ADS.
+			\item Gli updates tuttavia, andranno a cambiare il \textit{dataset} remoto, e dunque l'ADS presente sul cloud. Il client inoltre aggiorna il suo root hash locale con quello nuovo prodotto dall'ADS.
 			
 			\begin{figure}
 				\centering
 				\includegraphics[scale=0.75]{figure/updateADS.eps}
-				\caption{\textbf{Update}: il client richiede al server la proof su un valore da aggiornare. Può, a questo punto, aggiornare il root hash locale e inviare il nuovo valore al server. Suo è, successivamente, il compito di aggiornare l'ADS, $ refresh $ in figura.}\label{fig:5}
+				\caption{\textbf{Update}: il client richiede al server la proof su un valore da aggiornare. Può, a questo punto, aggiornare il root hash locale e inviare il nuovo valore al server. Suo è, successivamente, il compito di aggiornare l'ADS, \textit{refresh} in figura.}\label{fig:5}
 			\end{figure}
 		
 		\end{itemize}
@@ -253,12 +253,12 @@
 %	nel dettaglio l'API. Già nella prima parte è stato introdotto a grandi linee il funzionamento. Qui viene ripreso e
 %	approfondito, anche e sopratutto grazie alle sottosezioni successive. 
 
-	Riallacciandomi a quanto detto nella sezione riguardante il modello di dominio, è possibile a questo punto aggiungere informazioni più precise. L'API girerà sul server, e dovrà consentire la gestione della simbiosi tra lo storage e appunto l'ADS. L'entità rappresentante la struttura dati autenticata, in base a vincoli di progetto, dovrà basarsi sulla Skip List. Si tratterà, dunque, di un $ key-value store $ capace di offrire servizi di update e query, generando anche le opportune $ Proof $ in base al particolare tipo di richiesta del client. L'elemento costituente della Skip List Autenticata, sarà un nodo, in grado sia di memorizzare la chiave relativa alla torre in cui si trova, sia gli hash dei nodi adiacenti. In questo modo la struttura potrà comportarsi come un'ADS a tutti gli effetti, in ottemperanza con i requisiti e con i casi d'uso. Il funzionamento preciso dell'API sarà affrontato con il dovuto dettaglio nella sezione di Progetto, mentre qui si vuole soprattutto spiegare il funzionamento concettuale e la collaborazione tra le parti.
+	Riallacciandomi a quanto detto nella sezione riguardante il modello di dominio, è possibile a questo punto aggiungere informazioni più precise. L'API girerà sul server, e dovrà consentire la gestione della simbiosi tra lo storage e appunto l'ADS. L'entità rappresentante la struttura dati autenticata, in base a vincoli di progetto, dovrà basarsi sulla Skip List. Si tratterà, dunque, di un \textit{key-value store} capace di offrire servizi di update e query, generando anche le opportune \textit{Proof} in base al particolare tipo di richiesta del client. L'elemento costituente della Skip List Autenticata, sarà un nodo, in grado sia di memorizzare la chiave relativa alla torre in cui si trova, sia gli hash dei nodi adiacenti. In questo modo la struttura potrà comportarsi come un'ADS a tutti gli effetti, in ottemperanza con i requisiti e con i casi d'uso. Il funzionamento preciso dell'API sarà affrontato con il dovuto dettaglio nella sezione di Progetto, mentre qui si vuole soprattutto spiegare il funzionamento concettuale e la collaborazione tra le parti.
 	
 	\begin{figure}
 		\centering
 		\includegraphics[scale=0.75]{figure/global.eps}
-		\caption{In figura è rappresentata un'astrazione di ciò che è presente sul server, preso isolatamente. La Skip List Autenticata, il cui elemento base è il Nodo, sta "sopra" lo storage classico. Genera opportune $ Proof $ in base alle richieste del client.}\label{fig:8}
+		\caption{In figura è rappresentata un'astrazione di ciò che è presente sul server, preso isolatamente. La Skip List Autenticata, il cui elemento base è il Nodo, sta "sopra" lo storage classico. Genera opportune \textit{Proof} in base alle richieste del client.}\label{fig:8}
 	\end{figure}
 	
 	\subsection{Skip List Autenticata}
@@ -268,7 +268,7 @@
 %		Qui si parla della skiplist autenticata, facendo chiaramente riferimento alla skiplist base, sia nella definizione,
 %		sia nella descrizione delle operazioni
 
-	Una skip list autentiticata, come deducibile dalla figura \ref{fig:8}, è una particolare implementazione di un ADS, che si basa su skip list, e sulla quale è applicata una funzione crittografica di hash $ h $. La struttura dunque aggiungerà alla funzione di memorizzare un insieme di valori, in maniera ordinata, le caratteristiche tipiche di un ADS. Per permettere dunque sia l'ordinamento dei dati, sia l'applicazione di $ h $, si prende in esame una struttura  basata su coppie chiave-valore, entrambe di dimensione fissata a priori. In questo modo le chiavi permetteranno l'ordinamento dei dati, e i valori permetteranno l'applicazione dello schema di hashing, approfondito nel prossimo paragrafo. Ogni nodo conterrà, oltre alla chiave relativa alla torre su cui giace, un hash dei dati di alcuni altri nodi adiacenti. Intuitivamente, il suo hash potrebbe essere in funzione di $ w = right(v) $ e $ u = down(u) $. Questo schema confluirà nel root hash, ovvero nel $ digest $ dell'intera skip list, il quale sarà memorizzato nello $start node$.
+	Una skip list autentiticata, come deducibile dalla figura \ref{fig:8}, è una particolare implementazione di un ADS, che si basa su skip list, e sulla quale è applicata una funzione crittografica di hash $ h $. La struttura dunque aggiungerà alla funzione di memorizzare un insieme di valori, in maniera ordinata, le caratteristiche tipiche di un ADS. Per permettere dunque sia l'ordinamento dei dati, sia l'applicazione di $ h $, si prende in esame una struttura  basata su coppie chiave-valore, entrambe di dimensione fissata a priori. In questo modo le chiavi permetteranno l'ordinamento dei dati, e i valori permetteranno l'applicazione dello schema di hashing, approfondito nel prossimo paragrafo. Ogni nodo conterrà, oltre alla chiave relativa alla torre su cui giace, un hash dei dati di alcuni altri nodi adiacenti. Intuitivamente, il suo hash potrebbe essere in funzione di $ w = right(v) $ e $ u = down(u) $. Questo schema confluirà nel root hash, ovvero nel \textit{digest} dell'intera skip list, il quale sarà memorizzato nello \textit{start node}.
 	Il root hash, per definizione e per costruzione, sarà rigidamente dipendente sia dai valori di ogni nodo che dalla loro posizione reciproca. Da questo calcolo sono esclusi i nodi sentinella.
 	
 		\subsubsection{Schema hashing}
@@ -281,22 +281,22 @@
 		Sia $ f(v) $ la funzione di hash di ogni singolo nodo, allora varrà che:
 		
 		\begin{enumerate}
-			\item Se $ u = null $, e cioè se il nodo $ v $ si trova sulla $ base list $:
+			\item Se $ u = null $, e cioè se il nodo $ v $ si trova sulla \textit{base list}:
 				\begin{itemize}
-					\item (a) Se $ w $ è un nodo $ tower $, allora $ f(v) = h(elem(v)) $.
-					\item (b) Se $ w $ è un nodo $ plateau $, allora  $ f(v) = h(h(elem(v)), f(w)) $.
+					\item (a) Se $ w $ è un nodo \textit{tower}, allora $ f(v) = h(elem(v)) $.
+					\item (b) Se $ w $ è un nodo \textit{plateau}, allora  $ f(v) = h(h(elem(v)), f(w)) $.
 				\end{itemize}
-			\item Se $ u \ne null $, e cioè se il nodo $ v $ \underline{non} si trova sulla $ base list $:
+			\item Se $ u \ne null $, e cioè se il nodo $ v $ \underline{non} si trova sulla \textit{base list}:
 				\begin{itemize}
-					\item (a) Se $ w $ è un nodo $ tower $, allora $ f(v) = f(u) $. 
-					\item (b) Se $ w $ è un nodo $ plateau $, allora  $ f(v) = h(f(u), f(w)) $. 
+					\item (a) Se $ w $ è un nodo \textit{tower}, allora $ f(v) = f(u) $. 
+					\item (b) Se $ w $ è un nodo \textit{plateau}, allora  $ f(v) = h(f(u), f(w)) $. 
 				\end{itemize}
 		\end{enumerate}
 	
 		\begin{figure}
 			\centering
 			\includegraphics[scale=0.6]{figure/hashFlow.eps}
-			\caption{In alto a sinistra, lo $ start node $ ha il root hash. $ RH $, dipendente dai valori $ m_{n} $ e dal loro ordinamento sulla baselist.}\label{fig:6}
+			\caption{In alto a sinistra, lo \textit{start node} ha il root hash. $ RH $, dipendente dai valori $ m_{n} $ e dal loro ordinamento sulla baselist.}\label{fig:6}
 		\end{figure}
 	
 		\subsubsection{Operazioni}
@@ -318,9 +318,9 @@
 
 		{AGGIUNGERE CITAZIONE PROTOCOLLO E TESI GIANMARIA}
 
-		In base a quanto osservabile dai casi d'uso, l'$ update $ è l'operazione di primaria importanza. Nel momento in cui si vuole modificare, aggiungere o cancellare un valore nello $ storage $, la skip list autenticata deve aggiornarsi internamente, proprio a causa di questa modifica. Questo è possibile tramite l'operazione di update. Il client dunque, interagento con la struttura, dovrà specificare il tipo di operazione da svolgere (modifica, aggiunta o cancellazione) e la chiave corrispondente a quel valore.. 
-		A seguito dell'invocazione di questa operazione sull'ADS, i valori di hash dei singoli nodi devono essere aggiornati per riflettere il cambiamento che è avvenuto, e con essi il $ root hash $.
-		Nel caso di inserimento o cancellazione, la prima parte di esecuzione dell'operazione è identica a quella di una skip list semplice, con l'ovvia precisazione che i movimenti avverranno non più sui valori, ma sulle chiavi. Successivamente all'aggiunta/cancellazione del nodo interessato, viene utilizzata la pila precedentemente costituita per aggiornare gli hash dei nodi. Saranno infatti solamente i nodi presenti nella pila, ed eventualmente i suoi vicini di destra, grazie allo schema di hashing precedentemente presentato, a dover essere aggiornati. Pertanto ripercorrendo a ritroso tramite operazioni di $ pop $ la pila, la struttura dovrà ricalcolare le varie $ f(v) $ di questi nodi e nel caso di inserimento, dei nodi costituenti la nuova torre.
+		In base a quanto osservabile dai casi d'uso, l'\textit{update} è l'operazione di primaria importanza. Nel momento in cui si vuole modificare, aggiungere o cancellare un valore nello \textit{storage}, la skip list autenticata deve aggiornarsi internamente, proprio a causa di questa modifica. Questo è possibile tramite l'operazione di update. Il client dunque, interagento con la struttura, dovrà specificare il tipo di operazione da svolgere (modifica, aggiunta o cancellazione) e la chiave corrispondente a quel valore.. 
+		A seguito dell'invocazione di questa operazione sull'ADS, i valori di hash dei singoli nodi devono essere aggiornati per riflettere il cambiamento che è avvenuto, e con essi il \textit{root hash}.
+		Nel caso di inserimento o cancellazione, la prima parte di esecuzione dell'operazione è identica a quella di una skip list semplice, con l'ovvia precisazione che i movimenti avverranno non più sui valori, ma sulle chiavi. Successivamente all'aggiunta/cancellazione del nodo interessato, viene utilizzata la pila precedentemente costituita per aggiornare gli hash dei nodi. Saranno infatti solamente i nodi presenti nella pila, ed eventualmente i suoi vicini di destra, grazie allo schema di hashing precedentemente presentato, a dover essere aggiornati. Pertanto ripercorrendo a ritroso tramite operazioni di \textit{pop} la pila, la struttura dovrà ricalcolare le varie $ f(v) $ di questi nodi e nel caso di inserimento, dei nodi costituenti la nuova torre.
 		L'aggiunta in termini di costo computazionale dovuta a questa ulteriore operazione di aggiornamento degli hash, è proporzionale al numero di elementi presenti nella pila. Con alta probabilità l'operazione sarà eseguita in $\mathcal{O}(log{}n)$.
 		
 		[IMMAGINE CON DUE SKIPLIST PICCOLE AFFIANCATE IN CUI SI EVIDENZIA UN UPDATE DI MODIFICA CON FLUSSI]
@@ -334,12 +334,12 @@
 
 		{AGGIUNGERE CITAZIONE PROTOCOLLO E TESI GIANMARIA}
 
-		Prima di analizzare l'operazione di query, è necessario soffermarsi sul concetto di $ proof $, sopra solo accennato. La proof non è altro che un insieme di $ step $ da percorrere, secondo un preciso schema che rispecchia lo schema di hashing presente nella struttura dati autenticata, per ottenere il $ root hash $. Essa è utilizzato per ottenere una prova, appunto, della validità di un particolare elemento restituito da una query. Infatti oltre a ricevere un generico valore $ x $, corrispondente ad una chiave $ k $, il client ottiene anche una $ Proof(k) $, e potrà dunque verificare localmente la corrispondenza tra il proprio root hash locale, $ trusted Root Hash $, e quello ottenibile seguendo l'opportuna serie di passi sulla proof ottenuta, $ untrusted Root Hash $.
+		Prima di analizzare l'operazione di query, è necessario soffermarsi sul concetto di \textit{proof}, sopra solo accennato. La proof non è altro che un insieme di \textit{step} da percorrere, secondo un preciso schema che rispecchia lo schema di hashing presente nella struttura dati autenticata, per ottenere il \textit{root hash}. Essa è utilizzato per ottenere una prova, appunto, della validità di un particolare elemento restituito da una query. Infatti oltre a ricevere un generico valore $ x $, corrispondente ad una chiave $ k $, il client ottiene anche una \textit{Proof(k)}, e potrà dunque verificare localmente la corrispondenza tra il proprio root hash locale, \textit{trusted Root Hash}, e quello ottenibile seguendo l'opportuna serie di passi sulla proof ottenuta, \textit{untrusted Root Hash}.
 		
 	\begin{figure}
 		\centering
 		\includegraphics[scale=0.8]{figure/proofExample.eps}
-		\caption{\textbf{Esempio di una proof}: i nodi costituenti la proof per la chiave 'key 3' sono evidenziati, così come i collegamenti necessari a ripercorrere gli $ step $ per ottenere il root hash. Si osservi che la proof sarebbe stata la stessa per la chiave 'key 4' .}\label{fig:9}
+		\caption{\textbf{Esempio di una proof}: i nodi costituenti la proof per la chiave 'key 3' sono evidenziati, così come i collegamenti necessari a ripercorrere gli \textit{step} per ottenere il root hash. Si osservi che la proof sarebbe stata la stessa per la chiave 'key 4' .}\label{fig:9}
 	\end{figure}
  		
 	\subsection{Query e Verifica}
@@ -350,7 +350,7 @@
 
 		{AGGIUNGERE CITAZIONE PROTOCOLLO E TESI GIANMARIA}
 	
-		Analizzato il concetto di $ proof $ è possibile ora inserirlo nel più ampio contesto di una query. Un client, a seguito dell'esecuzione di una query su una determinata coppia chiave-valore $ (k,x) $, otterrà una $ Proof(k) $ relativa a quella chiave. Il client, che memorizza localmente il $ root hash $ di struttura, ripercorrerà gli $ step $ opportuni sulla proof, grazie alla conoscenza della particolare funzione crittografica di hash $ h $ correntemente attiva sull'ADS. (Deve cioè effettuare operazioni di hash, nel dato ordine, di tutta una sequenza di hash.) Otterrà dunque il $ root hash $ presente sul cloud e potrà verificare che questo corrisponda a quello locale. Nel caso in cui questo non accada, vorrà dire che l'integrità del valore ottenuto non è garantita, in quando sono state effettuate delle modifiche sulla struttura, ovvero sul $ dataset $. 
+		Analizzato il concetto di \textit{proof} è possibile ora inserirlo nel più ampio contesto di una query. Un client, a seguito dell'esecuzione di una query su una determinata coppia chiave-valore $ (k,x) $, otterrà una \textit{Proof(k)} relativa a quella chiave. Il client, che memorizza localmente il \textit{root hash} di struttura, ripercorrerà gli \textit{step} opportuni sulla proof, grazie alla conoscenza della particolare funzione crittografica di hash $ h $ correntemente attiva sull'ADS. (Deve cioè effettuare operazioni di hash, nel dato ordine, di tutta una sequenza di hash.) Otterrà dunque il \textit{root hash} presente sul cloud e potrà verificare che questo corrisponda a quello locale. Nel caso in cui questo non accada, vorrà dire che l'integrità del valore ottenuto non è garantita, in quando sono state effettuate delle modifiche sulla struttura, ovvero sul \textit{dataset}. 
 			
 	
 \section{Persistenza}
