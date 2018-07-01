@@ -6,7 +6,8 @@
 
 %	In questa sezione si ripercorrono gli stessi argomenti della parte di analisi, in parallelo, ma focalizzandosi sulle scelte di
 %	progetto. Queste dovranno essere motivate e lo scopo di questa porzione di testo è di definire le varie parti e la loro 
-%	collaborazione. Il livello di dettaglio non sarà massimo in quanto nelle successive sezioni si entrerà nello specifico.
+%	collaborazione GLOBALE (API + persistenza). Il livello di dettaglio non sarà massimo in quanto nelle successive sezioni 
+%	si entrerà nello specifico.
 %
 %	{Diagrammi} Class diagrams UML o analoghi più efficaci per il comportamento dinamico
 %	{Immagini}
@@ -20,23 +21,52 @@
 %	
 %	Il focus è sulle scelte progettuali. Evidenziare dunque i punti di forza e le scelte a livello di pattern.
 	
-	\subsection{Skiplist Autenticata}
+	\subsection{Interfaccia ADS}
+	
+	%	MODELLO FUNZIONALE, motivare la necessità
+	%
+	%	Sezione in cui si motiva pattern per interfaccia e si evidenzia collegamento funzionale con casi d'uso e requisiti, in termini solo di funzionalità offerte
+	
+	\subsection{Interfaccia Proof}
+	
+	%	MODELLO FUNZIONALE, motivare la necessità
+	%
+	%	Sezione in cui si motiva pattern per interfaccia e si evidenzia collegamento funzionale con casi d'uso e requisiti, in termini solo di funzionalità offerte
+	
+	\subsection{Nodo}
+	
+	%	Parlare dell'elemento alla base di implementazioni realizzate di ADS e Proof.
+	
+	\subsection{Schema hashing e $ HashUtils $}
+	
+	%	Breve sezione che riprende l'argomento dell'hashing e che lo analizza concentrandosi sulle scelte progettuali. Si parla anche della parametrizzazione rispetto
+	%	alle varie funzioni di hashing e si parla di HashUtils con relativo pattern Singleton
 		
-%		Qui si entra in dettaglio sulla struttura principale, autenticata. Quindi vengono analizzate più nel dettaglio alcune scelte progettuali
-%		su questa struttura
+	\subsection{Skip List Autenticata}
+	
+	%	MODELLO FUNZIONALE, motivare la realizzazione
+	%	
+	% 	Fatte tutte le opportune premesse descritte e motivate (APS style), si passa ora alla descrizione della struttura principale
+	
+	\subsection{Skip List Proof}
+	
+	%	MODELLO FUNZIONALE, motivare la realizzazione
+	%	
+	%	Fatte tutte le opportune premesse descritte e motivate (APS style), si passa ora alla descrizione della struttura proof
 
-	
-	
-	\subsection{Schema hashing}
-	
-%		Breve sezione che riprende l'argomento dell'hashing e che lo analizza concentrandosi sulle scelte progettuali.
-		
-	\subsection{Proof}
-	
-%		MODELLO FUNZIONALE, rimandando a parte successiva 
-%		
-%		Qui si entra in dettaglio sulla struttura secondaria, con dettagli di autenticazione. Quindi vengono analizzate più nel dettaglio alcune scelte progettuali
-%		su questa struttura
+
+
+
+
+
+
+
+
+
+
+
+
+
 	
 \section{Persistenza}
 
