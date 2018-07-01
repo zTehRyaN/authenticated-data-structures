@@ -59,6 +59,7 @@
 	
 	Lo schema di hashing presente all'interno della struttura, rispecchia quello già presentato in fase di analisi, e si adatta perfettamente alla separazione dei valori di hash attuata all'interno del nodo. Infatti da un lato il campo $ first $ $ Hash $, memorizzerà sempre l'hash relativo al campo $ down $ del nodo, sia esso un nodo o un valore vero e proprio, di tipo qualsiasi. Dall'altro lato il campo $ second $ $ Hash $ memorizzerà, solo se presente, l'hash relativo al campo $ next $ del nodo corrente. 
 	E' stato ritenuto conveniente eliminare, per i nodi sulla $ base list $, il fatto che il campo $ second $ $ Hash $, nel caso in cui il nodo $ next $ sia un nodo $ tower $, dovesse memorizzare l'hash relativo al valore sottostante il nodo $ next $. Questo permette di garantire l'esecuzione di tutte le operazione che comportino un refresh degli hash della struttura, in un tempo che sia con alta probabilità, $\mathcal{O}(log{}n)$.
+	Inoltre, la proprietà di non-commutatività degli hash, si manifesta nel fatto che, per costruzione, se fosse invertito il valore presente nel campo $ first $ $ Hash $, con quello presente nel campo $ second $ $ Hash $, il cambiamento si ripercuoterebbe su tutti gli hash seguenti, fino ad arrivare alla modifica del root Hash dell'intera struttura. Pertanto è fondamentale l'ordine e la posizione reciproca dei vari nodi.
 	
 	Per quanto riguarda più specificatamente le funzioni crittografiche di hash, si è deciso di delegare il compito di calcolo di hash, singoli o concatenati, ad un $ Singleton $, visibile a tutte le classi dell'API. Questa scelta ha permesso di rendere l'intera realizzazione totalmente flessibile e parametrica rispetto alla particolare funzione di hash che si volesse adottare.
 	
@@ -77,6 +78,8 @@
 	Prima di addentrarsi dettagliatamente sulla parte progettuale e algoritmica della struttura dati autenticata, è necessario fare delle considerazioni di carattere generale, conseguenza di quanto detto in fase di analisi.
 	Prima di tutto si sottolinea l'inutilità, in questo studio progettuale, della colonna di nodi sentinella di tipo $ +\infy $, la cui presenza comporterebbe solo un inutile spreco di memoria. I nodi sentinella di tipo $ -\infy $, d'altro canto, servono sia per poter avere una colonna che sia concettualmente antecedente a tutte le altre colonne presenti nella struttura e sia di supporto all'applicazione dello schema di hashing.
 	Secondariamente si è ritenuto superfluo, e puramente formale, il mantenimento di un livello superiore a tutti gli altri livelli, contenente soltanto agli estremi i nodi sentinella. Questo aggiungerebbe solamente una passo in più agli algoritmi di esecuzione delle operazioni. Nel contesto più ampio di una successiva applicazione di memorizzazione in persistenza della struttura, il mantenimento di questo livello superiore  complicherebbe soltanto la conversione da formato ad oggetti al formato della base di dati.
+	
+	La ricerca in tempo logaritmico, cosi come le operazioni di inserimento, cancellazione o modifica, sono permesse dalle chiavi dei nodi, che dunque saranno ordinate: $ k_{-\infty} < k_{1} < k_{2} < \dots < k_{n} < k_{+\infty} $.
 	
 	\subsection{Skip List Proof}
 	
