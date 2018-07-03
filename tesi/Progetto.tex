@@ -128,12 +128,21 @@
 	% 	Fatte tutte le opportune premesse descritte e motivate (APS style), si passa ora alla descrizione della struttura principale
 	
 	Prima di addentrarsi dettagliatamente sulla parte progettuale e algoritmica della struttura dati autenticata, è necessario fare delle considerazioni di carattere generale, conseguenza di quanto detto in fase di analisi.
-	Prima di tutto si sottolinea l'inutilità, in questo studio progettuale, della colonna di nodi sentinella di tipo $ +\infy $, la cui presenza comporterebbe solo un inutile spreco di memoria. I nodi sentinella di tipo $ -\infy $, d'altro canto, servono sia per poter avere una colonna che sia concettualmente antecedente a tutte le altre colonne presenti nella struttura e sia di supporto all'applicazione dello schema di hashing.
+	Prima di tutto si sottolinea l'inutilità, in questo studio progettuale, della colonna di nodi sentinella di tipo $ +\infty $, la cui presenza comporterebbe solo un inutile spreco di memoria. I nodi sentinella di tipo $ -\infty $, d'altro canto, servono sia per poter avere una colonna che sia concettualmente antecedente a tutte le altre colonne presenti nella struttura e sia di supporto all'applicazione dello schema di hashing.
 	Secondariamente si è ritenuto superfluo, e puramente formale, il mantenimento di un livello superiore a tutti gli altri livelli, contenente soltanto agli estremi i nodi sentinella. Questo aggiungerebbe solamente una passo in più agli algoritmi di esecuzione delle operazioni. Nel contesto più ampio di una successiva applicazione di memorizzazione in persistenza della struttura, il mantenimento di questo livello superiore complicherebbe soltanto la conversione da formato ad oggetti a quello della base di dati.
 	
 	La ricerca in tempo logaritmico, cosi come le operazioni di inserimento, cancellazione o modifica, sono permesse dalle chiavi dei nodi, che dunque saranno ordinate: $ k_{-\infty} < k_{1} < k_{2} < \dots < k_{n} < k_{+\infty} $.
 	
-	[IMMAGINE ESPLICATIVA PER STACK]
+	\begin{figure}[tbp] 
+		\begin{center}
+			\begin{tabular}{c @{\hspace{1em}} c}
+				\includegraphics[scale=0.7]{figure/stack.eps} &
+				\includegraphics[scale=0.6]{figure/path.eps} \\
+				(a) & (b)
+			\end{tabular}
+		\end{center}
+		\caption{Esempio di una pila. I nodi sono stati volutamente segnati con un identificativo, per facilitare la comprensione dell'immagine, ma non hanno alcun riferimento con la progettazione o la realizzazione reale dei nodi. (a) La pila contenente in ordine di attraversamento, dal basso verso l'alto, i passi compiuti per comporre il \textit{path}. I blocchi della pila sono composti dal nodo di partenza di ogni passo, affiancato dalla stringa che indica la direzione del passo compiuto. (b) Sono evidenziati, nella Skip List, i nodi e le direzioni presenti nello stack, a seguito della ricerca dell'elemento 10.} \label{fig:stack+path}
+	\end{figure}
 	
 	\begin{itemize}
 		\item \verb!getWithProof(k: K): Pair<V?, Proof<H, K, V>>!. L'algoritmo alla base di questa funzione, può essere diviso in due parti. La prima parte effettua una semplice ricerca di $ k $ sulla base delle chiavi contenute nei nodi, costruendo contemporaneamente la pila, \textit{stack}, di cui un esempio è raffigurato in figura \ref{fig:pila}. Questa funzione, come tutte le operazioni di read offerte dalla Skip List Autenticata, si appoggiano su una serie di metodi per la ricerca, che oltre a restituire il nodo cercato, riempono la pila. La seconda parte sfrutta proprio il contenuto di questa pila, per poter costruire la \textit{Proof} relativa alla chiave cercata $ k $. Infatti il contenuto della pila, analizzato a ritroso rispetto all'ordine di riempimento, rappresenta il percorso, \textit{path}, inverso, dal nodo allo \textit{start node.}. Per costruire la Proof necessaria ad ottenere il \textit{root hash}, bisogna però "integrare" i nodi presenti nello stack, proprio per costruzione dello schema di hash adottato sulla struttura. Se, ad esempio, un nodo ha come \textit{next} un \textit{plateau}, allora esso dovrà essere inserito nella \textit{Proof} in quanto sarà necessario nella computazione degli hash. Lo stesso vale per i nodi \textit{down} di ogni nodo, che non siano presenti già nel \textit{path}.
