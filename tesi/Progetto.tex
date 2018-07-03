@@ -113,7 +113,7 @@
 	E' stato ritenuto conveniente eliminare, per i nodi sulla \textit{base list}, il fatto che il campo \textit{second Hash}, nel caso in cui il nodo \textit{next} sia un nodo \textit{tower}, dovesse memorizzare l'hash relativo al valore sottostante il nodo \textit{next}. Questo permette di garantire l'esecuzione di tutte le operazione che comportino un refresh degli hash della struttura, in un tempo che sia con alta probabilità, $\mathcal{O}(log{}n)$.
 	Inoltre, la proprietà di non-commutatività degli hash, si manifesta nel fatto che, per costruzione, se fosse invertito il valore presente nel campo \textit{first Hash}, con quello presente nel campo \textit{second Hash}, il cambiamento si ripercuoterebbe su tutti gli hash seguenti, fino ad arrivare alla modifica del root Hash dell'intera struttura. Pertanto è fondamentale l'ordine e la posizione reciproca dei vari nodi.
 	
-	Per quanto riguarda più specificatamente le funzioni crittografiche di hash, si è deciso di delegare il compito di calcolo di hash, singoli o concatenati, ad un \textit{Singleton}, visibile a tutte le classi dell'API. Questa scelta ha permesso di rendere l'intera realizzazione totalmente flessibile e parametrica rispetto alla particolare funzione di hash che si volesse adottare.
+	Per quanto riguarda più specificatamente le funzioni crittografiche di hash, si è deciso di delegare il compito di calcolo di hash, singoli o concatenati, ad un \textit{Singleton}, visibile a tutte le classi dell'API. Questa scelta ha permesso di rendere l'intera realizzazione totalmente flessibile e parametrica rispetto alla particolare funzione di hash che si volesse adottare, tra quelle disponibili elencate in fase di analisi.
 	
 	\begin{figure}
 		\centering
