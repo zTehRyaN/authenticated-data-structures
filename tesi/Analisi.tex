@@ -192,7 +192,9 @@
 	%		Funzioni di hash, con eventuale breve richiamo alle loro differenze. Questo servirà a giustificare la resa parametrica
 	%		nel codice e potrà servire ad introdurre la parte di analisi di prestazioni, nel caso di dettaglio dell'analisi computazionale
 	%		(spazio e tempo) riguardo l'applicazione delle varie funzioni di hashing.
-
+			
+			Per lo scopo, possono essere adottati vari tipi di funzione di hash, sui singoli valori. Si è ritenuto importante garantire un certo livello di flessibilità, permettendo una scelta all'interno delle API. Le funzioni tra le quali è possibile scegliere appartengono a una famiglia delle funzioni crittografiche di hash, le \textit{Secure Hash Algorithms}, abbreviato \textit{SHA}. In particolare è possibile scegliere tra lo SHA-1, funzione di 160 bit la cui vulnerabilità crittografica è nota, lo SHA-256 e lo SHA-512, resistenti a pericolosi attacchi come il \textit{Length extension attack}, le quali differiscono nella dimensione della parola.
+			
 	\subsection{Resistenza a collisioni}
 	
 %		In questa sottosezione si approfondisce la caratteristica di resistenza a collisioni dell'hashing commutativo
