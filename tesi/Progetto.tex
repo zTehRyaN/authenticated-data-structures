@@ -164,8 +164,8 @@
 				\caption{Schema che mostra il funzionamento dei \textit{delta}. Tramite primitive di tipo \verb|add(k: K, v: V)| e/o \verb|del(k: K)| si popola la pila della struttura con dei blocchi, ordinati cronologicamente. L'uso di \verb|applyDeltas()| applica in ordine questi \textit{delta} e restituisce un'altra struttura, con stato di partenza equivalente al primo \textit{snapshot}, ma con tutti i \Delta_{n} applicati. La pila viene svuotata, ed è dunque poi pronta ad accogliere nuovi \textit{delta}.}\label{fig:deltas}
 			\end{figure}
 					
-		\item \verb|rootHash(): H|. 
-		
+		\item \verb|rootHash(): H|. Operazione che calcola e restituisce il \textit{Root Hash} dell'intera struttura. Lo \textit{Start node} conterrà in ogni istante, nel campo \textit{firstHash}, il contributo in termini di concatenzioni di hash crittografici dato da tutti gli elementi correlati al campo \textit{down}, e nel campo \textit{secondHash}, il contributo in termini di concatenazioni di hash crittografici dato da tutti gli elementi correlati al campo \textit{next}. Viene, a questo punto, restituito l'hash derivato dalla concatenazione dei campi \textit{firstHash} e \textit{secondHash}.
+			
 		\item \verb|isEmpty(): Boolean|. 
 		
 	\end{itemize}
