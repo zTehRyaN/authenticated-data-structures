@@ -147,7 +147,7 @@
 	Segue la descrizione delle operazioni fornite, con enfasi sulle caratteristiche algoritmiche:
 	
 	\begin{itemize}
-		\item \verb|getWithProof(k: K): Pair<V?, Proof<H, K, V>>|. L'algoritmo alla base di questa funzione, può essere diviso in due parti. La prima parte effettua una semplice ricerca di $ k $ sulla base delle chiavi contenute nei nodi, costruendo contemporaneamente la pila, \textit{stack}, di cui un esempio è raffigurato in figura \ref{fig:stack+path}. Questa funzione, come tutte le operazioni di read offerte dalla Skip List Autenticata, si appoggiano su una serie di metodi per la ricerca, che oltre a restituire il nodo cercato, riempono la pila. La seconda parte sfrutta proprio il contenuto di questa pila, per poter costruire la \textit{Proof} relativa alla chiave cercata $ k $. Infatti il contenuto della pila, analizzato a ritroso rispetto all'ordine di riempimento, rappresenta il percorso, \textit{path}, inverso, dal nodo allo \textit{start node.}. Per costruire la Proof necessaria ad ottenere il \textit{root hash}, bisogna però "integrare" i nodi presenti nello stack, proprio per costruzione dello schema di hash adottato sulla struttura. Se, ad esempio, un nodo ha come \textit{next} un \textit{plateau}, allora esso dovrà essere inserito nella \textit{Proof} in quanto sarà necessario nella computazione degli hash. Lo stesso vale per i nodi \textit{down} di ogni nodo, che non siano presenti già nel \textit{path}.
+		\item \verb|getWithProof(k: K): Pair<V?, Proof<H, K, V>>|. L'algoritmo alla base di questa funzione, può essere diviso in due parti. La prima parte effettua una semplice ricerca di $ k $ sulla base delle chiavi contenute nei nodi, costruendo contemporaneamente la pila, \textit{stack}, di cui un esempio è raffigurato in figura \ref{fig:stack+path}. Questa funzione, come tutte le operazioni di read offerte dalla Skip List Autenticata, si appoggiano su una serie di metodi per la ricerca, che oltre a restituire il nodo cercato, riempono la pila con opportuni dati per ogni passo effettutato. La seconda parte sfrutta proprio il contenuto di questa pila, per poter costruire la \textit{Proof} relativa alla chiave cercata $ k $. Infatti il contenuto della pila, analizzato a ritroso rispetto all'ordine di riempimento, rappresenta il percorso, \textit{path}, inverso, dal nodo allo \textit{start node.}. Per costruire la Proof necessaria ad ottenere il \textit{root hash}, bisogna però "integrare" i nodi presenti nello stack, proprio per costruzione dello schema di hash adottato sulla struttura. Se, ad esempio, un nodo ha come \textit{next} un \textit{plateau}, allora esso dovrà essere inserito nella \textit{Proof} in quanto sarà necessario nella computazione degli hash. Lo stesso vale per i nodi \textit{down} di ogni nodo, che non siano presenti già nel \textit{path}.
 		In base a quanto detto, una volta effettuata la ricerca dell'elemento, che indirettamente costituisce la pila, viene ripercorso il \textit{path} a ritroso partendo dall'elemento trovato, con opportune operazioni di pop. Ogni operazione di pop fornisce il successivo nodo presente nel \textit{path} e la direzione, in senso inverso, che deve essere intrapresa per raggiungerlo. Tramite questa seconda informazione è possibile distinguere il caso in cui, seguendo il \textit{path}, è necessario proseguire verso sinistra o verso l'alto. Nel primo caso sarà necessario integrare la \textit{Proof} con il nodo \textit{down} del successivo nodo del \textit{path}. Nel secondo caso, invece l'integrazione avviene solo nel caso in cui il nodo \textit{next} del successivo nodo del \textit{path} sia un \textit{plateau}.
 		
 		\item \verb|getProof(keys: List<K>): Proof<H, K, V>|. Questa funzione in qualche modo estende la precedente, dando la possibilità, in un solo round, di richiedere ed ottenere una Proof valida per un insieme di chiavi passato come parametro. Ovviamente la lista passata dovrà necessariamente contenere solo chiavi presenti nella struttura.
@@ -171,7 +171,8 @@
 			
 		\item \verb|isEmpty(): Boolean|. Questa operazione semplicemente restituisce \textit{true} se la struttura non contiene nessuna coppia chiave-valore, \textit{false} altrimenti.
 		
-		\item \verb|clone(): ADS<H, K, V>|. Copia la struttura e ne restituisce una identica, tranne per i delta che NON vengono copiati
+%		\item \verb|clone(): ADS<H, K, V>|. Copia la struttura e ne restituisce una identica, tranne per i delta che NON vengono copiati
+%					[Appunti di ragionamento su cloning ADS]
 		
 	\end{itemize}
 	
@@ -181,6 +182,29 @@
 	%	
 	%	Fatte tutte le opportune premesse descritte e motivate (APS style), si passa ora alla descrizione della struttura skip list proof
 	
+
+		Prima di addentrarsi dettagliatamente su aspetti di natura progettuale e algoritmica della Skip List Proof, è necessario fare delle premesse. La Proof, come già detto, concettualmente parlando, è relativa ad un particolare istante temporale della struttura dati autenticata da cui è stata generata. Dunque dal momento in cui inizia ad esistere, acquisisce uno stato e questo sarà completamente indipendente dallo stato della struttura di partenza. Pertanto la Skip List Proof, sarà una struttura dati indipendente e parallela all'ADS di partenza, di cui, inoltre, non avrà nessuna conoscenza, per motivi in parte già comprensibili, e in parte motivati in seguito nella sezione dedicata alla persistenza.
+
+		In base all'utilizzo dell'API, inoltre, nell'ambito del protocollo di integrità su dati nel Cloud (6), sarà necessario poter applicare update ricevuti dall'ADS, nella forma compatibile con la Proof, alla Proof stessa, come già detto indipendente dalla struttura da cui è stata generata.
+		
+		[Discorso su somiglianza con albero]
+		
+		[Discorso per giungere alla somiglianza con skip list]
+		
+		[Discorso su scelta tra opzione HEAD e opzione KEYS]
+				
+		Segue la descrizione delle operazioni fornite, con enfasi sulle caratteristiche algoritmiche:
+		
+		\begin{itemize}
+			\item \verb|rootHash(): H|.
+			\item \verb|union(proof: Proof<H, K, V>): Proof<H, K, V>|. 
+				[APPUNTI su ragionamenti]
+			\item \verb|rootHash(list: List<Pair<K, V?>>): Pair<Proof<H, K, V>, H>|. 
+			\item \verb|findNode(key: K, start: AuthSkipListNode<K, H>? = null): AuthSkipListNode<K, H>|. 
+%			\item \verb|clone(): Proof<ByteArray, String, Any>|. 
+%				[Appunti di ragionamento su cloning Proof]
+		\end{itemize}
+
 
 
 
