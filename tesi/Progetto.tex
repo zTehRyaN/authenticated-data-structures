@@ -196,15 +196,16 @@
 		Segue la descrizione delle operazioni fornite, con enfasi sulle caratteristiche algoritmiche:
 		
 		\begin{itemize}
-			\item \verb|findNode(key: K, start: AuthSkipListNode<K, H>? = null): AuthSkipListNode<K, H>|. 
+			\item \verb|findNode(key: K, start: AuthSkipListNode<K, H>? = null): AuthSkipListNode<K, H>|. E' un operazione di ricerca. Intuitivamente, per costruzione di Skip List Proof, è analoga ai metodi di ricerca all'interno della Skip List Autenticata. Partendo dall'\textit{HEAD} o dal nodo $ start $ se passato per parametro, in base alla chiave $ key $ è effettuata la ricerca del nodo corrispondente. Se la chiave inserita non è presenta è necessario sia sollevata un'eccezione, altrimenti viene restituito il nodo trovato. Questa operazione è private e di supporto alle seguenti operazioni.
 			
 			\item \verb|rootHash(): H|. L'operazione è analoga a quella della Skip List Autenticata appena descritta. Calcola e restituisce il \textit{Root Hash} dell'intera proof. Il nodo \textit{HEAD} conterrà in ogni istante, nel campo \textit{firstHash}, il contributo in termini di concatenzioni di hash crittografici dato da tutti gli elementi correlati al campo \textit{down}, e nel campo \textit{secondHash}, il contributo in termini di concatenazioni di hash crittografici dato da tutti gli elementi correlati al campo \textit{next}. Viene, a questo punto, restituito l'hash derivato dalla concatenazione dei campi \textit{firstHash} e \textit{secondHash}.
 			
-			\item \verb|rootHash(list: List<Pair<K, V?>>): Pair<Proof<H, K, V>, H>|. 
+			\item \verb|rootHash(list: List<Pair<K, V?>>): Pair<Proof<H, K, V>, H>|. [Operazione di scrittura ==> Functional]
 			
 			\item \verb|union(proof: Proof<H, K, V>): Proof<H, K, V>|. 
 				[APPUNTI su ragionamenti]
-
+				[Operazione di scrittura ==> Functional]
+				
 %			\item \verb|clone(): Proof<ByteArray, String, Any>|. 
 %				[Appunti di ragionamento su cloning Proof]
 		\end{itemize}
