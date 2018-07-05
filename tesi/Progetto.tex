@@ -155,16 +155,15 @@
 		
 		\item \verb|getValue(k: K): V?|. Si tratta di una semplice operazione di \textit{retrieve}. Infatti restituisce un valore di tipo $ V $, associato alla chiave $ k $ passata come parametro. Se non è presente la chiave è restituito $ null $.
 		
-		\item \verb|applyDeltas(): ADS<H, K, V>|. 
-		
+		\item \verb|applyDeltas(): ADS<H, K, V>|. Questa operazione permette alla struttura di avere la capacità di aggiornarsi rispetto a richieste di update in arrivo dai client. Trattandosi di una operazione di scrittura, e dovendo innestarsi in un ambito di concorrenza già altrove menzionato, sarà necessario evitare di modificare direttamente lo stato della struttura. Dunque viene separato il momento della ricezione di particolari richieste di update dal momento della loro effettiva applicazione. In questo modo sarà possibile \textit{clonare} la struttura corrente e applicare su quest'ultima gli update. Gli update possono tradursi in primitive di tipo \verb|add(k: K, v: V): H| nel caso si trattasse di aggiunte o modifiche, o di tipo \verb|del(k: K): H| nel caso si trattasse di cancellazioni, andando rappresentare dei \textit{delta}, ossia delle variazioni in potenza della struttura. Essi sono accumulati, mantenendone l'ordine di "arrivo" in una pila, con opportune operazioni di $ push $. A seguito dell'invocazione di \verb|applyDeltas()|, le istanze della pila vengono valutata una ad una singolarmente, in ordine cronologico, con operazioni di $ pop $, e applicate a un clone della struttura corrente. Sarà poi questo, comprensivo degli update, ad essere restituito.
+		Queste scelte rendono invariato lo stato della struttura di partenza, e dunque passibile di calcoli e computazioni anche contemporaneamente all'applicazione di update.
+				
 			\begin{figure}
 				\centering
 				\includegraphics[scale=0.6]{figure/deltas.eps}
 				\caption{Schema che mostra il funzionamento dei \textit{delta}. Tramite primitive di tipo \verb|add(k: K, v: V)| e/o \verb|del(k: K)| si popola la pila della struttura con dei blocchi, ordinati cronologicamente. L'uso di \verb|applyDeltas()| applica in ordine questi \textit{delta} e restituisce un'altra struttura, con stato di partenza equivalente al primo \textit{snapshot}, ma con tutti i \Delta_{n} applicati. La pila viene svuotata, ed è dunque poi pronta ad accogliere nuovi \textit{delta}.}\label{fig:deltas}
 			\end{figure}
-			
-			\verb|del(k: K): H| \verb|add(k: K, v: V): H|
-			
+					
 		\item \verb|rootHash(): H|. 
 		
 		\item \verb|isEmpty(): Boolean|. 
