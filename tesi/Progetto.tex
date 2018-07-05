@@ -151,6 +151,8 @@
 		\item \verb|getProof(keys: List<K>): Proof<H, K, V>|. Questa funzione in qualche modo estende la precedente, dando la possibilità, in un solo round, di richiedere ed ottenere una Proof valida per un insieme di chiavi passato come parametro. Ovviamente la lista passata dovrà necessariamente contenere solo chiavi presenti nella struttura.
 		Per raggiungere questo obiettivo, da un lato la struttura si preoccupa di creare le singole Proof, una per volta, per ogni singola chiave passata come parametro, in quanto, come già detto, è l'unica entità che conosce le informazioni necessarie a farlo. Dall'altro è mantenuta una Proof cumulativa, valida per tutte le chiavi nell'intervallo $ [k[0], k[corrente]) $. Pertanto appena è creata una nuova Proof viene integrata con la Proof cumulativa corrente, richiedendo a quest'ultima una \verb|union(proof: Proof<H, K, V>)|. Questo procedimento prosegue fino all'avvenuta presa in considerazione dell'ultima chiave in $ keys $, e termina con la restituzione della Proof cumulativa, a questo punta valida per tutto l'insieme di chiavi passato per parametro.
 		
+		E' inoltre necessario precisare che la Skip List Autenticata risulta accoppiata all'interfaccia della Proof, e \textit{non} alla sua implementazione. Questo è stato preferito, fornendo uno strato di \textit{Indirection}, in quanto la Skip List Proof, può subire cambiamenti e ottimizzazioni interne, senza ripercuotersi direttamente sulla Skip List Autenticata.
+		
 		\item \verb|getValue(k: K): V?|.
 		
 		\item \verb|applyDeltas(): ADS<H, K, V>|. 
