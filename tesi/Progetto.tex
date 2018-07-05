@@ -153,7 +153,7 @@
 		
 		E' inoltre necessario precisare che la Skip List Autenticata risulta accoppiata all'interfaccia della Proof, e \textit{non} alla sua implementazione. Questo è stato preferito, fornendo uno strato di \textit{Indirection}, in quanto la Skip List Proof, può subire cambiamenti e ottimizzazioni interne, senza ripercuotersi direttamente sulla Skip List Autenticata.
 		
-		\item \verb|getValue(k: K): V?|.
+		\item \verb|getValue(k: K): V?|. Si tratta di una semplice operazione di \textit{retrieve}. Infatti restituisce un valore di tipo $ V $, associato alla chiave $ k $ passata come parametro. Se non è presente la chiave è restituito $ null $.
 		
 		\item \verb|applyDeltas(): ADS<H, K, V>|. 
 		
