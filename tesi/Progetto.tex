@@ -202,7 +202,7 @@
 			
 			\item \verb|rootHash(): H|. L'operazione è analoga a quella della Skip List Autenticata appena descritta. Calcola e restituisce il \textit{Root Hash} dell'intera proof. Il nodo \textit{HEAD} conterrà in ogni istante, nel campo \textit{firstHash}, il contributo in termini di concatenzioni di hash crittografici dato da tutti gli elementi correlati al campo \textit{down}, e nel campo \textit{secondHash}, il contributo in termini di concatenazioni di hash crittografici dato da tutti gli elementi correlati al campo \textit{next}. Viene, a questo punto, restituito l'hash derivato dalla concatenazione dei campi \textit{firstHash} e \textit{secondHash}.
 			
-			\item \verb|rootHash(list: List<Pair<K, V?>>): Pair<Proof<H, K, V>, H>|. [Operazione di scrittura ==> Functional] [Lista invece che mappa per accesso iterativo e mai indicizzato]
+			\item \verb|rootHash(list: List<Pair<K, V?>>): Pair<Proof<H, K, V>, H>|. Nel caso in cui tutti i valori passati siano nulli, l'operazione risulta equivalente a \verb|rootHash(): H|. Tramite la presenza di anche un solo valore non nullo, l'operazione diventerà di scrittura. Trattandosi di una operazione di scrittura, e dovendo innestarsi in un ambito di concorrenza già altrove menzionato, sarà necessario evitare di modificare direttamente lo stato della struttura. Dunque la struttura sarà clonata internamente e le modifiche agli hash saranno applicate sul clone. La struttura iniziale sarà dunque passibile di calcoli e computazioni anche contemporaneamente all'applicazione di queste modifiche. Il parametro che accetta è una lista di coppie chiave-valore, struttura che verrà processata iterativamente, rendendo superflua l'applicazione di una mappa di coppia chiave-valore. Nello specifico l'operazione processerà, per ogni chiave presente nella lista $ list $, il nodo corrispondente nella Proof, aggiornando gli hash, risalendo fino al nodo \textit{HEAD}. Al termine di questo elenco di queste operazioni, la funzione restituirà la nuova Proof, con le modifiche applicate e il nuovo \textit{Root Hash}.
 			
 			\item \verb|union(proof: Proof<H, K, V>): Proof<H, K, V>|. 
 				[APPUNTI su ragionamenti]
@@ -211,6 +211,7 @@
 %			\item \verb|clone(): Proof<H, K, V>|. 
 %				[Appunti di ragionamento su cloning Proof]
 		\end{itemize}
+
 
 
 
