@@ -191,22 +191,24 @@
 		
 		[Discorso per giungere alla somiglianza con skip list] ==> [Motivare il nome del paragrafo e dunque della struttura]
 		
-		[Discorso su scelta tra opzione HEAD e opzione KEYS]  ==> [Menzionare che lo start node è lo stesso della skip list autenticata]
-				
+%     [Discorso su scelta tra opzione HEAD e opzione KEYS]  ==> [Menzionare che lo start node è lo stesso della skip list autenticata]
+		Riguardo la gestione interna della struttura, si individuano due principali alternative. La prima consiste nell'utilizzare come punto di partenza per ogni operazione il nodo \textit{HEAD}. La seconda invece consiste nell'avere una struttura contenente i riferimenti ai nodi contenenti le coppie chiave-valore per le quali è valida la Proof. La seconda soluzione presenta dei vantaggi soprattutto per quanto riguarda le operazioni che devono essere effettuate su un specifiche chiavi, in quanto sarebbe possibile sostituire l'operazione di ricerca vera e propria, con un veloce accesso indicizzato. Tuttavia, come soluzione, risulterebbe svantaggiosa per tutti i calcoli che riguarderebbero il nodo \textit{HEAD}, in quanto non sarebbe presente un riferimento fisso a quest'ultimo. La soluzione poi realmente adottata è un ibrido tra le due. Sarà dunque utilizzato il riferimento al nodo \textit{HEAD} per le operazioni \verb|rootHash(): H| e \verb|union(proof: Proof<H, K, V>): Proof<H, K, V>| e la struttura proposta nella seconda soluzione, per ridurre di un fattore $\mathcal{O}(m)$ la complessità computazionale dell'operazione \verb|rootHash(list: List<Pair<K, V?>>): Pair<Proof<H, K, V>, H>|, la quale nel caso di adozione esclusiva della prima soluzione sarebbe dell'ordine di $\mathcal{O}(m^{2}*n)$, dove $ m $ è il numero di nodi nel \textit{path} di ogni singola Proof, e $ n $ è il numero di chiavi per cui è valida la Proof stessa.
+		
+						
 		Segue la descrizione delle operazioni fornite, con enfasi sulle caratteristiche algoritmiche:
 		
 		\begin{itemize}
-			\item \verb|findNode(key: K, start: AuthSkipListNode<K, H>? = null): AuthSkipListNode<K, H>|. E' un operazione di ricerca. Intuitivamente, per costruzione di Skip List Proof, è analoga ai metodi di ricerca all'interno della Skip List Autenticata. Partendo dall'\textit{HEAD} o dal nodo $ start $ se passato per parametro, in base alla chiave $ key $ è effettuata la ricerca del nodo corrispondente. Se la chiave inserita non è presenta è necessario sia sollevata un'eccezione, altrimenti viene restituito il nodo trovato. Questa operazione è private e di supporto alle seguenti operazioni.
+%			\item \verb|findNode(key: K, start: AuthSkipListNode<K, H>? = null): AuthSkipListNode<K, H>|. E' un operazione di ricerca. Intuitivamente, per costruzione di Skip List Proof, è analoga ai metodi di ricerca all'interno della Skip List Autenticata. Partendo dall'\textit{HEAD} o dal nodo $ start $ se passato per parametro, in base alla chiave $ key $ è effettuata la ricerca del nodo corrispondente. Se la chiave inserita non è presenta è necessario sia sollevata un'eccezione, altrimenti viene restituito il nodo trovato. Questa operazione è privata e di supporto alle successive operazioni, nel caso di sola adozione della soluzione con nodo \textit{HEAD}.
 			
 			\item \verb|rootHash(): H|. L'operazione è analoga a quella della Skip List Autenticata appena descritta. Calcola e restituisce il \textit{Root Hash} dell'intera proof. Il nodo \textit{HEAD} conterrà in ogni istante, nel campo \textit{firstHash}, il contributo in termini di concatenzioni di hash crittografici dato da tutti gli elementi correlati al campo \textit{down}, e nel campo \textit{secondHash}, il contributo in termini di concatenazioni di hash crittografici dato da tutti gli elementi correlati al campo \textit{next}. Viene, a questo punto, restituito l'hash derivato dalla concatenazione dei campi \textit{firstHash} e \textit{secondHash}.
 			
-			\item \verb|rootHash(list: List<Pair<K, V?>>): Pair<Proof<H, K, V>, H>|. [Operazione di scrittura ==> Functional]
+			\item \verb|rootHash(list: List<Pair<K, V?>>): Pair<Proof<H, K, V>, H>|. [Operazione di scrittura ==> Functional] [Lista invece che mappa per accesso iterativo e mai indicizzato]
 			
 			\item \verb|union(proof: Proof<H, K, V>): Proof<H, K, V>|. 
 				[APPUNTI su ragionamenti]
 				[Operazione di scrittura ==> Functional]
 				
-%			\item \verb|clone(): Proof<ByteArray, String, Any>|. 
+%			\item \verb|clone(): Proof<H, K, V>|. 
 %				[Appunti di ragionamento su cloning Proof]
 		\end{itemize}
 
