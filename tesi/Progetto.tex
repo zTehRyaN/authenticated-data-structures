@@ -218,25 +218,25 @@
 			
 			\item \verb!union(proof: Proof<H, K, V>): Proof<H, K, V>!. Trattandosi di una operazione di scrittura, e dovendo innestarsi in un ambito di concorrenza già altrove menzionato, sarà necessario evitare di modificare direttamente lo stato della struttura. Dunque la struttura sarà clonata internamente e l'unione verrà effettuta sul clone. L'unione consiste, intuitivamente, nell'integrazione della Proof su cui viene invocato il metodo, $ this $, con la Proof passata per parametro, $ proof $. Inizia, infatti, col trovare, tramite differenza tra insiemi, le chiavi presenti in $ proof $ che non sono presenti in $ this $. Per ognuna di queste chiavi risultato della differenza, se presenti, viene effettuata una iterazione parallela a partire dall'HEAD di $ this $ e dall'HEAD di $ proof $. che ha come fine quello di aggiungere a $ this $ i nodi per renderla valida per le ulteriori chiavi, contributo di $ proof $. E' mostrato in maniera più chiara nel seguente pseudocodice:
 		
-%			\begin{algorithm}[H]
-%				\ForEach{key \in (proof.keys - this.keys)}{
-%					first_iterator = this.head
-%					second_iterator = proof.head
-%					\If{second_iterator.next != null}{
-%						first_iterator.next = second_iterator.next
-%					}
-%					\If{second_iterator.down != null}{
-%						first_iterator.down = second_iterator.down
-%					}
-%					\eIf{second_iterator.next.key $ \leqslant $ key}{
-%						first_iterator = first_iterator.next
-%						second_iterator = second_iterator.next
-%					}{
-%						first_iterator = first_iterator.down
-%						second_iterator = second_iterator.down
-%					}
-%				}
-%			\end{algorithm}
+			\begin{algorithm}[H]
+				\ForEach{key in (proof.keys - this.keys)}{
+					first-iterator = this.head
+					second-iterator = proof.head
+					\If{second-iterator.next != null}{
+						first-iterator.next = second-iterator.next
+					}
+					\If{second-iterator.down != null}{
+						first-iterator.down = second-iterator.down
+					}
+					\eIf{second-iterator.next.key $ \leq $ key}{
+						first-iterator = first-iterator.next
+						second-iterator = second-iterator.next
+					}{
+						first-iterator = first-iterator.down
+						second-iterator = second-iterator.down
+					}
+				}
+			\end{algorithm}
 			
 %	      [Appunti di ragionamento su cloning Proof]			
 			\item \verb!clone(): Proof<H, K, V>!. Copia la struttura e ne restituisce una identica. La strategia utilizzata consiste nel clonare tutti i \textit{path}, uno ad uno, e successivamente creare la Proof cumulativa tramite \verb!union!. Dunque la complessità dovuta alla gestione del nodo \textit{HEAD}, in comune per tutti i path, e alla gestione dei "sotto-percorsi", ovvero insiemi di nodi comuni a più path, è spostata proprio su quel metodo. L'algoritmo alla base della clonazione di un path, consiste nel "risalire", con una sequenza di passi verso l'alto o verso sinistra, da ogni nodo contenente chiavi per cui la Proof è valida, fino al nodo \textit{HEAD} tenendo in considerazione l'eventuale presenza di nodi "fuori-path" necessari allo schema di hashing, inseriti perché, come già detto, necessari allo schema di hashing. Se infatti, nella risalita è effettuato un passo verso l'alto, sarà necessario controllare se il nodo da clonare ha un $ plateau $ nel campo $ next $. Se invece è effettuato un passo verso sinistra, bisognerà preoccuparsi di clonare l'eventuale nodo presente nel campo $ down $.
