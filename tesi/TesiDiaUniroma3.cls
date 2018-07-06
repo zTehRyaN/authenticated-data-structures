@@ -75,7 +75,7 @@
 \newcommand{\@relatore}{Prof. Nome Cognome}
 \newcommand{\relatore}[1]{\renewcommand{\@relatore}{#1}}
 % Correlatore (Titolo Nome Cognome, es: Dott. Pippo Caruso)
-\newcommand{\@correlatore}{}
+\newcommand{\@correlatore}{Nome Cognome}
 \newcommand{\correlatore}[1]{\renewcommand{\@correlatore}{#1}}
 % Dedica
 \newcommand{\@dedica}{}
@@ -102,15 +102,15 @@
 %
 % scommenta questo blocco...
 %
-      {\large Relatore \\ \textbf{\@relatore}} \\
-%
+%      {\large Relatore \\ \textbf{\@relatore}} \\
+
 % ... oppure scommenta questo blocco
-%
-%      \begin{tabular}{c  @{\hspace{2.5cm}} c}
-%        Relatore & Correlatore \\
-%        \textbf{\@relatore} & \textbf{\@correlatore} \\
-%      \end{tabular} \\
-%
+
+      \begin{tabular}{c  @{\hspace{2.5cm}} c}
+        Relatore & Correlatore \\
+       \textbf{\@relatore} & \textbf{\@correlatore} \\
+      \end{tabular} \\
+
       \vfill
       {\large Anno Accademico \@annoAccademico} \\
    \end{center}
