@@ -89,8 +89,8 @@
 	
 	Prima di procedere con la descrizione dettagliata delle operazioni che fornisce, occorre introdurre ulteriore terminologia. Un nodo di un livello $ L_{i-1} $ contenente un elemento che non è presente al livello $ L_{i} $ è detto \textit{plateau}. Un nodo che non presenta queste caratteristiche è detto \textit{tower}. (2)
 	
-	Per comodità delle future analisi si è deciso di adottare una terminologia simile allo scritto di Goodrich e Tamassia (2), a cui ci si rifarà anceh nel successivo sottoparagrafo, in cui per ogni nodo $ v $ della sottosequenza $ L_{i} $, è detto $ elem(v) $ l'elemento memorizzato in $ v $. Inoltre è detto $ down(v) $ il nodo della sottosequenza $ L_{i-1} $ che memorizza lo stesso valore di $ v $, a meno che non si tratti della \textit{base list}, poiché in questo caso $down(v) = \boldmath{null}$.
-	Inoltre è detto $right(v)$ il nodo della sottosequenza $ L_{i} $ immediatamente alla destra di $v$, a meno che non si tratti di una sentinella di tipo $\infty$, per la quale $right(v) = \boldmath{null}$.
+	Per comodità delle future analisi si è deciso di adottare una terminologia simile allo scritto di Goodrich e Tamassia (2), a cui ci si rifarà anceh nel successivo sottoparagrafo, in cui per ogni nodo $ v $ della sottosequenza $ L_{i} $, è detto $ elem(v) $ l'elemento memorizzato in $ v $. Inoltre è detto $ down(v) $ il nodo della sottosequenza $ L_{i-1} $ che memorizza lo stesso valore di $ v $, a meno che non si tratti della \textit{base list}, poiché in questo caso $ down(v) = \boldmath{null}$.
+	Inoltre è detto $ right(v)$ il nodo della sottosequenza $ L_{i} $ immediatamente alla destra di $ v $, a meno che non si tratti di una sentinella di tipo $\infty$, per la quale $ right(v) = \boldmath{null}$.
 		
 	\begin{figure}
 		\centering
