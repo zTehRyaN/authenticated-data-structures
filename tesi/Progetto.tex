@@ -151,7 +151,7 @@
 		In base a quanto detto, una volta effettuata la ricerca dell'elemento, che indirettamente costituisce la pila, viene ripercorso il \textit{path} a ritroso partendo dall'elemento trovato, con opportune operazioni di pop. Ogni operazione di pop fornisce il successivo nodo presente nel \textit{path} e la direzione, in senso inverso, che deve essere intrapresa per raggiungerlo. Tramite questa seconda informazione è possibile distinguere il caso in cui, seguendo il \textit{path}, è necessario proseguire verso sinistra o verso l'alto. Nel primo caso sarà necessario integrare la \textit{Proof} con il nodo \textit{down} del successivo nodo del \textit{path}. Nel secondo caso, invece l'integrazione avviene solo nel caso in cui il nodo \textit{next} del successivo nodo del \textit{path} sia un \textit{plateau}.
 		
 		\item \verb|getProof(keys: List<K>): Proof<H, K, V>|. Questa funzione in qualche modo estende la precedente, dando la possibilità, in un solo round, di richiedere ed ottenere una Proof valida per un insieme di chiavi passato come parametro. Ovviamente la lista passata dovrà necessariamente contenere solo chiavi presenti nella struttura.
-		Per raggiungere questo obiettivo, da un lato la struttura si preoccupa di creare le singole Proof, una per volta, per ogni singola chiave passata come parametro, in quanto, come già detto, è l'unica entità che conosce le informazioni necessarie a farlo. Dall'altro è mantenuta una Proof cumulativa, valida per tutte le chiavi nell'intervallo $ [k[0], k[corrente]) $. Pertanto appena è creata una nuova Proof viene integrata con la Proof cumulativa corrente, richiedendo a quest'ultima una \verb|union(proof: Proof<H, K, V>)|. Questo procedimento prosegue fino all'avvenuta presa in considerazione dell'ultima chiave in $ keys $, e termina con la restituzione della Proof cumulativa, a questo punta valida per tutto l'insieme di chiavi passato per parametro.
+		Per raggiungere questo obiettivo, da un lato la struttura si preoccupa di creare le singole Proof, una per volta, per ogni singola chiave passata come parametro, in quanto, come già detto, è l'unica entità che conosce le informazioni necessarie a farlo. Dall'altro è mantenuta una Proof cumulativa, valida per tutte le chiavi nell'intervallo $ [k[0], k[corrente]] $. Pertanto appena è creata una nuova Proof viene integrata con la Proof cumulativa corrente, richiedendo a quest'ultima una \verb|union(proof: Proof<H, K, V>)|. Questo procedimento prosegue fino all'avvenuta presa in considerazione dell'ultima chiave in $ keys $, e termina con la restituzione della Proof cumulativa, a questo punta valida per tutto l'insieme di chiavi passato per parametro.
 		
 		E' inoltre necessario precisare che la Skip List Autenticata risulta accoppiata all'interfaccia della Proof, e \textit{non} alla sua implementazione. Questo è stato preferito, fornendo uno strato di \textit{Indirection}, in quanto la Skip List Proof, può subire cambiamenti e ottimizzazioni interne, senza ripercuotersi direttamente sulla Skip List Autenticata.
 		
@@ -164,7 +164,7 @@
 			\begin{figure}
 				\centering
 				\includegraphics[scale=0.6]{figure/deltas.eps}
-				\caption{Schema che mostra il funzionamento dei \textit{delta}. Tramite primitive di tipo \verb|add(k: K, v: V)| e/o \verb|del(k: K)| si popola la pila della struttura con dei blocchi, ordinati cronologicamente. L'uso di \verb|applyDeltas()| applica in ordine questi \textit{delta} e restituisce un'altra struttura, con stato di partenza equivalente al primo \textit{snapshot}, ma con tutti i $\Delta_{n}$ applicati. La pila viene svuotata, ed è dunque poi pronta ad accogliere nuovi \textit{delta}.}\label{fig:deltas}
+				\caption{Schema che mostra il funzionamento dei \textit{delta}. Tramite primitive di tipo \verb|add(k: K, v: V)| e/o \verb|del(k: K)| si popola la pila della struttura con dei blocchi, ordinati cronologicamente. L'uso di \verb|applyDeltas()| applica in ordine questi \textit{delta} e restituisce un'altra struttura, con stato di partenza equivalente al primo \textit{snapshot}, ma con tutti i $\Delta_{n}$ applicati. La pila viene svuotata, ed è dunque poi pronta ad accogliere nuovi \textit{delta}.} \label{fig:delta}
 			\end{figure}
 					
 		\item \verb|rootHash(): H|. Operazione che calcola e restituisce il \textit{Root Hash} dell'intera struttura. Lo \textit{Start node} conterrà in ogni istante, nel campo \textit{firstHash}, il contributo in termini di concatenzioni di hash crittografici dato da tutti gli elementi correlati al campo \textit{down}, e nel campo \textit{secondHash}, il contributo in termini di concatenazioni di hash crittografici dato da tutti gli elementi correlati al campo \textit{next}. Viene, a questo punto, restituito l'hash derivato dalla concatenazione dei campi \textit{firstHash} e \textit{secondHash}.
@@ -212,11 +212,26 @@
 			\item \verb|rootHash(list: List<Pair<K, V?>>): Pair<Proof<H, K, V>, H>|. Nel caso in cui tutti i valori passati siano nulli, l'operazione risulta equivalente a \verb|rootHash(): H|. Tramite la presenza di anche un solo valore non nullo, l'operazione diventerà di scrittura. Trattandosi di una operazione di scrittura, e dovendo innestarsi in un ambito di concorrenza già altrove menzionato, sarà necessario evitare di modificare direttamente lo stato della struttura. Dunque la struttura sarà clonata internamente e le modifiche agli hash saranno applicate sul clone. La struttura iniziale sarà dunque passibile di calcoli e computazioni anche contemporaneamente all'applicazione di queste modifiche. Il parametro che accetta è una lista di coppie chiave-valore, struttura che verrà processata iterativamente, rendendo superflua l'applicazione di una mappa di coppia chiave-valore. Nello specifico l'operazione processerà, per ogni chiave presente nella lista $ list $, il nodo corrispondente nella Proof, aggiornando gli hash, risalendo fino al nodo \textit{HEAD}. Al termine di questo elenco di queste operazioni, la funzione restituirà la nuova Proof, con le modifiche applicate e il nuovo \textit{Root Hash}.
 			
 			\item \verb|union(proof: Proof<H, K, V>): Proof<H, K, V>|. Trattandosi di una operazione di scrittura, e dovendo innestarsi in un ambito di concorrenza già altrove menzionato, sarà necessario evitare di modificare direttamente lo stato della struttura. Dunque la struttura sarà clonata internamente e l'unione verrà effettuta sul clone. L'unione consiste, intuitivamente, nell'integrazione della Proof su cui viene invocato il metodo, $ this $, con la Proof passata per parametro, $ proof $. Inizia, infatti, col trovare, tramite differenza tra insiemi, le chiavi presenti in $ proof $ che non sono presenti in $ this $. Per ognuna di queste chiavi risultato della differenza, se presenti, viene effettuata una iterazione parallela a partire dall'HEAD di $ this $ e dall'HEAD di $ proof $. che ha come fine quello di aggiungere a $ this $ i nodi per renderla valida per le ulteriori chiavi, contributo di $ proof $. E' mostrato in maniera più chiara nel seguente pseudocodice:
-			
+		
 			\begin{algorithm}[H]
-				\While{$\not$(proof.keys - this.keys).isEmpty()}{
-%					Completare passi algoritmo
+				\ForEach{key \in (proof.keys - this.keys)}{
+					first_iterator = this.head
+					second_iterator = proof.head
+					\If{second_iterator.next != null}{
+						first_iterator.next = second_iterator.next
+					}
+					\If{second_iterator.down != null}{
+						first_iterator.down = second_iterator.down
+					}
+					\eIf{second_iterator.next.key $ \leqslant $ key}{
+						first_iterator = first_iterator.next
+						second_iterator = second_iterator.next
+					}{
+						first_iterator = first_iterator.down
+						second_iterator = second_iterator.down
+					}
 				}
+				\caption{Algoritmo per unione di due Proof.}
 			\end{algorithm}
 			
 %	      [Appunti di ragionamento su cloning Proof]			
