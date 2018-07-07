@@ -155,6 +155,8 @@
 		\end{center}
 		\caption{Esempio di una pila. I nodi sono stati volutamente segnati con un identificativo, per facilitare la comprensione dell'immagine, ma non hanno alcun riferimento con la progettazione o la realizzazione reale dei nodi. (a) La pila contenente in ordine di attraversamento, dal basso verso l'alto, i passi compiuti per comporre il \textit{path}. I blocchi della pila sono composti dal nodo di partenza di ogni passo, affiancato dalla stringa che indica la direzione del passo compiuto. (b) Sono evidenziati, nella Skip List, i nodi e le direzioni presenti nello stack, a seguito della ricerca dell'elemento 10.} \label{fig:stack+path}
 	\end{figure}
+
+	Come ultima premessa, si precisano a questo punto altri due vincoli di progetto riguardanti il tipo da utilizzare per le chiavi, ovvero una stringa di caratteri, e per gli hash, ovvero array di byte e/o stringa di caratteri. Questi vincoli si propagano, per ovvie ragioni anche alla Skip List Proof, descritta in seguito.
 	
 	Segue la descrizione delle operazioni fornite, con enfasi sulle caratteristiche algoritmiche:
 	
