@@ -39,7 +39,7 @@
 
 	\subsection{Persistenza}
 	
-	Per quanto riguarda la seconda parte, questa è da interpretarsi come una estensione delle API, atta a fornire la possibilità di memorizzare la struttura in persistenza, continuando ad ottemperare ai requisiti sopra esposti. Uno tra i principi cardine di questo studio consiste nel garantire la trasparenza dell'API rispetto a questa estensione. Pertanto essa non avrà bisogno di essere modificata a seguito dell'introduzione delle modifiche per la persistenza. Ovviamente il servizio dovrà essere affidabile, sempre attivo e dovrà avere la capacità di tollerare guasti, errori e fallimenti.
+	Per quanto riguarda la seconda parte, questa è da interpretarsi come una estensione delle API, atta a fornire la possibilità di memorizzare la struttura dati autenticata in persistenza, continuando ad ottemperare ai requisiti sopra esposti. Uno tra i principi cardine di questo studio consiste nel garantire la trasparenza dell'API rispetto a questa estensione. Pertanto essa non avrà bisogno di essere modificata a seguito dell'introduzione delle modifiche per la persistenza. Ovviamente il servizio dovrà essere affidabile, sempre attivo e dovrà avere la capacità di tollerare guasti, errori e fallimenti.
 	Oltre a questo, l'obiettivo principale, per cui nei successivi capitoli è presente un'approfondito studio teorico, è quello dell'efficienza, cercando di operare caricamenti e query in maniera parallela piuttosto che sequenziale.
 	Anche per questa sezione è presente un vincolo di progetto, che riguarda l'interoperabilità con un database management system di tipo non relazionale.
 
@@ -49,7 +49,7 @@
 	
  	Si procede, dunque, in questa sezione, dipendentemente dai casi d'uso e dai requisiti funzionali e non, sopra esposti, all'enumerazione dei concetti significativi nell'ambito di un modello di dominio. I concetti qui esposti, saranno poi più dettagliatamente spiegati nei successivi paragrafi, ma sono qui anticipati con lo scopo di fornire una rappresentazione visuale di entità concettuali rilevanti.
  	Ebbene, sicuramente sarà necessaria un'entità che rappresenti la struttura dati autenticata, la quale dovrà essere in grado di offrire servizi di lettura e scrittura, rispettivamente di query e update. Essa inoltre deve essere in grado di fornire le \textit{Proof} necessarie ai client o agli autenticatori per effettuare le prove di integrità dei dati. Allo stesso tempo la \textit{Proof} deve saper fornire il \textit{root Hash} relativo alle chiavi sulle quali è definita, e deve saper applicare degli update sulle suddette chiavi. Inoltre, intuitivamente, sarà necessario che due \textit{Proof} per due diversi insiemi di chiavi, possano unirsi, tramite un \textit{merge} dando vita ad una \textit{Proof} valida per entrambi gli insieme di chiavi di partenza.
- 	
+
 	
 \section{Skiplist}
 
@@ -361,8 +361,4 @@
 %	{Analisi prettamente relativa a studio teorico}
 %	Qui si inizia a parlare approfonditamente del problema della persistenza approfondendo come si lega all'API. 
 
-	\subsection{Modello Funzionale}
-	
-%	Giustificazione dell'adozione del modello valore. Prima viene giustificata nell'ambito della concorrenza, cioè dell'utilizzo (Thread Safety) ora anche
-%	per quanto riguarda il modello funzionale. Per le strutture dati viene inoltre spiegato in termini molto precisi il fatto che viene salvata in persistenaza solo la struttura  ADS.
-%	E si sottolinea il collegamento tra modello funzionale e possibilità di ovviare alla alta complessità computazionale spaziale del modelli funzionali.
+

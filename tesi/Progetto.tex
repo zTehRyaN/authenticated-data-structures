@@ -252,17 +252,11 @@
 %	NON SARA' POSSIBILE PARLARE DELLA TECNOLOGIE UTILIZZATE, CERCARE DI SOTTOLINEARLO INDIRETTAMENTE QUI,
 %	PUR SEMPRE APPUNTO NON CITANDO ESATTAMENTE LE TECNOLOGIE CHE SI E' PENSATO DI APPLICARE.
 		
-	\subsection{Studi teorici}
+	\subsection{Studi teorici di progettazione}
 		
 %		Qui viene affrontato il problema dal punto di vista teorico, con particolare attenzione a sottolineare i problemi teorici derivati dallo studio 
 %		teorico operato per quanto riguarda la persistenza di una struttura dati su base di dati NoSQL. Qui darei un accento più teorico, mentre le 
 %		scelte progettuali che ne possono derivare, le descriverei nelle successive sezioni.
-		
-	\subsection{Progettazione}
-	
-%	Questa è la sezione in cui si parla di tutto il progetto legato alla persistenza, e di come questo si lega al tutto.
-%	E' importante qui accennare tutti gli attori e la loro interazione globale. Il focus è sulle scelte progettuali, e sui
-%	pattern applicati, ma saranno descritti al massimo livello di dettaglio solo nelle sottosezioni successive.
 		
 	\subsection{Translator}
 	
@@ -272,7 +266,7 @@
 	
 %		Entro nel dettaglio del Connector, descrivendo compiti e giustificandolo tramite pattern
 	
-	\subsection{CassandraService}
+	\subsection{ADSService}
 	
 %		Entro nel dettaglio del Service, descrivendo compiti e giustificandolo tramite pattern.
 %		Enfasi su come questa parte sia un centro-stella per le altre parti progettuali
@@ -282,8 +276,26 @@
 %		In base a quanto detto, sottolineare le decisioni progettuali e di come queste possano essere ottimizzate con
 %		comportamento asincrono. Sottolineare bene che uno degli obiettivi è stato quello di minimizzare i round di 
 %		query con Cassandra, e che questo è reso possibile da coroutine tipiche di linguaggi di programmazione OO moderni.
+
+	\subsection{Database Listener}
+	
+%	Sezione che espone le utilita di un sistema push di notification e listener
 			
 	\subsection{Caching}
 	
 %		In questa parte si analizza il problema di caching con relativi problemi di "always-on". Descrivere compiti e giustificazioni
 %		tramite pattern e future proofing. Giustificare anceh in funzione del contesto piu generale delle dimensioni dell'ADS (fare calcolo su stime)
+
+	\subsection{Progettazione}
+
+%	Questa è la sezione in cui si parla di tutto il progetto legato alla persistenza, e di come questo si lega al tutto.
+%	E' importante qui accennare tutti gli attori e la loro interazione globale. Il focus è sulle scelte progettuali, e sui
+%	pattern applicati, ma saranno descritti al massimo livello di dettaglio solo nelle sottosezioni successive.
+
+% 	DIAGRAMMI DI SEQUENZA PER LE OPERAZIONI
+
+
+
+
+
+
