@@ -271,21 +271,31 @@
 	
 \section{Persistenza}
 
-%	Introduzione al discorso sulla persistenza, riallacciandosi a ciò che è stato detto nella parte di analisi.
+%	Introduzione al discorso sulla persistenza, riallacciandosi a ciò che è stato detto nella parte di analisi. Descrizione del class diagram con pattern annessi
 
 	Si passa ora alla sezione sulla \textit{persistenza}. Prima di tutto è necessario sottolineare che i ragionamenti per questa sezione sono stati effettuati prendendo in considerazione un particolare DBMS non relazionale, Cassandra. Tuttavia, a meno di piccoli accorgimenti, lo studio teorico che è di seguito condotto, è altamente flessibile rispetto alla tipologia di database NoSQL scelta.
 	Da come è deducibile dal Class Diagram in figura~\ref{fig:services}, il progetto per il servizio di persistenza è stato pensato come una collaborazione attiva tra più parti, per mantenere alta la coesione globale.
 	Il nucleo centrale è rappresentato dalla classe Pure Fabrication \textit{ADSService}. Questa funge da Controller per tutti i casi d'uso che necessitino di interagire con il database. Essa collabora con la classe \textit{CassandraConnector}, la quale interagisce direttamente con il database, e con \textit{Translator}, una classe di supporto per la conversione di formato dei dati scambiati con il database. E' previsto inoltre un sistema di \textit{Cache}, rappresentato dalla classe omonima, per massimizzare l'efficienza nello scambio di dati con il database.
-	
-	{DatabaseListener} ---nel caso--> {Discorso su contesto del server}
 
 	Nei successivi paragrafi si spiegherà più nel dettaglio ogni parte attiva all'interno del progetto di persistenza, illustrandone e motivandone tutte le scelte progettuali rilevanti.
 
-	\subsection{Cassandra}
+	\subsection{Cassandra e NoSQL}
 	
-%	Sezione in cui si introduce a Cassandra, in quanto un particolare tipo di database NoSQL e in funzione di questo paragrafo saranno affrontati tutti 
-%	gli studi teorici e le scelte di progettazione
+%	Sezione in cui si parla di Cassandra, in quanto un particolare tipo di database NoSQL e in funzione di questo paragrafo saranno affrontati tutti gli studi teorici e le scelte di progettazione
+
+		Cassandra è un \textit{Database Management System} non relazionale e distribuito con licenza \textit{open source} e ottimizzato per la gestione di grandi quantità di dati. Fa parte della categoria di database NoSQL, ovvero di quei database dove la persistenza dei dati segue un meccanismo sostanzialmente diverso da quello appartenente al modello relazionale.  Tuttavia, rispetto allo standard dei NoSQL, garantisce consistenza e supporta il sistema di transazioni, entrambe caratteristiche molto importanti nell'ambito della memorizzazione in persistenza della struttura dati autenticata. Le componenti principali di Cassandra, di interesse per questa introduzione, sono le seguenti:
 		
+		\begin{itemize}
+			\item \textbf{Nodo}: Luogo dove sono memorizzati i dati.
+			\item \textbf{Centro dati}: Insieme di nodi correlati.
+			\item \textbf{Cluster}: Componente che contiene uno o più centri dati.
+		\end{itemize}
+	
+		Si tratta di un sistema \textit{masterless}, ovvero tutti i nodi all'interno di un Cluster sono organizzati secondo uno schema ad anello e svolgono lo stesso ruolo, ovvero sono identici e contengono ognuno una replica dei dati. Ognuno di essi può dunque rispondere alle richieste di lettura e/o scrittura, al pari degli altri. Questo garantisce l'assenza di un \textit{single point of failure}. Allo stesso tempo però tutti i nodi all'interno di un cluster sono interconnessi, in base al \textit{Gossip Protocol}, garantendo la continuazione di servizio nel caso in cui uno o più nodi dovessero essere fuori uso.
+		
+		Dal punto di vista logico, l'elemento più esterno è il \textit{Keyspace}. Esso contiene liste di \textit{Column Families}, ed è per questo che Cassandra è detto \textit{column-oriented}. Una column family, a sua volta, è una collezione di righe, dove però ogni riga è di lunghezza variabile. Mentre nel modello relazionale uno schema è fissato a priori, e una volta definite le colonne per una tabella, per ogni riga dovrò avere lo stesso numero di elementi, Cassandra è \textit{schema-free}. Pertanto ogni riga potrà avere un numero variabile di colonne, modificabile nel tempo in base alle esigenze, offrendo altissimi livelli di flessibilità. Cassandra dunque non obbliga ogni riga ad avere tutte le colonne. 
+		Questi sono gli aspetti necessari alla comprensione degli studi teorici che seguono.
+				
 	\subsection{Studi teorici di progettazione}
 		
 %		Qui viene affrontato il problema dal punto di vista teorico, con particolare attenzione a sottolineare i problemi teorici derivati dallo studio 
@@ -310,11 +320,7 @@
 %		In base a quanto detto, sottolineare le decisioni progettuali e di come queste possano essere ottimizzate con
 %		comportamento asincrono. Sottolineare bene che uno degli obiettivi è stato quello di minimizzare i round di 
 %		query con Cassandra, e che questo è reso possibile da coroutine tipiche di linguaggi di programmazione OO moderni.
-
-	\subsection{Database Listener}
-	
-%	Sezione che espone le utilita di un sistema push di notification e listener
-			
+		
 	\subsection{Caching}
 	
 %	In questa parte si analizza il problema di caching con relativi problemi di "always-on". Descrivere compiti e giustificazioni
@@ -322,21 +328,21 @@
 
 %  	LRU
 
-	{Eventualità di aggiornamento con DatabaseListener o sbirciate su altre cache}
-
 	\subsection{Bloom Filters}
 	
 % 	Sezione che illustra l'ottimizzazione per complessita di query su gestione caching
 
+	\subsection{Modello con attori}
+	
+%	Se si vuole considerare che nell'utilizzo pratico, attori presenti sul server operano in parallelo sulla struttura, per dare parallelismo è possibile inserire un attore per ogni nodo della struttura dati. Cosi si potrà accedere alla struttura dati da vari punti in modo parallelo. L'attore radice potrebbe essere un collo di bottiglia, ma posso dedicargli CPU esclusiva. Miglioria possibile riguarda l'avere un attore per le letture e uno per le scritture per ogni singolo nodo. Una volta caricata la struttura su Cassandra, poi per tutte le query successive, invece di passare per uno script lato server per individuazione, restituzione e scrittura dei nodi necessari, assegno ad ogni attore un nodo (cioè blocco cassandra) e poi per tutte le query passo per gli attori? Dove ogni attore quindi conosce il solo blocco a lui assegnato.
+%	Basta che gli attori mantengano la struttura tra loro e si possono fare query parallele.
+
 	\subsection{Progettazione}
 
 %	Questa è la sezione in cui si parla di tutto il progetto legato alla persistenza, e di come questo si lega al tutto.
-%	E' importante qui accennare tutti gli attori e la loro interazione globale. Il focus è sulle scelte progettuali, e sui
-%	pattern applicati, ma saranno descritti al massimo livello di dettaglio solo nelle sottosezioni successive.
+%	E' importante qui accennare tutti gli attori e la loro interazione globale. Il focus qui è sulle varie operazioni di sistema
 
 % 	DIAGRAMMI DI SEQUENZA PER LE OPERAZIONI
-
-	{Dipendenza dei diagrammi di sequenza dalla soluzione scelta}
 
 
 
