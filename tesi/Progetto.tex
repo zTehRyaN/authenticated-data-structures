@@ -48,10 +48,9 @@
 %	
 %	Il focus è sulle scelte progettuali. Evidenziare dunque i punti di forza e le scelte a livello di pattern.
 
-	Nei successivi paragrafi si spiegherà più nel dettaglio ogni parte attiva all'interno del progetto di queste API, illustrandone e motivandone tutte le scelte progettuali rilevanti.
 	Come già deducibile dal Class Diagram in figura~\ref{fig:authDCD}, le API consistono fondamentalmente di due interfacce, \textit{stabili}, \textit{comuni} e \textit{unificate}, che forniscono \textit{Protected Variation} rispetto a rivisitazioni e ottimizzazioni. Pertanto è stato fornito all'utilizzatore un punto di contatto singolo, una \textit{Facade}, con le librerie. 
 	Le implementazioni di queste due interfaccie sono soggette a due vincoli di progetto riguardanti il tipo da utilizzare per le chiavi, ovvero una stringa di caratteri, e per gli hash, ovvero array di byte e/o stringa di caratteri. Esse di basano entrambe sul \textit{Node} come elemento costituente di base. Per le funzioni di hash, esse si affidano ad un \textit{Singleton} di utilità, HashUtils. Prima di passare ad un'analisi dettagliata delle varie parti, si sottolinea la dipendenza della Skip List Autenticata all'interfaccia della Proof, e \textit{non} alla sua implementazione. Questo è stato preferito, fornendo uno strato di \textit{Indirection}, in quanto la Skip List Proof, può subire cambiamenti e ottimizzazioni interne, senza ripercuotersi direttamente sulla Skip List Autenticata.
-	
+	Nei successivi paragrafi si spiegherà più nel dettaglio ogni parte attiva all'interno del progetto di queste API, illustrandone e motivandone tutte le scelte progettuali rilevanti.
 	
 	\subsection{Interfaccia ADS}
 	
@@ -273,12 +272,8 @@
 \section{Persistenza}
 
 %	Introduzione al discorso sulla persistenza, riallacciandosi a ciò che è stato detto nella parte di analisi.
-%	
-%	VISTO CHE NON SARA' PRESENTE UNA PARTE DI REALIZZAZIONE PER LA PARTE DI PERSISTENZA, E DUNQUE
-%	NON SARA' POSSIBILE PARLARE DELLA TECNOLOGIE UTILIZZATE, CERCARE DI SOTTOLINEARLO INDIRETTAMENTE QUI,
-%	PUR SEMPRE APPUNTO NON CITANDO ESATTAMENTE LE TECNOLOGIE CHE SI E' PENSATO DI APPLICARE.
 
-	Per quanto riguarda invece la parte legata alla persistenza, si sottolinea da un lato la flessibilità dei ragionamenti effettuati rispetto alla tipologia di database NoSQL scelta, dall'altro il legame di molti ragionamenti ad un particolare DBMS non relazionale, ovvero Cassandra.
+
 
 	\subsection{Cassandra}
 	
