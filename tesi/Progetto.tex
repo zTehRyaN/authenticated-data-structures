@@ -10,7 +10,24 @@
 %	si entrerà nello specifico.
 %
 %	{Diagrammi} Class diagrams UML o analoghi più efficaci per il comportamento dinamico
-%	{Immagini}
+
+	A seguito della fase di analisi appena condotta, si passa all'ambito più strettamente progettuale. Scopo di questa sezione introduttiva è quello di riallacciarsi ai requisiti già esposti in fase di analisi, aggiungendo obiettivi di progettazione. Per quanto riguarda le API, si è già parlato dei requisiti funzionali, cosi come si è sottolineata la necessità di utilizzo in \textit{concorrenza}. Una trattazione più dettagliata è operata in fase di analisi. Si pone l'accento invece su alcuni obiettivi progettuali di cui si è tenuto conto:
+	
+	\begin{enumerate}
+		\item \textbf{Prestazioni}. Si vogliono garantire complessità computazionali compatibili e coerenti con quelle illustrate in fase di analisi per la Skip List, cosi come ottimi tempi di risposta e throughput.
+	  	\item \textbf{Usabilità}. Si vuole una interfaccia ben definita, chiara, di facile interpretazione e stabile, al fine di ottimizzarne l'utilizzo.
+	  	\item \textbf{Sostenibilità}. Progettazione e realizzazione devono permettere alti livelli di manutenibilità per poter operare ottimizzazioni, miglioramenti e riparazioni. Di pari importanza sono la verificabilità e la configurabilità delle API.
+	\end{enumerate}
+	 
+	Per quanto riguarda la sezione sulla persistenza, invece, si ricordano i due requisiti fondamentali. Il primo riguarda la trattazione della stessa come un'estensione delle API, il secondo invece sottolinea la caratteristica di trasparenza dell'introduzione di questa estensione, rispetto alla libreria stessa.
+	Si pone anche qui l'accento sugli obiettivi progettuali principali di cui si è tenuto conto:
+	
+	\begin{enumerate}
+		\item \textbf{Efficienza}. L'obiettivo principale riguarda l'impostazione della restituzione e caricamento di elementi da e sul database in maniera parallela piuttosto che sequenziale. Inoltre è auspicabile un sistema che sappia lavorare sul minimo di informazioni necessarie all'esecuzione delle operazioni, evitando il più possibile traffico di elementi inutili. L'architettura complessiva, infine, dovrebbe poter lavorare con un sistema di caching efficiente, per ridurre il traffico di informazioni generale e dunque il carico gravante sulle query con il database.
+		\item \textbf{Affidabilità}. Si vuole un sistema disponibile, sempre attivo e che fornisca la capacità di essere ripristinato a seguito di guasti, errori o fallimenti.
+	\end{enumerate}
+
+	Seguono i diagrammi della classi dell'intera progettazione per fornire un contesto alla successiva analisi dettagliata delle singole parti.
 
 	\begin{figure}
 		\centering
@@ -265,6 +282,8 @@
 %	VISTO CHE NON SARA' PRESENTE UNA PARTE DI REALIZZAZIONE PER LA PARTE DI PERSISTENZA, E DUNQUE
 %	NON SARA' POSSIBILE PARLARE DELLA TECNOLOGIE UTILIZZATE, CERCARE DI SOTTOLINEARLO INDIRETTAMENTE QUI,
 %	PUR SEMPRE APPUNTO NON CITANDO ESATTAMENTE LE TECNOLOGIE CHE SI E' PENSATO DI APPLICARE.
+
+	Per quanto riguarda invece la parte legata alla persistenza, si sottolinea da un lato la flessibilità dei ragionamenti effettuati rispetto alla tipologia di database NoSQL scelta, dall'altro il legame di molti ragionamenti ad un particolare DBMS non relazionale, ovvero Cassandra.
 
 	\subsection{Cassandra}
 	
