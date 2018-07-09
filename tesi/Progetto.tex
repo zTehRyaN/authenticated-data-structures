@@ -352,7 +352,15 @@
 		
 	\subsection{Translator}
 	
-%		Entro nel dettaglio del Translator, descrivendo compiti e giustificandolo tramite pattern
+%	Entro nel dettaglio del Translator, descrivendo compiti e giustificandolo tramite pattern
+	
+		La conversione tra formato ad oggetti, in memoria, a formato in persistenza e viceversa, nel progetto precedentemente illustrato è affidata al \textit{Translator}. 
+		
+		Le operazioni che fornisce sono banalmente due, e sono simmetriche:
+		\begin{itemize}
+			\item \verb!translateToPersistence(ads: AuthSkipList<ByteArray, String, Any>): String! E' necessaria la conoscenza della logica di schematizzazione dei blocchi vigente all'interno del database. In questo modo è possibile preparare nell'esatta sequenza	i blocchi che saranno poi caricati sul database.
+			\item \verb!translateFromPersistence(blocks: String): AuthSkipList<ByteArray, String, Any>! Anche in questo caso è necessaria la conoscenza della logica di schematizzazione dei blocchi vigente all'interno del database. Infatti è possibile dedurre dall'ordine di collocazione dei vari blocchi all'interno della risposta della query, le informazioni necessarie a ricostruire la sezione di Skip List Autenticata. Come già detto infatti, in base all'operazione invocata sulla Skip List Autenticata, il Sistema provvederà a restituire soltanto i nodi che saranno toccati dall'operazione, ovvero solo quelli strettamente necessari all'esecuzione di quell'operazione.
+		\end{itemize}
 		
 	\subsection{Connector}
 	
