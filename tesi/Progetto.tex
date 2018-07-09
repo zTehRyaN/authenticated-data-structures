@@ -338,6 +338,17 @@
 		% CORRISPONDENZA TRA BLOCCO MEMORIA E BLOCCO CASSANDRA, E INFORMAZIONI AGGIUNTIVE EVENTUALI CHE QUESTO DEVE CONTENERE. Discorso sul Livello, che non è necessario. Discorso su chiavi e indicizzazioni interne alla persistenza. Immagine illustrativa di UNA DELLE POSSIBILITA' soprattutto per avvalorare la tesi che non serve il level perche lo deduco dalla sequenza di restituizione
 		Si ragiona ora sulle informazioni, ed eventualmente meta-informazioni, che dovrebbe contenere un blocco Cassandra, nel caso in cui ad ogni nodo corrisponda un blocco. Chiaramente dovrà contenere i due valori presenti nei campi \textit{First Hash} e \textit{Second Hash} cosi come la chiave. Potrebbe inoltre essere necessario memorizzare le informazione relative al livello in cui si trova il nodo, cosi come ai suoi campi $ next $, $ prev $, $ up $ e $ down $. Tuttavia se si segue una opportuna collocazione dei blocchi in persistenza è possibile rendere superflua la presenza di queste informazioni, in quanto possono facilmente essere dedotte dalla sequenza di blocchi restituita. E' dunque sufficiente conoscere il modo di strutturazione in persistenza dei blocchi per poter ricostruire i blocchi ottenuti in memoria.
 		
+		\begin{figure}[tbp] 
+			\begin{center}
+				\begin{tabular}{c @{\hspace{1em}} c}
+					\includegraphics[scale=0.8]{figure/cassandra1.eps} &
+					\includegraphics[scale=0.7]{figure/cassandra2.eps} \\
+					(a) & (b)
+				\end{tabular}
+			\end{center}
+			\caption{\textbf{(a)} Esempio di una Skip List Autenticata e \textbf{(b)} sua rispettiva possibile rappresentazione in persistenza su Cassandra. Ogni blocco, formato da una coppia chiave-valore di colonna, contiene le informazioni di un solo nodo.} \label{fig:bloccoCassandra}
+		\end{figure}
+		
 		
 	\subsection{Translator}
 	
