@@ -293,7 +293,7 @@
 	
 		Si tratta di un sistema \textit{masterless}, ovvero tutti i nodi all'interno di un Cluster sono organizzati secondo uno schema ad anello e svolgono lo stesso ruolo, ovvero sono identici e contengono ognuno una replica dei dati. Ognuno di essi può dunque rispondere alle richieste di lettura e/o scrittura, al pari degli altri. Questo garantisce l'assenza di un \textit{single point of failure}. Allo stesso tempo però tutti i nodi all'interno di un cluster sono interconnessi, in base al \textit{Gossip Protocol}, garantendo la continuazione di servizio nel caso in cui uno o più nodi dovessero essere fuori uso.
 		
-		Dal punto di vista logico, l'elemento più esterno è il \textit{Keyspace}. Esso contiene liste di \textit{Column Families}, ed è per questo che Cassandra è detto \textit{column-oriented}. Una column family, a sua volta, è una collezione di righe, dove però ogni riga è di lunghezza variabile. Mentre nel modello relazionale uno schema è fissato a priori, e una volta definite le colonne per una tabella, per ogni riga dovrò avere lo stesso numero di elementi, Cassandra è \textit{schema-free}. Pertanto ogni riga potrà avere un numero variabile di colonne, modificabile nel tempo in base alle esigenze, offrendo altissimi livelli di flessibilità. Cassandra dunque non obbliga ogni riga ad avere tutte le colonne. 
+		Dal punto di vista logico, l'elemento più esterno è il \textit{Keyspace}. Esso contiene liste di \textit{Column Families}, ed è per questo che Cassandra è detto \textit{column-oriented}. Una column family, a sua volta, è una collezione di righe, rappresentate da una \textit{Map<RowKey, SortedMap<ColumnKey, ColumnValue>>}, dove però ogni riga è di lunghezza variabile. Mentre nel modello relazionale uno schema è fissato a priori, e una volta definite le colonne per una tabella, per ogni riga dovrò avere lo stesso numero di elementi, Cassandra è \textit{schema-free}. Pertanto ogni riga potrà avere un numero variabile di colonne, modificabile nel tempo in base alle esigenze, offrendo altissimi livelli di flessibilità. Cassandra dunque non obbliga ogni riga ad avere tutte le colonne. 
 		Questi sono gli aspetti necessari alla comprensione degli studi teorici che seguono.
 				
 	\subsection{Studi teorici di progettazione}
@@ -365,6 +365,8 @@
 	\subsection{Connector}
 	
 %		Entro nel dettaglio del Connector, descrivendo compiti e giustificandolo tramite pattern
+
+		
 	
 	\subsection{ADSService}
 	
