@@ -376,7 +376,7 @@
 			\item \verb!createTable(List<String>)!. Crea la Column Family relativa alla struttura. Può accettare come parametro la lista di tutte le chiavi presenti nella struttura iniziale, che possono essere altrimenti aggiunte progressivamente.
 			\item \verb!deleteKeyspace(keyspaceName: String)!. Elimina il Keyspace di nome $ keyspaceName $.
 			\item \verb!deleteTable()!. Elimina la Column Family relativa alla struttura.
-
+			\item \verb!storeADS(ads: String)!. Carica tutta la struttura passata per parametro. Funzione di utilità introdotta in base ad una specifica di utilizzo nell'ambito del protocollo, dove viene inizialmente creata una struttura iniziale, che dovrà dunque poter essere caricata in persistenza.
 			\item \verb!selectPathForKey(k: String): String!. Restituisce la sequenza di blocchi costituenti il $ path $ dallo \textit{Start Node} al nodo contenente la chiave $ k $.
 			\item \verb!selectHead(): String!. Restituisce i campi \textit{First Hash} e \textit{Second Hash} dello \textit{Start Node}.
 			\item \verb!selectForAdd(k: String): String!. Restituisce la sequenza di blocchi necessaria a poter eseguire un'inserimento o una modifica sulla struttura. Tiene conto dunque sia dell'eventualità di aggiunta di nuovi nodi, sia della modifica di nodi già presenti.
@@ -391,6 +391,13 @@
 	
 %		Entro nel dettaglio del Service, descrivendo compiti e giustificandolo tramite pattern.
 %		Enfasi su come questa parte sia un centro-stella per le altre parti progettuali
+
+		Come già deducibile da precedenti discussioni, l'\textit{ADSService} è un centro-stella per le altre parti progettuali. Essa, in base alle operazioni invocate sulla Skip List Autenticata, si occupa della cooperazione tra Translator e Connector per fornire le informazioni necessarie all'esecuzione delle operazioni stesse, da un lato, e per tenere aggiornata la struttura in persistenza, dall'altro.
+		
+		Le principali operazioni fornite sono:
+			\begin{itemize}
+			\item \verb!storeADS(ads: AuthSkipList<ByteArray, String, Any>)!. Funzione che permette il caricamento su database dell'intera struttura passata per parametro. La conversione di formato è delegata al Translator, e successivamente la sequenza ottenuta è passata al Connector che dovrà caricarla in persistenza.
+		\end{itemize}
 		
 	\subsection{Comportamento asincrono}
 	
