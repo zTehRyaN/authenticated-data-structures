@@ -416,10 +416,15 @@
 		
 	\subsection{Caching}
 	
-%	In questa parte si analizza il problema di caching con relativi problemi di "always-on". Descrivere compiti e giustificazioni
-%	tramite pattern e future proofing. Giustificare anceh in funzione del contesto piu generale delle dimensioni dell'ADS (fare calcolo su stime)
+%		In questa parte si analizza il problema di caching. Descrivere compiti e giustificazioni
+%		tramite pattern e future proofing. Giustificare anche in funzione del contesto piu generale delle dimensioni dell'ADS (fare calcolo su stime)
 
-%  	LRU
+% 	 	LRU
+
+		All'interno del progetto di persistenza è stato introdotto anche un sistema di \textit{caching} dei blocchi. Si è ipotizzato di applicare una \textit{Replacement policy} di tipo LRU, ovvero \textit{Last Recently Used}. Separatamente per ciascun blocco in cache è associato un \textit{replacement index}, ovvero un "contatore di età". I blocchi aventi il più alto valore saranno eliminati dalla cache, per fare spazio ad altri blocchi. Inoltre, ogni volta che un blocco di cache è acceduto il suo contatore è settato a zero, mentre gli altri contatori degli altri blocchi sono aumentati di 1, ad esclusione dei blocchi contenenti nodi direttamente adiacenti al blocco acceduto. La decisione del valore massimo di età, ovvero di una soglia massima di permanenza di un blocco in cache, è un valore variabile. All'aumentare della soglia, chiaramente, aumenteranno le probabilità di cache hit, a discapito di più spazio di memoria utilizzato.
+		All'interno di questo progetto la cache viene riempita a seguito di una query di qualsiasi tipo. Le query che comportano scritture su database, devono preoccuparsi di aggiornare anche i blocchi in cache che hanno modificato.
+		Tuttavia risulta necessario informare lo script server-side, in qualche modo, riguardo gli elementi già presenti in cache, che dunque non dovranno essere restituiti. Questo può essere risolto, aggiungendo alle query di tipo retrieve i blocchi già posseduti.
+		
 
 	\subsection{Bloom Filters}
 	
