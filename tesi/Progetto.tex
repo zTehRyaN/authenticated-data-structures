@@ -381,7 +381,7 @@
 			\item \verb!selectHead(): String!. Restituisce i campi \textit{First Hash} e \textit{Second Hash} dello \textit{Start Node}.
 			\item \verb!selectForAdd(k: String): String!. Restituisce la sequenza di blocchi necessaria a poter eseguire un'inserimento o una modifica sulla struttura. Tiene conto dunque sia dell'eventualità di aggiunta di nuovi nodi, sia della modifica di nodi già presenti.
 			\item \verb!selectForDel(k: String): String!. Restituisce la sequenza di blocchi necessaria a poter eseguire una cancellazione sulla struttura. Tiene conto dunque sia dei nodi che saranno rimossi, sia di quelli che subiranno una modifica a seguito della rimozione di una torre.
-			\item \verb!selectForProof(k: String): String!. Restituisce la sequenza di blocchi necessaria per poter costruire la Proof relativa alla chiave $ k $. Questa funzione potrebbe essere utilizzata sia singolarmente per ottenere una Proof valida per una sola chiave, sia nell'ambito di una richiesta di una Proof cumulativa. In questo caso sarebbe necessario chiamare questa funzione tante volte quante sono le chiavi. E' possibile operare una ottimizzazione che restituisca la sequenza di blocchi necessari per poter ricostruire la Proof cumulativa per un insieme di chiavi. In tal caso la firma cambierebbe in: \verb!selectForProof(keys: List<String>)!. 
+			\item \verb!selectForProof(k: String): String!. Restituisce la sequenza di blocchi necessaria per poter costruire la Proof relativa alla chiave $ k $. Questa funzione potrebbe essere utilizzata sia singolarmente per ottenere una Proof valida per una sola chiave, sia nell'ambito di una richiesta di una Proof cumulativa. In questo caso sarebbe necessario chiamare questa funzione tante volte quante sono le chiavi. E' possibile operare una ottimizzazione che restituisca la sequenza di blocchi necessari per poter ricostruire la Proof cumulativa per un insieme di chiavi. In tal caso la firma cambierebbe in: \verb!selectForProof(keys: Set<String>)!. 
 			\item \verb!alterTableByAdd(structure: String)!. Effettua la sovrascrittura su database dei blocchi modificati e la scrittura di blocchi eventualmente aggiunti. Le informazioni relative all'aggiunta devono essere opportunamente codificate all'interno di una stringa di caratteri che sarà interpretata poi lato server.
 			\item \verb!alterTableByDel(structure: String)!. Effettua la sovrascrittura su database dei blocchi modificati e la cancellazione di quelli rimossi. Le informazioni relative all'aggiunta devono essere opportunamente codificate all'interno di una stringa di caratteri che sarà interpretata poi lato server.	
 		\end{itemize}
@@ -392,12 +392,7 @@
 %		Entro nel dettaglio del Service, descrivendo compiti e giustificandolo tramite pattern.
 %		Enfasi su come questa parte sia un centro-stella per le altre parti progettuali
 
-		Come già deducibile da precedenti discussioni, l'\textit{ADSService} è un centro-stella per le altre parti progettuali. Essa, in base alle operazioni invocate sulla Skip List Autenticata, si occupa della cooperazione tra Translator e Connector per fornire le informazioni necessarie all'esecuzione delle operazioni stesse, da un lato, e per tenere aggiornata la struttura in persistenza, dall'altro.
-		
-		Le principali operazioni fornite sono:
-			\begin{itemize}
-			\item \verb!storeADS(ads: AuthSkipList<ByteArray, String, Any>)!. Funzione che permette il caricamento su database dell'intera struttura passata per parametro. La conversione di formato è delegata al Translator, e successivamente la sequenza ottenuta è passata al Connector che dovrà caricarla in persistenza.
-		\end{itemize}
+
 		
 	\subsection{Comportamento asincrono}
 	
