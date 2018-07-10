@@ -411,6 +411,8 @@
 %		In base a quanto detto, sottolineare le decisioni progettuali e di come queste possano essere ottimizzate con
 %		comportamento asincrono. Sottolineare bene che uno degli obiettivi è stato quello di minimizzare i round di 
 %		query con Cassandra, e che questo è reso possibile da coroutine tipiche di linguaggi di programmazione OO moderni.
+
+		In base ai ragionamenti condotti fin qui, è possibile operare una forma di ottimizzazione generale, data dall'introduzione di parallelismo sull'esecuzione delle varie query e/o operazioni. Infatti potrebbero essere frequenti situazioni in cui sarebbe possibile fare chiamate asincrone su varie funzioni la cui esecuzione parallela non creerebbe collisioni. Un esempio è il caso di letture parallele: le operazioni di lettura non modificano in alcun modo la struttura, pertanto possono essere distribuite su più thread di esecuzione paralleli. In questo caso le operazioni consisterebbero in una serie di chiamate asincrone annidate. Per gestirne opportunamente il flusso è necessario fare uso delle \textit{promesse} di restituzione futura di un valore, per poter gestire il responso delle varie esecuzioni.
 		
 	\subsection{Caching}
 	
