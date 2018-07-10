@@ -392,7 +392,19 @@
 %		Entro nel dettaglio del Service, descrivendo compiti e giustificandolo tramite pattern.
 %		Enfasi su come questa parte sia un centro-stella per le altre parti progettuali
 
-
+		Come già deducibile da precedenti discussioni, l'\textit{ADSService} è un centro-stella per le altre parti progettuali. Essa, in base alle operazioni invocate sulla Skip List Autenticata, si occupa della cooperazione tra Translator e Connector per fornire le informazioni necessarie all'esecuzione delle operazioni stesse, da un lato, e per tenere aggiornata la struttura in persistenza, dall'altro.
+		
+		Le principali operazioni fornite sono:
+			\begin{itemize}
+			\item \verb!storeADS(ads: AuthSkipList<ByteArray, String, Any>)!. Funzione che permette il caricamento su database dell'intera struttura passata per parametro. La conversione di formato è delegata al Translator, e successivamente la sequenza ottenuta è passata al Connector che dovrà caricarla in persistenza.
+			\item \verb!retrievePath(k: String): AuthSkipList<ByteArray, String, Any>!. Funzione che permette l'ottenimento della struttura necessaria a costituire un $ path $. Utile dunque per permettere le operazioni di ricerca e verifica di contenimento di chiave.
+			\item \verb!retrieveForAdd(k: String): AuthSkipList<ByteArray, String, Any>!. Restituisce la struttura opportuna su cui potrà essere eseguita una modifica o una aggiunta sulla struttura.
+			\item \verb!retrieveForDel(k: String): AuthSkipList<ByteArray, String, Any>!. Restituisce la struttura opportuna su cui potrà essere eseguita una cancellazione sulla struttura.
+			\item \verb!getHead(): Node<String, ByteArray>!. Permette l'ottenimento dello \textit{Start Node}. Utile dunque per tutte le operazioni della Skip List Autenticata che necessitano solo di quest'ultimo.
+			\item \verb!retrieveProof(Set<String>): Proof<ByteArray, String, Any>!. Permette l'ottenimento della Proof cumulativa per un insieme di chiavi $ Set<String> $ passato per parametro.
+			\item \verb!executeAdd(structure: AuthSkipList<ByteArray, String, Any>)!. Permette l'aggiornamento del database a seguito di una operazione di aggiunta/modifica effettuata sulla struttura.
+			\item \verb!executeDel(structure): AuthSkipList<ByteArray, String, Any>)!. Permette l'aggiornamento del database a seguito di una operazione di cancellazione effettuata sulla struttura.		
+		\end{itemize}
 		
 	\subsection{Comportamento asincrono}
 	
