@@ -4,18 +4,26 @@
 %	in precedenza, ma qui si parla della loro applicazione. Qui dunque si entra nello specifico.
 	
 	Come già accennato in fase di progettazione, l'intera libreria è stata realizzata in \textit{Kotlin}, un linguaggio di programmazione basato sulla JVM ed ispirato ad altri linguaggi tra i quali \textit{Scala} e \textit{Java}. Inoltre questa scelta ha permesso una perfetta integrazione con l'ambiente in cui è utilizzata, anch'esso scritto interamente in Kotlin.
+	L'intera progettazione e realizzazione è stata effettuata seguendo sia principi di TDD, ossia \textit{Test-Driven Development}, di cui si approfondirà nel paragrafo successivo, sia di DDD, ovvero \textit{Data-Driven Design}. Sono state utilizzate alcune tecniche che hanno permesso di cambiare il comportamento delle API, parametrizzandolo, durante le varie esecuzioni.
 
 \section{Testing}
 
 %	Si parla del TDD. E di come è stata condotta la programmazione: a cavallo tra il TDD e il DataDD.
 %	Il testing è stato fatto anche in virtù dell'utilizzo dell'API, simulando la concorrenza tramite thread di sistema
 
+	L'intero sviluppo delle API è stato seguendo principi di TDD, ossia \textit{Test-Driven Development}. Il testing della libreria è stato condotto in maniera progressiva e incrementale, con lo scopo di verificarne il funzionamento complessivo:
+	
+	\begin{itemize}
+		\item \textbf{Test unitari}: con lo scopo di verificare il funzionamento delle singole unità del sistema.
+		\item \textbf{Test di integrazione}: al fine di verificare la comunicazione tra specifiche parti del sistema, in particolare la corretta comunicazione tra la Skip List Autenticata e la Proof.
+		\item \textbf{Test end-to-end}: per verificare il collegamento complessivo tra tutti gli elementi del sistema. Leggera estensione del caso precedente.
+		\item \textbf{Test di accettazione}: in questo caso è stato verificato il corretto funzionamento complessivo del sistema, considerandolo dal punto di vista dell'utilizzo. E' stata dunque data una particolare attenzione alle capacità di concorrenza: è stata simulata la situazione di accesso concorrente a risorse condivise da parte di attori Akka, con \textit{thread} indipendenti del Sistema Operativo.
+	\end{itemize}
+
+	Questo ha consentito in più occasioni modifiche, ottimizzazioni e miglioramenti del codice, cosi come flessibilità rispetto alle eventuali richieste di aggiunta di specifiche funzionali.
+
 % 	Print di supporto per AuthSkipList e SkipListProof
-
-
-
-
-
+	Il testing inoltre è stato facilitato dalla scrittura di funzioni di stampa dell'intera struttura in maniera grafica su \textit{console}, sia della Skip List Autenticata, sia della Skip List Proof. Questo ha consentito di tracciare facilmente il funzionamento dell'intera libreria anche su dataset molto grandi.
 
 
 
