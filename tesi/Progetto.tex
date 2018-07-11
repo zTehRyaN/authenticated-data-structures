@@ -383,13 +383,14 @@
 			\item \verb!deleteKeyspace(keyspaceName: String)!. Elimina il Keyspace di nome $ keyspaceName $.
 			\item \verb!deleteTable()!. Elimina la Column Family relativa alla struttura.
 			\item \verb!storeADS(ads: String)!. Carica tutta la struttura passata per parametro. Funzione di utilità introdotta in base ad una specifica di utilizzo nell'ambito del protocollo, dove viene inizialmente creata una struttura iniziale, che dovrà dunque poter essere caricata in persistenza.
-			\item \verb!selectPathForKey(k: String): List<Block>!. Restituisce la sequenza di blocchi costituenti il $ path $ dallo \textit{Start Node} al nodo contenente la chiave $ k $.
+			\item \verb!selectPathForKey(k: String, filter: Filter): List<Block>!. Restituisce la sequenza di blocchi costituenti il $ path $ dallo \textit{Start Node} al nodo contenente la chiave $ k $.
 			\item \verb!selectHead(): Block!. Restituisce i campi \textit{First Hash} e \textit{Second Hash} dello \textit{Start Node}.
-			\item \verb!selectForAdd(k: String): List<Block>!. Restituisce la sequenza di blocchi necessaria a poter eseguire un'inserimento o una modifica sulla struttura. Tiene conto dunque sia dell'eventualità di aggiunta di nuovi nodi, sia della modifica di nodi già presenti.
-			\item \verb!selectForDel(k: String): List<Block>!. Restituisce la sequenza di blocchi necessaria a poter eseguire una cancellazione sulla struttura. Tiene conto dunque sia dei nodi che saranno rimossi, sia di quelli che subiranno una modifica a seguito della rimozione di una torre.
-			\item \verb!selectForProof(k: String): List<Block>!. Restituisce la sequenza di blocchi necessaria per poter costruire la Proof relativa alla chiave $ k $. Questa funzione potrebbe essere utilizzata sia singolarmente per ottenere una Proof valida per una sola chiave, sia nell'ambito di una richiesta di una Proof cumulativa. In questo caso sarebbe necessario chiamare questa funzione tante volte quante sono le chiavi. E' possibile operare una ottimizzazione che restituisca la sequenza di blocchi necessari per poter ricostruire la Proof cumulativa per un insieme di chiavi. In tal caso la firma cambierebbe in: \verb!selectForProof(keys: Set<String>)!. 
+			\item \verb!selectForAdd(k: String, filter: Filter): List<Block>!. Restituisce la sequenza di blocchi necessaria a poter eseguire un'inserimento o una modifica sulla struttura. Tiene conto dunque sia dell'eventualità di aggiunta di nuovi nodi, sia della modifica di nodi già presenti.
+			\item \verb!selectForDel(k: String, filter: Filter): List<Block>!. Restituisce la sequenza di blocchi necessaria a poter eseguire una cancellazione sulla struttura. Tiene conto dunque sia dei nodi che saranno rimossi, sia di quelli che subiranno una modifica a seguito della rimozione di una torre.
+			\item \verb!selectForProof(k: String, filter: Filter): List<Block>!. Restituisce la sequenza di blocchi necessaria per poter costruire la Proof relativa alla chiave $ k $. Questa funzione potrebbe essere utilizzata sia singolarmente per ottenere una Proof valida per una sola chiave, sia nell'ambito di una richiesta di una Proof cumulativa. In questo caso sarebbe necessario chiamare questa funzione tante volte quante sono le chiavi. E' possibile operare una ottimizzazione che restituisca la sequenza di blocchi necessari per poter ricostruire la Proof cumulativa per un insieme di chiavi. In tal caso la firma cambierebbe in: \verb!selectForProof(keys: Set<String>)!. 
 			\item \verb!alterTableByAdd(structure: List<Block>)!. Effettua la sovrascrittura su database dei blocchi modificati e la scrittura di blocchi eventualmente aggiunti. Le informazioni relative all'aggiunta devono essere opportunamente codificate all'interno di una stringa di caratteri che sarà interpretata poi lato server.
-			\item \verb!alterTableByDel(structure: List<Block>)!. Effettua la sovrascrittura su database dei blocchi modificati e la cancellazione di quelli rimossi. Le informazioni relative all'aggiunta devono essere opportunamente codificate all'interno di una stringa di caratteri che sarà interpretata poi lato server.	
+			\item \verb!alterTableByDel(structure: List<Block>)!. Effettua la sovrascrittura su database dei blocchi modificati e la cancellazione di quelli rimossi. Le informazioni relative all'aggiunta devono essere opportunamente codificate all'interno di una stringa di caratteri che sarà interpretata poi lato server.
+			\item \verb!containsKey(k: String): Boolean!. Restituisce true se la chiave è presente in struttura, false altrimenti.
 		\end{itemize}
 		
 	
@@ -407,9 +408,10 @@
 			\item \verb!retrieveForAdd(k: String): AuthSkipList<ByteArray, String, Any>!. Restituisce la struttura opportuna su cui potrà essere eseguita una modifica o una aggiunta sulla struttura.
 			\item \verb!retrieveForDel(k: String): AuthSkipList<ByteArray, String, Any>!. Restituisce la struttura opportuna su cui potrà essere eseguita una cancellazione sulla struttura.
 			\item \verb!getHead(): Node<String, ByteArray>!. Permette l'ottenimento dello \textit{Start Node}. Utile dunque per tutte le operazioni della Skip List Autenticata che necessitano solo di quest'ultimo.
-			\item \verb!retrieveProof(Set<String>): Proof<ByteArray, String, Any>!. Permette l'ottenimento della Proof cumulativa per un insieme di chiavi $ Set<String> $ passato per parametro.
+			\item \verb!retrieveProof(Set<String>): AuthSkipList<ByteArray, String, Any>!. Permette l'ottenimento della struttura da cui sarà possibile ricavare la Proof cumulativa per un insieme di chiavi $ Set<String> $ passato per parametro.
 			\item \verb!executeAdd(structure: AuthSkipList<ByteArray, String, Any>)!. Permette l'aggiornamento del database a seguito di una operazione di aggiunta/modifica effettuata sulla struttura.
 			\item \verb!executeDel(structure): AuthSkipList<ByteArray, String, Any>)!. Permette l'aggiornamento del database a seguito di una operazione di cancellazione effettuata sulla struttura.		
+			\item \verb!containsKey(k: String): Boolean!. Permette di verificare la presenza di una chiave nella struttura.
 		\end{itemize}
 		
 	\subsection{Comportamento asincrono}
@@ -467,7 +469,35 @@
 
 	Seguono delle immagini per illustrare, sulla base di quanto detto, la collaborazione tra le varie parti per permettere la memorizzazione della Skip List Autenticata in persistenza e contestualmente l'utilizzo dell'API. I diagrammi di sequenza sono costruiti in base alle operazioni eseguibili dalla Skip List Autenticata e mostrano come sia possibile rispettare il requisito della trasparenza di questa estensione rispetto alla libreria standard.
 
+	\begin{figure}
+		\centering
+		\includegraphics[scale=0.6]{figure/containsKeySD.eps}
+		\caption{Diagramma di sequenza per l'operazione di check sulla presenza di una chiave.}\label{fig:containsKeySD}
+	\end{figure}
 
+	\begin{figure}
+		\centering
+		\includegraphics[scale=0.6]{figure/cloneADS.eps}
+		\caption{Immagine che illustra un esempio di Hash Map, come sarebbero nella prima fase dell'operazione di clonazione, rispetto alla Skip List nell'esempio. E' possibile poi da questo stato clonare tutti i nodi e provvedere alla sistemazione di tutti i collegamenti.}\label{fig:cloneADS}
+	\end{figure}
+
+	\begin{figure}
+		\centering
+		\includegraphics[scale=0.6]{figure/cloneADS.eps}
+		\caption{Immagine che illustra un esempio di Hash Map, come sarebbero nella prima fase dell'operazione di clonazione, rispetto alla Skip List nell'esempio. E' possibile poi da questo stato clonare tutti i nodi e provvedere alla sistemazione di tutti i collegamenti.}\label{fig:cloneADS}
+	\end{figure}
+
+	\begin{figure}
+		\centering
+		\includegraphics[scale=0.6]{figure/cloneADS.eps}
+		\caption{Immagine che illustra un esempio di Hash Map, come sarebbero nella prima fase dell'operazione di clonazione, rispetto alla Skip List nell'esempio. E' possibile poi da questo stato clonare tutti i nodi e provvedere alla sistemazione di tutti i collegamenti.}\label{fig:cloneADS}
+	\end{figure}
+
+	\begin{figure}
+		\centering
+		\includegraphics[scale=0.6]{figure/cloneADS.eps}
+		\caption{Immagine che illustra un esempio di Hash Map, come sarebbero nella prima fase dell'operazione di clonazione, rispetto alla Skip List nell'esempio. E' possibile poi da questo stato clonare tutti i nodi e provvedere alla sistemazione di tutti i collegamenti.}\label{fig:cloneADS}
+	\end{figure}
 
 
 
