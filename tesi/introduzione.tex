@@ -1,21 +1,19 @@
-\section{Contestualizzazione}
+\section{Contestualizzazione e definizione problemi affrontati}
 	
 %	In questa sezione viene definito il contesto in cui si trova il progetto e l'esperimento svolto.
 %	Viene dunque descritto l'ambito in cui è definito il tutto.
-%	
-%	Quindi ambito Cloud, Trusted/Untrusted, integrità dei dati, storage illimitato ma non fidato nel cloud e storage molto limitato ma fidato "in memory"
-	 
-	\subsection{Definizione dei problemi affrontati}
-	
-%		In questa sottosezione si va più nello specifico descrivendo i problemi affrontati all'interno del contesto 
-%		precedentemente descritto.
-%		Perciò si introduce ai problemi relativi ai punti della sezione precedente.
 
+	Negli ultimi anni, in funzione dell'esponenziale incremento di utenti che utilizzano dispositivi come computer, smartphone o simili, è cresciuta l'esigenza di servizi di \textit{Cloud Computing} e, in particolare, di \textit{Cloud Storage}. Quest'ultimo è un servizio di archiviazione e conservazione dati sulla rete, dove appunto i dati stessi sono memorizzati su molteplici server. Fisicamente le risorse possono essere distribuite su più di un server in maniera, però, del tutto trasparente per l'utilizzatore finale. Il suo obiettivo ultimo tuttavia, risiede non solo nella volontà di memorizzare i dati sul cloud, ma soprattutto nella sicurezza informatica offerta da suddetti servizi.
+	Sussiste infatti la sostanziale dicotomia tra i dispositivi utilizzati dagli utenti, sicuri, parte \textit{fidata} ma dalle capacità di storage limitate, e tutto l'ecosistema relativo al cloud, caratterizzato da storage illimitato ma \textit{Untrusted}, cioè non fidato.
+	Un particolare aspetto, racchiuso all'interno di questo universo legato alla sicurezza informatica, in ambito di cloud computing, riguarda l'integrità dei dati. Un tale scenario può essere affrontato tramite l'utilizzo di \textit{strutture dati autenticate}. Una ADS, infatti, comporta la presenza di due ruoli: il \textit{server}, con il compito di memorizzare i dati di interesse e di rispondere a richieste sugli stessi fornendone una \textit{Prova} di validità, e il \textit{client}, che opererà tali richieste al server, e vorrà poter verificare l'autenticità delle risposte.
+	
+	
 \section{Obiettivi}
 
 %	A questo punto si descrivono gli obiettivi, in funzione dei problemi affrontati. Sia obiettivi generali, di superamento dei problemi 
 %	precedentemente descritti e in seguito accenni a obiettivi di cui si è tenuto conto in fase di analisi, progetto e realizzazione.
-%	()Magari confermati da fase di testing?)
+
+		Gli obiettivi principali di progetto dunque hanno riguardato analisi, progettazione e realizzazione di una API, \textit{Application Programming Interface}, riguardante l'implementazione efficiente di una struttura dati autenticata, basata su \textit{Skip List}. Questa API è stata di supporto alla realizzazione di un protocollo per l'integrità di dati su cloud nell'ambito di un progetto di ricerca svolto dal gruppo di sicurezza delle reti e dei sistemi informatici del Dipartimento di Ingegneria Informatica dell'Università degli Studi "Roma Tre". Di superiore importanza è, in secondo luogo, lo studio teorico comprensivo di attività di analisi e progettazione riguardante la possibilità di estendere le capacità dell'API, permettendo la memorizzazione e il mantenimento dell'ADS e dello storage in persistenza, prendendo ad esempio uno tra i più noti DBMS non relazionali, Cassandra.
 
 \section{Conclusione}
 	
