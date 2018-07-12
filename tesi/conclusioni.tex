@@ -3,18 +3,29 @@
 %	Elencare i risultati raggiunti e sottolinearne il valore. Parlare anche dell'avanzamento rispetto allo stato dell'arte
 %	di cui sopra.
 
+	Nell'ambito di questa attività è stato realizzato un set di API di supporto alla realizzazione di un protocollo per l'integrità dei dati su cloud. La progettazione ha dovuto tenere conto sia dei casi d'uso relativi a requisiti funzionali sia della possibilità di utilizzo dell'intera libreria in contesto concorrente. Oltre a ciò è stato deciso di prendere in considerazione anche altre specifiche come usabilità, prestazioni e sostenibilità, come già ampiamente discusso in fase di analisi. Lo studio teorico e la progettazione sono poi proseguite con lo scopo di realizzare una estensione delle API atta a consentirne la memorizzazione e gestione in persistenza.
+
 \section{Problemi aperti e sviluppi futuri}
 
 	\subsection{Limiti concettuali su Proof}
 	
 %		Discutere qui dei problemi relativi a ciò che è stato realizzato (se presenti) e a suoi limiti, accennando alla possibile
 %		soluzione del prossimo paragrafo
+
+		Concettualmente parlando, come si è già detto, la Proof rappresenta una struttura a se stante dalla struttura di partenza dal momento in cui viene creata. Si è inoltre sottolineato come in realtà non ci sia nessuna conoscenza dell'ADS da parte della Proof a posteriori, tanto più considerando il caso in cui l'ADS sia memorizzata in persistenza.
+		Ebbene, nell'ambito dell'utilizzo delle librerie si vuole istanziare una Proof a partire da uno stato iniziale $ T_{0} $ della struttura. Successivamente alla ricezione e applicazione sull'ADS di blocchi di update che può aver ricevuto, si vogliono riproporre tali aggiornamenti sulla Proof, parallelamente. Tuttavia l'attuale realizzazione consente questo solo nel caso in cui gli update riguardino aggiornamenti di chiavi già esistenti. Infatti update che aggiungono o cancellano chiavi, modificano la struttura, che, essendo inoltre randomica, può variare consistentemente nella sua interezza. Queste informazioni non sono più conosciute dalla Proof, dal momento che è una realtà ontologicamente indipendente, anche se sarebbero necessarie.
 	
 	\subsection{Ipotesi di soluzione con Modello a ruoli}
 	
 %		Parlare qui della soluzione precedentemente accennata
 	
+		Una ipotesi di soluzione è stata ideata, ma non realizzata. Sarebbe interessante come sviluppo futuro attuarne la realizzazione.
+		
+%		DESCRIVERE LA SOLUZIONE da fogli
+	
 	\subsection{Realizzazione progetto persistenza}
 		
 %		Sezione relativa agli sviluppi futuri in cui semplicemente si accenna alla realizzazione del progetto persistenza.
 %		Magari eventualmente accennare alle tecnologie pensate.
+
+	Infine, un ulteriore sviluppo futuro, potrebbe vedere la realizzazione e l'applicazione ad un caso reale del progetto di persistenza presentato nel corso di questa tesi. Infatti, sebbene questo sia stato condotto con particolare riferimento a \textit{Cassandra}, un DBMS non relazionale molto diffuso, in realtà con poche dovute accortezze è perfettamente replicabile per molti altre situazioni, risultando quasi totalmente indipendente dalla tecnologia adottata.
