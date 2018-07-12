@@ -30,7 +30,7 @@
 	\begin{figure}
 		\centering
 		\includegraphics[scale=0.65]{figure/Auth+Proof.pdf}
-		\caption{Diagramma delle classi di progetto per la parte di autenticazione. Con un piccolo abuso di notazione sono stati presi in prestito alcuni elementi sintattici dal linguaggio Kotlin, con cui sono state realizzate le API.}\label{fig:authDCD}
+		\caption{Diagramma delle classi di progetto per la parte di autenticazione. Con un piccolo abuso di notazione sono stati presi in prestito alcuni elementi sintattici dal linguaggio \textit{Kotlin}, con cui sono state realizzate le API.}\label{fig:authDCD}
 	\end{figure}
 
 	\begin{figure}
@@ -81,9 +81,9 @@
 			\item \textbf{\textit{getValue(k: K): V?}}: data una chiave $ k $, restituisce il valore $ v $ associato ad essa. Questa operazione permette dunque le operazioni di lettura, \textit{read(k)}, richieste dai casi d'uso.
 			\item \textbf{\textit{add(k: K, v: V): H}}: crea un \textit{delta} rispetto alla struttura corrente, il quale viene memorizzato. Il delta riguarda l'aggiunta o la modifica degli elementi relativi alla chiave $ k $. L'operazione \underline{non} modifica la struttura corrente.
 			\item \textbf{\textit{del(k: K): H}}: crea un \textit{delta} rispetto alla struttura corrente, il quale viene memorizzato. Il delta riguarda la cancellazione degli elementi relativi alla chiave $ k $ L'operazione \underline{non} modifica la struttura corrente.
-			\item \textit{applyDeltas(): ADS<H, K, V>}: compatta tutti i vari delta relativi alla struttura corrente e li applica in ordine, restituendo una nuova ADS, con le modifiche applicate. Questa operazione permette all'ADS di avere la capacità di aggiornarsi rispetto a richieste di update in arrivo dai client.
-			\item \textit{rootHash(): H}: calcola e restituisce il \textit{Root Hash} della struttura corrente. Questa operazione permette di ottenere il \textit{digest} dell'intera struttura, come specificato dai requisiti.
-			\item \textit{isEmpty(): Boolean}: Informa se l'ADS è vuoto o meno.
+			\item \textbf{\textit{applyDeltas(): ADS<H, K, V>}}: compatta tutti i vari delta relativi alla struttura corrente e li applica in ordine, restituendo una nuova ADS, con le modifiche applicate. Questa operazione permette all'ADS di avere la capacità di aggiornarsi rispetto a richieste di update in arrivo dai client.
+			\item \textbf{\textit{rootHash(): H}}: calcola e restituisce il \textit{Root Hash} della struttura corrente. Questa operazione permette di ottenere il \textit{digest} dell'intera struttura, come specificato dai requisiti.
+			\item \textbf{\textit{isEmpty(): Boolean}}: Informa se l'ADS è vuoto o meno.
 		\end{itemize}
 	
 		E' necessario sottolineare riguardo alla prima operazione fornita, che, per \textit{Creator}, sara l'ADS stesso a generare una Proof una o più chiavi, proprio in quanto è l'unica entità a conoscere le informazioni per farlo. A seguito della creazione, essa sarà un entità indipendente, in grado di aggiornarsi in parallelo rispetto agli update. I calcoli e le operazioni poi eseguite sulla Proof, sono indipendenti dall'ADS di partenza.
@@ -251,20 +251,20 @@
 		
 			\begin{algorithm}[H]
 				\ForEach{key in (proof.keys - this.keys)}{
-					first-iterator = this.head
-					second-iterator = proof.head
+					first-iterator = this.head\;
+					second-iterator = proof.head\;
 					\If{second-iterator.next != null}{
-						first-iterator.next = second-iterator.next
+						first-iterator.next = second-iterator.next\;
 					}
 					\If{second-iterator.down != null}{
-						first-iterator.down = second-iterator.down
+						first-iterator.down = second-iterator.down\;
 					}
 					\eIf{second-iterator.next.key $ \leq $ key}{
-						first-iterator = first-iterator.next
-						second-iterator = second-iterator.next
+						first-iterator = first-iterator.next\;
+						second-iterator = second-iterator.next\;
 					}{
-						first-iterator = first-iterator.down
-						second-iterator = second-iterator.down
+						first-iterator = first-iterator.down\;
+						second-iterator = second-iterator.down\;
 					}
 				}
 			\end{algorithm}
@@ -445,7 +445,7 @@
 		I Bloom Filter hanno inoltre l'importante proprietà, utile anch'essa ai fini dei questo studio di caso, secondo cui il tempo richiesto per aggiunte o per verificare la presenza di un elemento è costante, ed è $\mathcal{O}(k)$, ovvero è completamente indipendente dal numero di elementi nell'insieme. I $ k $ \textit{lookup}, inoltre, sono indipendenti tra loro, e potrebbero essere parallelizzati per aumentare l'efficienza.
 		
 		Dovendo tuttavia rispecchiare la cache presente in memoria, è necessaria la possibilità di cancellazione di un elemento, come detto impossibile per un semplice Bloom Filter. Sarebbe possibile l'utilizzo di una sua estensione, i \textit{Counting Filters}, che aggiungono esattamente quella caratteristica, tramite la promozione di ogni posizione dell'array da 1-bit ad n-bit. In questo modo l'operazione di inserimento non farà altro che incrementare il valore presente nella posizione, e la verifica di presenza controllerà che nelle $ k $ posizioni non ci sia un bit pari a 0. Tuttavia, se già i Bloom Filter classici, utilizzano $ 1.44\log{2}{\frac{1}{\epsilon}} $ bit di spazio per elemento inserito nell'insieme, dove $\epsilon$ è la probabilità di falso positivo della struttura, i Counting Filters utilizzano mediamende 3-4 volte lo spazio. Questo potrebbe dunque ridurne l'utilità di utilizzo all'interno del progetto di persistenza.
-		Tuttavia una soluzione ottimale invece prevede l'utilizzo dei \textit{Cuckoo Filters}(8), ovvero una evoluzione dei Bloom Filters, che permettono sia aggiunte che cancellazioni, ma ottimizzate per l'utilizzo dello spazio. Infatti possiedono un algoritmo di riempimento dell'array più sofisticato in grado di garantire prestazioni molto superiori a quelle di estensioni classiche dei Bloom Filters.
+		Tuttavia una soluzione ottimale invece prevede l'utilizzo dei \textit{Cuckoo Filters} \cite{cuckoo}, ovvero una evoluzione dei Bloom Filters, che permettono sia aggiunte che cancellazioni, ma ottimizzate per l'utilizzo dello spazio. Infatti possiedono un algoritmo di riempimento dell'array più sofisticato in grado di garantire prestazioni molto superiori a quelle di estensioni classiche dei Bloom Filters.
 		
 		Dunque, in definitiva, il filtro passato nella query permetterà alla UDF server-side il check se un blocco è presente o meno in cache, e potrà dunque decidere se restituirlo o meno. In cache dunque sarà presente una lista di blocchi dove continuerà a valere quanto detto fin ora, accostata ad un Cuckoo Filter, sincronizzato con quest'ultima. 
 		
