@@ -26,7 +26,7 @@
 		\item Una forma di prova di validità, nel seguito \textit{Proof}, per una o più chiavi presenti nella struttura, utilizzata da ProofVerifier e RootHashCalculator.
 		\item Possibilità di ottenere dalla struttura dati autenticata il \textit{digest}, nel seguito \textit{Root Hash}, relativo a tutte le coppie chiave-valore presenti.
 		\item Possibilità di ottenere dalla \textit{Proof}, il \textit{Root Hash} relativo alla chiave o all'insieme di chiavi sulle quali è costruita, oggetto di calcolo anche qui per ProofVerifier e RootHashCalculator.
-		\item Capacità della \textit{Proof} di aggiornarsi rispetto agli update che avvengono sulla struttura dati autenticata principale, per poter fornire il \textitr{Root Hash} aggiornato. Operazione necessaria a RootHashCalculator nell'iter del processamento di una Proof lato autenticatore.
+		\item Capacità della \textit{Proof} di aggiornarsi rispetto agli update che avvengono sulla struttura dati autenticata principale, per poter fornire il \textit{Root Hash} aggiornato. Operazione necessaria a RootHashCalculator nell'iter del processamento di una Proof lato autenticatore.
  		\item Una struttura dati autenticata in grado di effettuare una serie di update, e in grado di restituire una \textit{Proof} cumulativa per questi update.
 	\end{itemize}
 	
@@ -76,7 +76,6 @@
 	
 %		Qui si procede con una più precisa e dettagliata definizione della struttura
 %		
-%		{dimostrazioni MIT}
 %		{Immagini}
 
 	Dopo averne brevemente motivato l'adozione, si procede con una più precisa definizione che possa aiutare il lettore a comprendere appieno il razionale retrostante questa struttura. 
@@ -128,16 +127,14 @@
 			
 			\begin{itemize}
 			
-			\item 
-			\textbf{Hop forward}:
+			\item \textbf{Hop forward}:
 				\begin{algorithm}[H]
 					\While{elem(right(v)) < x}{
 						v $\leftarrow$ right(v)\;
 					}
 				\end{algorithm}
 			
-			\item 
-			\textbf{Drop down}:
+			\item \textbf{Drop down}:
 				\begin{algorithm}[H]
 					\eIf{down(v)  != null}{
 						v $\leftarrow$ down(v)\;
@@ -157,8 +154,6 @@
 				\includegraphics[scale=0.6]{figure/search-66.eps}
 				\caption{\textbf{Ricerca dell'elemento 66} nella Skip List della figura \ref{fig:skiplist}. I nodi visitati e i collegamenti attraversati sono evidenziati con linee più spesse. Si noti che la ricerca, fallimentare, dell'elemento \textit{70} produrrebbe lo stesso risultato.}\label{fig:2}
 			\end{figure}
-			
-%			{EVENTUALE DIMOSTRAZIONE MIT}
 			
 			Considerando che il numero di livelli in una skip list con $ n $ elementi è, con alta probabilità\footnote{Un evento occorre con alta probabilità quando la sua probabilità dipende da un certo valore $ n $ e tende a 1 quando $ n $ tende a $\infty$}, pari a $\mathcal{O}(log{}n)$, è dimostrabile che il costo di ricerca è, con alta probabilità, pari a $\mathcal{O}(log{}n)$.
 				

@@ -52,7 +52,7 @@
 %	Qui, sulla base di quanto detto nella sezione di analisi, si inizia a mettere insieme le varie parti per descrivere più
 %	nel dettaglio l'API dal punto di vista progettuale. Già nella prima parte di analisi è stato introdotto a grandi linee il funzionamento.
 %	
-%	Il focus è sulle scelte progettuali. Evidenziare dunque i punti di forza e le scelte a livello di pattern.
+%	Il focus è sulle scelte progettuali. Evidenziare dunque le scelte a livello di pattern.
 
 	Come già deducibile dal Class Diagram in figura~\ref{fig:authDCD}, le API consistono fondamentalmente di due interfacce, \textit{stabili}, \textit{comuni} e \textit{unificate}, che forniscono \textit{Protected Variation} rispetto a rivisitazioni e ottimizzazioni. Pertanto è stato fornito all'utilizzatore un punto di contatto singolo, una \textit{Facade}, con le librerie. 
 	Le implementazioni di queste due interfaccie sono soggette a due vincoli di progetto riguardanti il tipo da utilizzare per le chiavi, ovvero una stringa di caratteri, e per gli hash, ovvero array di byte e/o stringa di caratteri. Esse di basano entrambe sul \textit{Node} come elemento costituente di base. Per le funzioni di hash, esse si affidano ad un \textit{Singleton} di utilità, HashUtils. Prima di passare ad un'analisi dettagliata delle varie parti, si sottolinea la dipendenza della Skip List Autenticata all'interfaccia della Proof, e \textit{non} alla sua implementazione. Questo è stato preferito, fornendo uno strato di \textit{Indirection}, in quanto la Skip List Proof, può subire cambiamenti e ottimizzazioni interne, senza ripercuotersi direttamente sulla Skip List Autenticata.
