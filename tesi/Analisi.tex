@@ -11,20 +11,22 @@
 	Il contesto, in breve, prevede un numero variabile di \textit{client}, con una disponibilità limitata in termini di memorizzazione, \textit{storage}, ma che necessita di salvare una grande mole di dati. Questo sarà reso possibile da un \textit{server}, considerata parte non fidata, il cui compito comprenderebbe anche l'attuazione del protocollo, delegando a particolari client, detti \textit{autenticatori}, il compito di autenticare le richieste provenienti dai client. Questi ultimi provvederanno all'autenticazione tramite firme, con una criptazione asimmetrica, verificabili tramite dei \textit{certificati}, noti a tutti i client. L'autenticazione di un valore relativo ad una richiesta di un client, tuttavia, dipenderebbe dall'avvenuta firma delle richieste precedenti.
 	La forza del protocollo sta nella possibilità di attuazione di una architettura parallela di \textit{autenticatori}, i quali sarebbero in grado di autenticare un valore $ r_{i} $, anche se il valore precedente $ r_{i-1} $ non è ancora stato firmato. Dunque intuitivamente, l'autenticazione può avvenire in maniera \textit{condizionata} rispetto alla \textit{catena} di valori precedenti, permettendo al server di richiedere una autenticazione quando la precedente non è ancora finita.
 	
+	La gestione del lato server e del lato relativo agli autenticatori è stata gestita tramite l'utilizzo del modello ad attori. Si vuole qui solo contestualizzare l'ambito di utilizzo delle API, con lo scopo di giustificarne i casi d'uso, pertanto per una trattazione approfondita si veda \cite{pipelineintegrity_thesis}. All'interno del server, "vivranno" attori tra i quali \textit{ADSManager}, con il compito di gestione del dataset, \textit{ServerUpdate}, delegato alla gestione delle richieste di update da parte dei client, e \textit{ServerRead}, per le richieste di read. All'interno dell'autenticatore, d'altro canto, saranno presenti attori tra i quali, \textit{Authenticator}, con il ruolo di coordinazione generale gli altri attori presenti, \textit{RootHashCalculator}, delegato al semplice calcolo del Root Hash di una Proof a seguito dell'applicazione sulla stessa di un blocco di update, e \textit{ProofVerifier}, il quale verifica la validità del Root Hash precedente all'applicazione degli update.
+	
 	\begin{figure}
 		\centering
 		\includegraphics[scale=0.6]{figure/semicircles.eps}
 		\caption{Il server riceve e accumula un certo numero di updates e richiede poi l'autenticazione tramite una authentication request, riceverà poi una authentication reply non appena sarà avvenuta l'autenticazione}\label{fig:semicircles}
 	\end{figure}
 	
-	Fatte queste premesse, di seguito si elencano i casi d'uso della libreria, dovuti all'utilizzo all'interno del protocollo realizzato da \cite{pipelineintegrity_thesis}:
+	Fatte queste premesse, di seguito si elencano i casi d'uso della libreria, in funzione dell'utilizzo all'interno del protocollo realizzato da \cite{pipelineintegrity_thesis}:
 	
 	\begin{itemize}
-		\item Una struttura dati autenticata, impostata come \textit{key-value store}, in grado di fornire operazioni di lettura e di scrittura, per ADSManager
-		\item Una forma di prova di validità, nel seguito \textit{Proof}, per una o più chiavi presenti nella struttura
-		\item Possibilità di ottenere dalla struttura dati autenticata il \textit{digest}, nel seguito \textit{root Hash}, relativo a tutte le coppie chiave-valore presenti
-		\item Possibilità di ottenere dalla \textit{Proof}, il \textit{root Hash} relativo alla chiave o all'insieme di chiavi sulle quali è costruita, per ProofVerifier
-		\item Capacità della \textit{Proof} di aggiornarsi rispetto agli update che avvengono sulla struttura dati autenticata principale, per poter fornire il \textit{root Hash} aggiornato, per RootHashCalculator.
+		\item Una struttura dati autenticata, impostata come \textit{key-value store}, in grado di fornire operazioni di lettura e di scrittura, mantenuta all'interno di ADSManager.
+		\item Una forma di prova di validità, nel seguito \textit{Proof}, per una o più chiavi presenti nella struttura, utilizzata da ProofVerifier e RootHashCalculator.
+		\item Possibilità di ottenere dalla struttura dati autenticata il \textit{digest}, nel seguito \textit{Root Hash}, relativo a tutte le coppie chiave-valore presenti.
+		\item Possibilità di ottenere dalla \textit{Proof}, il \textit{Root Hash} relativo alla chiave o all'insieme di chiavi sulle quali è costruita, oggetto di calcolo anche qui per ProofVerifier e RootHashCalculator.
+		\item Capacità della \textit{Proof} di aggiornarsi rispetto agli update che avvengono sulla struttura dati autenticata principale, per poter fornire il \textitr{Root Hash} aggiornato. Operazione necessaria a RootHashCalculator nell'iter del processamento di una Proof lato autenticatore.
  		\item Una struttura dati autenticata in grado di effettuare una serie di update, e in grado di restituire una \textit{Proof} cumulativa per questi update.
 	\end{itemize}
 	
