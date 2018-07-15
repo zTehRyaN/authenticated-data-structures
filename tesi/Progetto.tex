@@ -9,15 +9,16 @@
 %
 %	{Diagrammi} Class diagrams UML o analoghi più efficaci per il comportamento dinamico
 
-	A seguito della fase di analisi appena condotta, si passa all'ambito più strettamente progettuale. Scopo di questa sezione introduttiva è quello di riallacciarsi ai requisiti già esposti in fase di analisi, aggiungendo obiettivi di progettazione. Per quanto riguarda le API, si è già parlato dei requisiti funzionali, cosi come si è sottolineata la necessità di utilizzo in \textit{concorrenza}. Una trattazione più dettagliata è operata in fase di analisi. Si pone l'accento invece su alcuni obiettivi progettuali di cui si è tenuto conto:
+	A seguito della fase di analisi appena condotta, si passa all'ambito più strettamente progettuale. Scopo di questa sezione introduttiva è quello di riallacciarsi ai requisiti già esposti in fase di analisi, aggiungendo obiettivi specifici di progettazione. Per quanto riguarda l'API, si è già parlato dei requisiti funzionali, cosi come si è sottolineata la necessità di utilizzo in \textit{concorrenza}. \\
+	Si pone ora l'accento invece su alcuni obiettivi progettuali di cui si è tenuto conto:
 	
 	\begin{enumerate}
-		\item \textbf{Prestazioni}. Si vogliono garantire complessità computazionali compatibili e coerenti con quelle illustrate in fase di analisi per la Skip List, minimizzando lo spazio usato dalla struttura dati, cosi come garantire ottimi tempi di risposta e throughput.
+		\item \textbf{Prestazioni}. Si vogliono garantire complessità computazionali compatibili e coerenti con quelle illustrate in fase di analisi per la Skip List, minimizzando lo spazio utilizzato dalla struttura dati, cosi come garantire ottimi tempi di risposta e throughput.
 	  	\item \textbf{Usabilità}. Si vuole una interfaccia ben definita, chiara, di facile interpretazione e stabile, al fine di ottimizzarne l'utilizzo.
-	  	\item \textbf{Sostenibilità}. Progettazione e realizzazione devono permettere alti livelli di manutenibilità per poter operare ottimizzazioni, miglioramenti e riparazioni. Di pari importanza sono la verificabilità e la configurabilità delle API.
+	  	\item \textbf{Sostenibilità}. Progettazione e realizzazione devono permettere alti livelli di manutenibilità per poter operare ottimizzazioni, miglioramenti e riparazioni. Di pari importanza sono la verificabilità e la configurabilità dell'API.
 	\end{enumerate}
 	 
-	Per quanto riguarda la sezione sulla persistenza, invece, si ricordano i due requisiti fondamentali. Il primo riguarda la trattazione della stessa come un'estensione delle API, il secondo invece sottolinea la caratteristica di trasparenza dell'introduzione di questa estensione, rispetto alla libreria stessa.
+	Per quanto riguarda la sezione sulla persistenza, invece, si ricordano i due requisiti fondamentali. Il primo riguarda la trattazione della stessa come un'estensione dell'API, il secondo invece sottolinea la caratteristica di trasparenza dell'introduzione di questa estensione, rispetto alla libreria stessa.
 	Si pone anche qui l'accento sugli obiettivi progettuali principali di cui si è tenuto conto:
 	
 	\begin{enumerate}
