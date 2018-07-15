@@ -96,7 +96,7 @@
 	\begin{figure}
 		\centering
 		\includegraphics[scale=0.6]{figure/skiplist.eps}
-		\caption{Esempio di una Skip List}\label{fig:skiplist}
+		\caption{Esempio di una Skip List.}\label{fig:skiplist}
 	\end{figure}
 		
 	\subsection{Operazioni principali}
@@ -121,7 +121,7 @@
 	
 		\subsubsection{Ricerca}
 			
-			L'operazione di ricerca di un elemento $ x $ in una skip list inizia, come tutte le altre, dallo \textit{start node}. La ricerca viene effettuata tramite l'alternanza di due azioni, \textit{hop forward} e \textit{drop down}, che rappresentano rispettivamente il movimento verso destra o verso il basso all'interno della struttura. Esse sono ripetute, sotto determinate condizioni, fino a che la ricerca non sia terminata, indipendentemente dall'esito, che potrà essere positivo o negativo.
+			L'operazione di ricerca di un elemento $ x $ in una Skip List inizia, come tutte le altre, dallo \textit{Start Node}. La ricerca viene effettuata tramite l'alternanza di due azioni, \textit{hop forward} e \textit{drop down}, che rappresentano rispettivamente il movimento verso destra o verso il basso all'interno della struttura. Esse sono ripetute, sotto determinate condizioni, fino a che la ricerca non sia terminata, indipendentemente dall'esito, che potrà essere positivo o negativo.
 			
 			La prima azione menzionata prevede movimenti verso destra fino a che non si raggiunge un nodo il cui valore sia il più grande minore o uguale a $ x $. La seconda azione invece consiste semplicemente in uno spostamento verticale, al nodo immediatamente sottostante, a condizione che questo esista.  In pseudocodice, i passi rilevanti delle due azioni, rispettivamente: 
 			
@@ -144,7 +144,7 @@
 				\end{algorithm}
 			\end{itemize} 
 			
-			La ricerca consiste dunque in un \textit{hop forward} e un \textit{drop down}, fintanto che risulti possibile effettuare \textit{drop down}.  Con questa sequenza di passi si raggiungerà un nodo sulla \textit{base list}: se vale che $ elem(v) = x $ allora la skip list contiene l'elemento $ x $. Se questa condizione non risulta vera, allora il nodo raggiunto tramite questa sequenza di passi sarà il nodo sulla \textit{base list} con il valore più grande minore di $ x $. Per costruzione $ right(v) $ è il nodo sulla \textit{base list} il cui elemento è il più piccolo maggiore di $ x $.
+			La ricerca consiste dunque in una serie di \textit{hop forward} e \textit{drop down}, fino a che non sia più possibile effettuare ulteriori \textit{drop down}. Con questa sequenza di passi si raggiungerà un nodo sulla Base List: se vale che $ elem(v) = x $ allora la Skip List contiene l'elemento $ x $. Se questa condizione non risulta vera, allora il nodo raggiunto tramite questa sequenza di passi sarà il nodo sulla Base List con il valore più grande minore di $ x $. Per costruzione, di conseguenza, $ right(v) $ sarà il nodo sulla Base List il cui elemento è il più piccolo maggiore di $ x $.
 			
 			Il costo computazionale dell'operazione di ricerca è dato dalla somma dei costi di attraversamento di tutti i livelli. Tuttavia ogni livello, tranne il primo, subisce un attraversamento parziale, in quanto il nodo di partenza non è il primo nodo della sequenza.
 			
@@ -155,7 +155,7 @@
 				\caption{\textbf{Ricerca dell'elemento 66} nella Skip List della figura \ref{fig:skiplist}. I nodi visitati e i collegamenti attraversati sono evidenziati con linee più spesse. Si noti che la ricerca, fallimentare, dell'elemento \textit{70} produrrebbe lo stesso risultato.}\label{fig:2}
 			\end{figure}
 			
-			Considerando che il numero di livelli in una skip list con $ n $ elementi è, con alta probabilità\footnote{Un evento occorre con alta probabilità quando la sua probabilità dipende da un certo valore $ n $ e tende a 1 quando $ n $ tende a $\infty$}, pari a $\mathcal{O}(log{}n)$, è dimostrabile che il costo di ricerca è, con alta probabilità, pari a $\mathcal{O}(log{}n)$.
+			Considerando che il numero di livelli in una Skip List con $ n $ elementi è, con alta probabilità\footnote{Un evento occorre con alta probabilità quando la sua probabilità dipende da un certo valore $ n $ e tende a 1 quando $ n $ tende a $\infty$}, pari a $\mathcal{O}(log{}n)$, è dimostrabile che il costo di ricerca è, con alta probabilità, pari a $\mathcal{O}(log{}n)$.
 				
 		\subsubsection{Inserimento}
 		
