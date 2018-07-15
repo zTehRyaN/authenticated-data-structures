@@ -11,14 +11,14 @@
 	Il contesto, in breve, prevede un numero variabile di \textit{client}, con una disponibilità limitata in termini di memorizzazione, \textit{storage}, ma che necessita di salvare una grande mole di dati. Questo sarà reso possibile da un \textit{server}, considerata parte non fidata, il cui compito comprenderebbe anche l'attuazione del protocollo, delegando a particolari client, detti \textit{autenticatori}, il compito di autenticare, appunto, le richieste provenienti dai client. Questi ultimi provvederanno all'autenticazione tramite firme, operando una criptazione asimmetrica, verificabili tramite dei \textit{certificati}, noti a tutti i client. L'autenticazione di un valore relativo ad una richiesta di un client, tuttavia, dipenderebbe dall'avvenuta firma delle richieste precedenti.
 	La forza del protocollo sta nella possibilità di attuazione di una architettura parallela di autenticatori, i quali sarebbero in grado di autenticare un valore $ r_{i} $, anche se il valore precedente $ r_{i-1} $ non è ancora stato firmato. Dunque intuitivamente, l'autenticazione può avvenire in maniera \textit{condizionata} rispetto alla \textit{catena} di valori precedenti, permettendo al server di richiedere una autenticazione quando la precedente non è ancora finita.
 	
-	La gestione del lato server e dell'ecosistema comprendente gli autenticatori è stata gestita tramite l'utilizzo del Modello ad Attori. Si vuole qui solo contestualizzare l'ambito di utilizzo dell'API, con lo scopo di giustificarne i casi d'uso, pertanto per una trattazione approfondita si veda \cite{pipelineintegrity_thesis}. All'interno del server, "vivranno" attori tra i quali \textit{ADSManager}, con il compito di gestione del dataset, \textit{ServerUpdate}, delegato alla gestione delle richieste di update da parte dei client, e \textit{ServerRead}, per le richieste di read. All'interno dell'autenticatore, d'altro canto, saranno presenti attori tra i quali, \textit{Authenticator}, con il ruolo di coordinazione generale degli altri attori presenti, \textit{RootHashCalculator}, delegato al semplice calcolo del Root Hash di una Proof a seguito dell'applicazione sulla stessa di un blocco di update, e \textit{ProofVerifier}, il quale verifica la validità del Root Hash\footnote{Concetti ancora poco chiari qui esposti saranno affrontati esaustivamente nei successivi paragrafi. Tuttavia è necessario farne menzione per giustificare i casi d'uso col giusto livello di dettaglio.} antecedente l'applicazione degli update.
+	La gestione del lato server e dell'ecosistema comprendente gli autenticatori è stata gestita tramite l'utilizzo del Modello ad Attori. Si vuole qui solo contestualizzare l'ambito di utilizzo dell'API, con lo scopo di giustificarne i casi d'uso, pertanto per una trattazione approfondita si veda \cite{pipelineintegrity_thesis}. All'interno del server, "vivranno" attori tra i quali \textit{ADSManager}, con il compito di gestione del dataset, \textit{ServerUpdate}, delegato alla gestione delle richieste di update da parte dei client, e \textit{ServerRead}, per le richieste di read. All'interno dell'autenticatore, d'altro canto, saranno presenti attori tra i quali, \textit{Authenticator}, con il ruolo di coordinazione generale degli altri attori presenti, \textit{RootHashCalculator}, delegato al semplice calcolo del Root Hash di una Proof a seguito dell'applicazione sulla stessa di un blocco di update, e \textit{ProofVerifier}, il quale verifica la validità del Root Hash\footnote{Concetti ancora poco chiari qui esposti saranno affrontati esaustivamente nei successivi paragrafi. Tuttavia è necessario farne menzione per giustificare i casi d'uso col giusto livello di dettaglio.} antecedente l'applicazione degli update. \\
 	
 	\begin{figure}
 		\centering
 		\includegraphics[scale=0.6]{figure/semicircles.eps}
 		\caption{Il server riceve e accumula un certo numero di updates e ne richiede poi l'autenticazione tramite una Authentication Request. La risposta prevederà una Authentication Reply, non appena sarà avvenuta l'autenticazione}\label{fig:semicircles}
 	\end{figure}
-	\\
+
 	Fatte queste premesse, di seguito si elencano i casi d'uso della libreria:
 	
 	\begin{itemize}
@@ -209,7 +209,7 @@
 % 		Introduzione su strutture dati autenticate. Magari breve, e mirata a far comprendere i sucessivi paragrafi
 
 		Una struttura dati autenticata, abbreviato \textit{ADS}, è una struttura dati che è adatta a controlli sulla sua integrità, cosi come su porzioni di essa. Memorizza valori e associa una funzione crittografica di hash $ h $ con il suo contenuto. L'output prodotto da questa funzione è detto \textit{Root Hash} e possiede lunghezza finita. Tramite una ADS, dunque, un client può rilevare piccoli cambiamenti all'interno di un \textit{dataset} anche molto grande, in maniera efficiente.
-		La sua applicazione in ambiente cloud risulta particolarmente proficua in quanto generalmente permette di ottenere elevate garanzie su sicurezza, autenticazione e verifica di integrità dei dati. Tutto questo rispettando la dicotomia tra l'ambiente di storage locale, limitato ma fidato, \textit{trusted}, e l'ambiente cloud, virtualmente illimitato, ma non fidato. Il razionale alla base consiste nel memorizzare un grande \textit{dataset} sul cloud, equipaggiato dunque con una ADS, e mantenere soltanto il root hash localmente.
+		La sua applicazione in ambiente cloud risulta particolarmente proficua in quanto generalmente permette di ottenere elevate garanzie su sicurezza, autenticazione e verifica di integrità dei dati. Tutto questo rispettando la dicotomia tra l'ambiente di storage locale, limitato ma fidato, \textit{trusted}, e l'ambiente cloud, virtualmente illimitato, ma non fidato. Il razionale alla base consiste nel memorizzare un grande \textit{dataset} sul cloud, equipaggiandolo con una ADS, e mantenere soltanto il root hash localmente.
 
 		Un'ADS, dunque, è una struttura dati dove una serie di operazioni può essere eseguita da un entità non fidata, ma dove i risultati possono essere sottoposti a controlli sull'autenticità. Questo è possibile grazie al fatto che l'entità che esegue le operazioni, oltre a restituire il risultato delle stesse, produrra una prova di validità, \textit{Proof}, che sarà utilizzabile per verificare ogni singolo risultato.
 
@@ -240,7 +240,7 @@
 		
 		\end{itemize}
 	
-		Dunque, updates effettuati da un qualsiasi client, su un qualsiasi valore della struttura, si ripercuoteranno sul root hash della struttura, permettendo il rilevamento delle modifiche ad ogni altro client, in tutte le successive query.
+		Dunque, update effettuati da un qualsiasi client, su un qualsiasi valore, si ripercuoteranno sul root hash dell'intera struttura, permettendo il rilevamento di queste modifiche ad ogni altro client, in tutte le successive query.
 		
 		Le più diffuse implementazioni di strutture dati autenticate sono:
 		
