@@ -171,7 +171,7 @@
 			L'operazione di cancellazione ha, con alta probabilità, costo computazionale pari a $\mathcal{O}(log{}n)$.
 			
 	
-\section{Hashing Non-commutativo}
+\section{Hashing Non-Commutativo}
 	
 %	Qui si parla della tecnica di hashing commutativo
 
@@ -185,7 +185,7 @@
 		\item Dato $ h $ e $ m $, è computazionalmente difficile trovare un $ m \ne m^{'} $, tale che $ h(m) = h(m^{'}) $.
 	\end{itemize}
 
-	E' altrettanto vero che la funzione può essere applicata a due o più messaggi. Pertanto data una coppia di valori $ a $ e $ b $, sarà $ h(a,b) $ il digest prodotto dalla funzione di hash. Lo stesso è applicabile anche su triple, e più in generale su n-ple di lunghezza qualsiasi. Per effetture il digest di una sequenza $ (x_{1}, x_{2}, ... , x_{m}) $, dovrà essere effettuato il seguente calcolo: $ h(x_{1}, h(x_{2}, ... h(x_{m-2},h(x_{m-1},x_{m}))...)) $. \cite{authskiplist}
+	E' altrettanto vero che la funzione può essere applicata a due o più messaggi. Pertanto data una coppia di valori $ a $ e $ b $, sarà $ H = h(a,b) $ il digest prodotto dalla funzione di hash. Lo stesso è applicabile anche su triple, e più in generale su n-ple di lunghezza qualsiasi. Per effetture il digest di una sequenza $ (x_{1}, x_{2}, ... , x_{m}) $, dovrà essere effettuato il seguente calcolo: $ h(x_{1}, h(x_{2}, ... h(x_{m-2},h(x_{m-1},x_{m}))...)) $. \cite{authskiplist}
 	
 		\subsection{Funzioni}
 	
@@ -193,18 +193,18 @@
 	%		nel codice e potrà servire ad introdurre la parte di analisi di prestazioni, nel caso di dettaglio dell'analisi computazionale
 	%		(spazio e tempo) riguardo l'applicazione delle varie funzioni di hashing.
 			
-			Per lo scopo, possono essere adottati vari tipi di funzione di hash, sui singoli valori. Si è ritenuto importante garantire un certo livello di flessibilità, permettendo una scelta all'interno delle API. Le funzioni tra le quali è possibile scegliere appartengono a una famiglia delle funzioni crittografiche di hash, le \textit{Secure Hash Algorithms}, abbreviato \textit{SHA}. In particolare è possibile scegliere tra lo SHA-1, funzione di 160 bit la cui vulnerabilità crittografica è nota, lo SHA-256 e lo SHA-512, resistenti a pericolosi attacchi come il \textit{Length extension attack}, le quali differiscono nella dimensione della parola.
+			Per lo scopo, possono essere adottati vari tipi di funzione di hash, sui singoli valori. Si è ritenuto importante garantire un certo livello di flessibilità, permettendo una scelta all'interno dell'API. Le funzioni tra le quali è possibile scegliere appartengono ad una famiglia delle funzioni crittografiche di hash, le \textit{Secure Hash Algorithms}, abbreviato \textit{SHA}. In particolare è possibile scegliere tra lo SHA-1, funzione di 160 bit la cui vulnerabilità crittografica è nota, lo SHA-256 e lo SHA-512, resistenti a pericolosi attacchi come il \textit{Length extension attack}, le quali differiscono nella dimensione dell'output.
 			
 	\subsection{Resistenza a collisioni}
 	
 %		In questa sottosezione si approfondisce la caratteristica di resistenza a collisioni dell'hashing commutativo
 %		con particolare attenzione all'utilità di questa caratteristica al nostro studio
 
-		L'utilità di una funzione crittografica di hash all'interno di una struttura dati autenticata, di cui si parlerà più approfonditamente nel successivo paragrafo, è data dalla resistenza alle collisioni. Ovvero data una coppia di valori $ (a,b) $, risulta computazionalmente difficile trovare una coppia $ (c,d) \ne (a,b) $ tale per cui  $ h(a,b) = h(c,d) $. Infatti il costo computazionale richiesto per trovare una coppia di collisione $ (c,d) $ sarebbe troppo elevato anche per un supercomuter.
+		L'utilità di una funzione crittografica di hash all'interno di una struttura dati autenticata, di cui si parlerà più approfonditamente nel successivo paragrafo, è data dalla resistenza alle collisioni. Ovvero data una coppia di valori $ (a,b) $, risulta computazionalmente difficile trovare una coppia $ (c,d) \ne (a,b) $ tale per cui  $ h(a,b) = h(c,d) $. Infatti il costo computazionale richiesto per trovare una coppia di collisione $ (c,d) $ sarebbe troppo elevato anche per un supercomuter. \\
 		La specifica di non commutatività della funzione di hash, serve a sottolineare l'esclusione della proprietà di commutatività che potrebbe essere inclusa per semplificare i processi di verifica effettuati dall'utente.
 		In questo studio tuttavia essa non è permessa, causa vincoli di progetto, e dunque formalmente $ h(a,b) \ne h(b,a) $ per ogni $ a $ e $ b $.
 
-	\subsection{Strutture dati autenticate}
+\section{Strutture dati autenticate}
 
 % 		Introduzione su strutture dati autenticate. Magari breve, e mirata a far comprendere i sucessivi paragrafi
 
