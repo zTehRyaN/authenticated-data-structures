@@ -222,12 +222,12 @@
 		\end{figure}
 		
 		\begin{itemize}
-			\item Le varie query, effettuate dal client, restituiranno oltre ai valori richiesti, anche una prova, detta \textit{Proof}. Tramite la proof ricevuta e il root hash locale, il client potrà verificare l'integrità del risultato della query.
+			\item Le varie query, effettuate dal client, restituiranno oltre ai valori richiesti, anche una prova, detta \textit{Proof}. Tramite la Proof ricevuta e il Root Hash locale, il client potrà verificare l'integrità del risultato della query.
 			
 			\begin{figure}
 				\centering
 				\includegraphics[scale=0.75]{figure/queryADS.eps}
-				\caption{\textbf{Query}: il client effettua una query e riceve oltre al risultato atteso, una proof per quel risultato. Effettua dunque il calcolo localmente sulla proof e verifica se corrisponde al root hash locale.}\label{fig:4}
+				\caption{\textbf{Query}: il client effettua una query e riceve oltre al risultato atteso, una Proof per quel risultato. Effettua dunque il calcolo localmente sulla Proof e ne verifica l'integrità grazie al Root Hash locale.}\label{fig:4}
 			\end{figure}
 			
 			\item Gli updates tuttavia, andranno a cambiare il \textit{dataset} remoto, e dunque l'ADS presente sul cloud. Il client inoltre aggiorna il suo root hash locale con quello nuovo prodotto dall'ADS.
@@ -235,7 +235,7 @@
 			\begin{figure}
 				\centering
 				\includegraphics[scale=0.75]{figure/updateADS.eps}
-				\caption{\textbf{Update}: il client richiede al server la proof su un valore da aggiornare. Può, a questo punto, aggiornare il root hash locale e inviare il nuovo valore al server. Suo è, successivamente, il compito di aggiornare l'ADS, \textit{refresh} in figura.}\label{fig:5}
+				\caption{\textbf{Update}: il client richiede al server la Proof su un valore da aggiornare. Può, a questo punto, aggiornare il Root Hash locale e inviare il nuovo valore al server. Di quest'ultimo è, successivamente, il compito di aggiornare l'ADS, \textit{refresh} in figura.}\label{fig:5}
 			\end{figure}
 		
 		\end{itemize}
@@ -245,7 +245,7 @@
 		Le più diffuse implementazioni di strutture dati autenticate sono:
 		
 		\begin{itemize}
-			\item Merkle Hash Tree (MHT);
+			\item Merkle Hash Tree (MHT).
 			\item Skip list autenticate.
 		\end{itemize}
 	
