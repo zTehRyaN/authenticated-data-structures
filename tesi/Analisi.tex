@@ -274,8 +274,8 @@
 %		Qui si parla della skiplist autenticata, facendo chiaramente riferimento alla skiplist base, sia nella definizione,
 %		sia nella descrizione delle operazioni
 
-	Una skip list autentiticata, come deducibile dalla figura \ref{fig:8}, è una particolare implementazione di un ADS, che si basa su skip list, e sulla quale è applicata una funzione crittografica di hash $ h $. La struttura dunque aggiungerà alla funzione di memorizzare un insieme di valori, in maniera ordinata, le caratteristiche tipiche di un ADS. Per permettere dunque sia l'ordinamento dei dati, sia l'applicazione di $ h $, si prende in esame una struttura  basata su coppie chiave-valore, entrambe di dimensione fissata a priori. In questo modo le chiavi permetteranno l'ordinamento dei dati, e i valori permetteranno l'applicazione dello schema di hashing, approfondito nel prossimo paragrafo. Ogni nodo conterrà, oltre alla chiave relativa alla torre su cui giace, un hash dei dati di alcuni altri nodi adiacenti. Intuitivamente, il suo hash potrebbe essere in funzione di $ w = right(v) $ e $ u = down(u) $. Questo schema confluirà nel root hash, ovvero nel \textit{digest} dell'intera skip list, il quale sarà memorizzato nello \textit{start node}.
-	Il root hash, per definizione e per costruzione, sarà rigidamente dipendente sia dai valori di ogni nodo che dalla loro posizione reciproca. Da questo calcolo sono esclusi i nodi sentinella.
+	Una Skip List Autentiticata, come deducibile dalla figura \ref{fig:8}, è una particolare implementazione di un ADS, che si basa su Skip List, e sulla quale è applicata una funzione crittografica di hash $ h $. La struttura dunque aggiungerà alla funzione di memorizzare un insieme di valori, in maniera ordinata, le caratteristiche tipiche di un ADS. Per permettere dunque sia l'ordinamento dei dati, sia l'applicazione di $ h $, si prende in esame una struttura  basata su coppie chiave-valore. In questo modo le chiavi permetteranno l'ordinamento dei dati, e i valori permetteranno l'applicazione dello schema di hashing, approfondito nel prossimo paragrafo. Ogni nodo conterrà, oltre alla chiave relativa alla torre su cui giace, un hash dei dati di alcuni altri nodi adiacenti. Intuitivamente, il suo hash potrebbe essere in funzione di $ w = right(v) $ e $ u = down(u) $. Questo schema confluirà nel Root Hash, ovvero nel \textit{digest} dell'intera Skip List, memorizzato nello Start Node.
+	Il Root Hash, per definizione, sarà rigidamente dipendente sia dai valori di ogni nodo che dalla loro posizione reciproca. Da questo calcolo sono esclusi i nodi sentinella.
 	
 		\subsubsection{Schema hashing}
 	
@@ -283,16 +283,16 @@
 	%		si definisce la sua applicazione alla skiplist autenticata. Nella sezione sopra l'argomento è affrontato in maniera più
 	%		teorica, preliminare, e isolata. Qui invece si sottolinea l'aspetto pratico sulla struttura dati.
 	
-		Il calcolo del root hash dunque è strettamente legato allo schema di hashing scelto, ovvero alla modalità secondo cui i singoli nodi calcolano il loro hash locale in funzione dei nodi adiacenti. Per questa analisi, si è deciso di seguire lo schema suggerito da Tamassia \cite{authskiplist}, con alcune piccole variazioni. 
+		Il calcolo del Root Hash dunque è strettamente legato allo schema di hashing scelto, ovvero alla modalità secondo cui i singoli nodi calcolano il loro hash locale in funzione dei nodi adiacenti. Per questa analisi, si è deciso di seguire lo schema suggerito da Tamassia \cite{authskiplist}, con alcune piccole variazioni. 
 		Sia $ f(v) $ la funzione di hash di ogni singolo nodo, allora varrà che:
 		
 		\begin{enumerate}
-			\item Se $ u = null $, e cioè se il nodo $ v $ si trova sulla \textit{base list}:
+			\item Se $ u = null $, e cioè se il nodo $ v $ si trova sulla Base List:
 				\begin{itemize}
 					\item (a) Se $ w $ è un nodo \textit{tower}, allora $ f(v) = h(elem(v)) $.
 					\item (b) Se $ w $ è un nodo \textit{plateau}, allora  $ f(v) = h(h(elem(v)), f(w)) $.
 				\end{itemize}
-			\item Se $ u \ne null $, e cioè se il nodo $ v $ \underline{non} si trova sulla \textit{base list}:
+			\item Se $ u \ne null $, e cioè se il nodo $ v $ \underline{non} si trova sulla Base List:
 				\begin{itemize}
 					\item (a) Se $ w $ è un nodo \textit{tower}, allora $ f(v) = f(u) $. 
 					\item (b) Se $ w $ è un nodo \textit{plateau}, allora  $ f(v) = h(f(u), f(w)) $. 
@@ -302,7 +302,7 @@
 		\begin{figure}
 			\centering
 			\includegraphics[scale=0.6]{figure/hashFlow.eps}
-			\caption{In alto a sinistra, lo \textit{start node} ha il root hash. $ RH $, dipendente dai valori $ m_{n} $ e dal loro ordinamento sulla baselist.}\label{fig:6}
+			\caption{In alto a sinistra, lo \textit{start node} ha il Root Hash, $ RH $, dipendente dai valori $ m_{n} $ e dal loro ordinamento sulla Base List.}\label{fig:6}
 		\end{figure}
 	
 		\subsubsection{Operazioni}
@@ -310,11 +310,11 @@
 %			Sezione analoga a quella sulla skiplist semplice. Ovviamente questa è sempre una parte di analisi pertanto le varie spiegazione saranno puramente concettuali,
 %			algoritmiche e legate a formule, e non comprenderanno scelte di progettazione.
 
-			In quanto ADS, la skip list autenticata offrirà due tipologie di operazione:
+			In quanto ADS, la Skip List Autenticata offrirà due tipologie di operazione:
 			
 			\begin{itemize}
-				\item \textbf{Update}, ovvero la possibilità di fare inserimenti o cancellazioni.
-				\item \textbf{Query}, con la possibilità di ottenere un valore e verificare la sua integrità.
+				\item \textbf{Update}. Offre la possibilità di fare inserimenti o cancellazioni.
+				\item \textbf{Read}. Operazioni di lettura che permettono di ottenere un valore assieme alla sua Proof, grazie alla quale sarà possibile verificare l'integrità del risultato.
 			\end{itemize}
 			
 	\subsubsection{Update}
