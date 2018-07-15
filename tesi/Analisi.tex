@@ -161,14 +161,14 @@
 		
 			L'operazione di inserimento è sempre preceduta da una operazione di ricerca. Dunque per inserire un elemento $ x $, per prima cosa è effettuata una ricerca su $ x $, con l'unica differenza che ogni volta che viene effettuato un \textit{hop forward} o un \textit{drop down} rispetto al nodo corrente $ v $, viene aggiunto un elemento in una pila che registri il nodo corrente $ v $ e l'azione associata.
 			Dal momento in cui l'elemento $ x $ da inserire non è ancora presente, l'operazione di ricerca restituirà il nodo sulla Base List che dovrà essere immediatamente precedente al nodo da inserire. A questo punto sarà possibile inserire il nodo memorizzando il valore $ x $. Dopodiché, nel caso di Skip List randomiche, viene valutata l'altezza della torre, ovvero in quali livelli superiori dovrà essere presente l'elemento, tramite una sequenza di tiri di moneta simulati. Per ogni lancio di moneta, nel caso in cui il risultato sia testa, viene utilizzato la pila per ripercorrere il percorso a ritroso e ottenere la posizione, del livello superiore, in cui dovrà essere inserito il nuovo nodo, tramite opportune operazioni di \textit{pop}. Il procedimento continua fino a che il risultato non sia croce. Nel caso in cui la torre dovesse superare l'altezza corrente della struttura, si aggiunge un nuovo livello alla struttura, comprensivo, ovviamente, dei nuovi nodi sentinella ai suoi estremi.
-			L'operazione di inserimento è, con alta probabilità, pari a $\mathcal{O}(log{}n)$.
+			L'operazione di cancellazione ha, con alta probabilità, costo computazionale pari a $\mathcal{O}(log{}n)$.
 		
 		\subsubsection{Cancellazione}
 		
-			L'operazione di cancellazione di un elemento $ x $ prevede la ricerca di un elemento che sia minore di $ x $ ma maggiore di ogni altro elemento nella \textit{base list} che sia minore di $ x $. Come per l'operazione di inserimento, viene utilizzata una pila di supporto per tenere traccia dei passi effettuati dalla ricerca. Chiaramente, l'elemento immediatamente successivo al nodo restituito dall'operazione di ricerca, dovrà essere $ x $, poiché in caso contrario l'elemento da cancellare non sarebbe presente nella skip list, scenario di non successo, da segnalare con errore opportunamente.
+			L'operazione di cancellazione di un elemento $ x $ prevede la ricerca di un elemento che sia minore di $ x $ ma contemporaneamente maggiore di ogni altro elemento nella Base List tra quelli minori di $ x $. Come per l'operazione di inserimento, viene utilizzata una pila di supporto per tenere traccia dei passi effettuati dalla ricerca. Chiaramente, l'elemento immediatamente successivo al nodo restituito dall'operazione di ricerca, dovrà essere $ x $, poiché in caso contrario l'elemento da cancellare non sarebbe presente nella Skip List, scenario di non successo, da segnalare con errore opportunamente.
 			Dunque viene rimosso il nodo interessato, e tutti i nodi sulla stessa torre, ottenendone la posizione grazie ad opportune operazioni di \textit{pop} dalla pila precedentemente riempita.
 			Nel caso in cui la rimozione dovesse comportare un abbassamento globale della struttura, devono essere eliminati i nodi sentinella interessati.
-			L'operazione di cancellazione è, con alta probabilità, pari a $\mathcal{O}(log{}n)$.
+			L'operazione di cancellazione ha, con alta probabilità, costo computazionale pari a $\mathcal{O}(log{}n)$.
 			
 	
 \section{Hashing Non-commutativo}
