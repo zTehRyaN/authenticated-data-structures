@@ -371,26 +371,27 @@
 		
 	\subsection{CassandraConnector}
 	
-%		Entro nel dettaglio del Connector, descrivendo compiti e giustificandolo tramite pattern
+%	Entro nel dettaglio del Connector, descrivendo compiti e giustificandolo tramite pattern
 
-		Il \textit{CassandraConnector} ha il compito di stabilire la connessione vera a propria con il database, in base al particolare nodo e alla porta, entrambi specificati per parametro. Sarà dunque suo il compito di creare Keyspace e Tabelle necessarie alla memorizzazione della struttura dati, cosi come a fornire le primitive opportune per la gestione di operazioni di scrittura e lettura.
+		Il \textit{CassandraConnector} ha il compito di stabilire la connessione vera a propria con il database, in base al particolare nodo e alla porta, entrambi specificati per parametro. Sarà dunque suo il compito di creare keyspace e tabelle necessarie alla memorizzazione della struttura dati, cosi come a fornire le primitive opportune per la gestione di operazioni di scrittura e lettura.
 		
 		Le operazioni principali che fornisce sono:
 		\begin{itemize}
+			
 			\item \verb!connect(node: String, port: Integer)!. Stabilisce la connessione con il nodo $ node $ alla porta $ port $. Se non specificata, verrà utilizzata quella di default 9042.
 			\item \verb!close()!. Chiude la connessione.
 			\item \verb!createKeyspace(keyspaceName: String, replicationStrategy: String, replicationFactor: Int)!. Crea il Keyspace con nome $ keyspaceName $, fattore di replicazione dato da $ replicationFactor $ e strategia di replicazione data da $ replicationStrategy $. Questi due parametri stabiliscono il numero di repliche dei dati sui vari nodi e la strategia di distribuzione delle stesse all'interno dell'anello.
 			\item \verb!createTable(List<String>)!. Crea la Column Family relativa alla struttura. Può accettare come parametro la lista di tutte le chiavi presenti nella struttura iniziale, che possono essere altrimenti aggiunte progressivamente.
 			\item \verb!deleteKeyspace(keyspaceName: String)!. Elimina il Keyspace di nome $ keyspaceName $.
 			\item \verb!deleteTable()!. Elimina la Column Family relativa alla struttura.
-			\item \verb!storeADS(ads: String)!. Carica tutta la struttura passata per parametro. Funzione di utilità introdotta in base ad una specifica di utilizzo nell'ambito del protocollo, dove viene inizialmente creata una struttura iniziale, che dovrà dunque poter essere caricata in persistenza.
+			\item \verb!storeADS(ads: List<Block>)!. Carica tutta la struttura passata per parametro. Funzione di utilità introdotta in base ad una specifica di utilizzo nell'ambito del protocollo, dove viene inizialmente creata una struttura iniziale, che dovrà dunque poter essere caricata in persistenza.
 			\item \verb!selectPathForKey(k: String, filter: Filter): List<Block>!. Restituisce la sequenza di blocchi costituenti il $ path $ dallo \textit{Start Node} al nodo contenente la chiave $ k $.
-			\item \verb!selectHead(): Block!. Restituisce i campi \textit{First Hash} e \textit{Second Hash} dello \textit{Start Node}.
+			\item \verb!selectHead(): Block!. Restituisce i campi \textit{First Hash} e \textit{Second Hash} dello Start Node.
 			\item \verb!selectForAdd(k: String, filter: Filter): List<Block>!. Restituisce la sequenza di blocchi necessaria a poter eseguire un'inserimento o una modifica sulla struttura. Tiene conto dunque sia dell'eventualità di aggiunta di nuovi nodi, sia della modifica di nodi già presenti.
 			\item \verb!selectForDel(k: String, filter: Filter): List<Block>!. Restituisce la sequenza di blocchi necessaria a poter eseguire una cancellazione sulla struttura. Tiene conto dunque sia dei nodi che saranno rimossi, sia di quelli che subiranno una modifica a seguito della rimozione di una torre.
 			\item \verb!selectForProof(k: String, filter: Filter): List<Block>!. Restituisce la sequenza di blocchi necessaria per poter costruire la Proof relativa alla chiave $ k $. Questa funzione potrebbe essere utilizzata sia singolarmente per ottenere una Proof valida per una sola chiave, sia nell'ambito di una richiesta di una Proof cumulativa. In questo caso sarebbe necessario chiamare questa funzione tante volte quante sono le chiavi. E' possibile operare una ottimizzazione che restituisca la sequenza di blocchi necessari per poter ricostruire la Proof cumulativa per un insieme di chiavi. In tal caso la firma cambierebbe in: \verb!selectForProof(keys: Set<String>)!. 
-			\item \verb!alterTableByAdd(structure: List<Block>)!. Effettua la sovrascrittura su database dei blocchi modificati e la scrittura di blocchi eventualmente aggiunti. Le informazioni relative all'aggiunta devono essere opportunamente codificate all'interno di una stringa di caratteri che sarà interpretata poi lato server.
-			\item \verb!alterTableByDel(structure: List<Block>)!. Effettua la sovrascrittura su database dei blocchi modificati e la cancellazione di quelli rimossi. Le informazioni relative all'aggiunta devono essere opportunamente codificate all'interno di una stringa di caratteri che sarà interpretata poi lato server.
+			\item \verb!alterTableByAdd(structure: List<Block>)!. Effettua la sovrascrittura su database dei blocchi modificati e la scrittura di blocchi eventualmente aggiunti. Le informazioni relative all'aggiunta devono essere opportunamente codificate all'interno di una stringa di caratteri, sotto forma di lista di blocchi, che sarà interpretata poi lato server.
+			\item \verb!alterTableByDel(structure: List<Block>)!. Effettua la sovrascrittura su database dei blocchi modificati e la cancellazione di quelli rimossi. Le informazioni relative all'aggiunta devono essere opportunamente codificate all'interno di una stringa di caratteri, sotto forma di lista di blocchi, che sarà interpretata poi lato server.
 			\item \verb!containsKey(k: String): Boolean!. Restituisce true se la chiave è presente in struttura, false altrimenti.
 		\end{itemize}
 		
