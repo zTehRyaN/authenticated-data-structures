@@ -281,7 +281,7 @@
 %	Introduzione al discorso sulla persistenza, riallacciandosi a ciò che è stato detto nella parte di analisi. Descrizione del class diagram con pattern annessi
 
 	Si passa ora alla sezione sulla \textit{persistenza}. Prima di tutto è necessario sottolineare che i ragionamenti per questa sezione sono stati effettuati prendendo in considerazione un particolare DBMS non relazionale, Cassandra. Tuttavia, a meno di piccoli accorgimenti, lo studio teorico che è di seguito condotto, è altamente flessibile rispetto alla tipologia di database NoSQL scelta.
-	Da come è deducibile dal Class Diagram in figura~\ref{fig:services}, il progetto per il servizio di persistenza è stato pensato come una collaborazione attiva tra più parti, per mantenere alta la coesione globale.
+	Da come è deducibile dal Class Diagram in figura~\ref{fig:ServiceDCD}, il progetto per il servizio di persistenza è stato pensato come una collaborazione attiva tra più parti, per mantenere alta la coesione globale.
 	Il nucleo centrale è rappresentato dalla classe Pure Fabrication \textit{ADSService}. Questa funge da Controller per tutti i casi d'uso che necessitino di interagire con il database. Essa collabora con la classe \textit{CassandraConnector}, la quale interagisce direttamente con il database, e con \textit{Translator}, una classe di supporto per la conversione di formato dei dati scambiati con il database. E' previsto inoltre un sistema di \textit{Cache}, rappresentato dalla classe omonima, per massimizzare l'efficienza nello scambio di dati con il database.
 
 	Nei successivi paragrafi si spiegherà più nel dettaglio ogni parte attiva all'interno del progetto di persistenza, illustrandone e motivandone tutte le scelte progettuali rilevanti.
