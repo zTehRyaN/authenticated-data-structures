@@ -31,13 +31,13 @@
 	\begin{figure}
 		\centering
 		\includegraphics[scale=0.65]{figure/Auth+Proof.pdf}
-		\caption{Diagramma delle classi di progetto per la parte di autenticazione. Con un piccolo abuso di notazione sono stati presi in prestito alcuni elementi sintattici dal linguaggio \textit{Kotlin}, con cui sono state realizzate le API.}\label{fig:authDCD}
+		\caption{Diagramma delle classi di progetto per la parte di autenticazione. Con un piccolo abuso di notazione sono stati presi in prestito alcuni elementi sintattici dal linguaggio \textit{Kotlin}.}\label{fig:authDCD}
 	\end{figure}
 
 	\begin{figure}
 		\centering
 		\includegraphics[scale=0.65]{figure/HashUtils.pdf}
-		\caption{\textit{Singleton} per funzioni di utilità per calcolo e restituzione di hash.}\label{fig:hashUtils}
+		\caption{Singleton per funzioni di utilità per calcolo e restituzione di hash.}\label{fig:hashUtils}
 	\end{figure}
 
 	\begin{figure}
@@ -77,19 +77,19 @@
 
 		Le operazioni fornite dall'ADS, sulla base di requisiti e casi d'uso già discussi in fase di analisi, sono:
 		\begin{itemize}
-			\item \textbf{\textit{getWithProof(k: K): Pair<V?\footnote{Il punto interrogativo accanto ad un parametro sta ad indicare che quel parametro può essere anche nullo}, Proof<H, K, V>>}}: restituisce il valore $ v $ associato alla chiave $ k $, assieme alla \textit{Proof} per quella chiave. Questa operazione è necessaria per permettere di ottenere la Proof relativa ad una specifica coppia chiave-valore $ (k,v) $.
-			\item\textbf{ \textit{getProof(keys: List<K>): Proof<H, K, V>}}: restituisce la Proof relativa alle chiavi contenute nella lista \textit{keys}. Estende le possibilità di \textit{getWithProof(k)}, restituendo in un solo round una Proof cumulativa per un'insieme di chiavi $ keys $, valida e utilizzabile per tutte le stesse. 
+			\item \textbf{\textit{getWithProof(k: K): Pair<V?\footnote{Il punto interrogativo accanto ad un parametro sta ad indicare che quel parametro può essere anche nullo}, Proof<H, K, V>{}>}}: restituisce il valore $ v $ associato alla chiave $ k $, assieme alla \textit{Proof} per quella chiave. Questa operazione è necessaria per permettere di ottenere la Proof relativa ad una specifica coppia chiave-valore $ (k,v) $.
+			\item\textbf{ \textit{getProof(keys: Set<K>): Proof<H, K, V>}}: restituisce la Proof relativa alle chiavi contenute nell'insieme \textit{keys}. Estende le possibilità di \textit{getWithProof(k)}, restituendo in un solo round una Proof cumulativa per un insieme di chiavi $ keys $, valida e utilizzabile per tutte le stesse. 
 			\item \textbf{\textit{getValue(k: K): V?}}: data una chiave $ k $, restituisce il valore $ v $ associato ad essa. Questa operazione permette dunque le operazioni di lettura, \textit{read(k)}, richieste dai casi d'uso.
-			\item \textbf{\textit{add(k: K, v: V): H}}: crea un \textit{delta} rispetto alla struttura corrente, il quale viene memorizzato. Il delta riguarda l'aggiunta o la modifica degli elementi relativi alla chiave $ k $. L'operazione \underline{non} modifica la struttura corrente.
+			\item \textbf{\textit{add(k: K, v: V): H}}: crea un \textit{delta} rispetto alla struttura corrente, il quale viene memorizzato. Il delta riguarda l'aggiunta o la modifica dell'elemento corrispondente alla chiave $ k $. L'operazione \underline{non} modifica la struttura corrente.
 			\item \textbf{\textit{del(k: K): H}}: crea un \textit{delta} rispetto alla struttura corrente, il quale viene memorizzato. Il delta riguarda la cancellazione degli elementi relativi alla chiave $ k $ L'operazione \underline{non} modifica la struttura corrente.
 			\item \textbf{\textit{applyDeltas(): ADS<H, K, V>}}: compatta tutti i vari delta relativi alla struttura corrente e li applica in ordine, restituendo una nuova ADS, con le modifiche applicate. Questa operazione permette all'ADS di avere la capacità di aggiornarsi rispetto a richieste di update in arrivo dai client.
-			\item \textbf{\textit{rootHash(): H}}: calcola e restituisce il \textit{Root Hash} della struttura corrente. Questa operazione permette di ottenere il \textit{digest} dell'intera struttura, come specificato dai requisiti.
+			\item \textbf{\textit{rootHash(): H}}: calcola e restituisce il Root Hash della struttura corrente. Questa operazione permette di ottenere il \textit{digest} dell'intera struttura, come specificato dai requisiti.
 			\item \textbf{\textit{isEmpty(): Boolean}}: Informa se l'ADS è vuoto o meno.
 		\end{itemize}
 	
-		E' necessario sottolineare riguardo alla prima operazione fornita, che, per \textit{Creator}, sara l'ADS stesso a generare una Proof una o più chiavi, proprio in quanto è l'unica entità a conoscere le informazioni per farlo. A seguito della creazione, essa sarà un entità indipendente, in grado di aggiornarsi in parallelo rispetto agli update. I calcoli e le operazioni poi eseguite sulla Proof, sono indipendenti dall'ADS di partenza.
+		E' necessario sottolineare riguardo alla prima operazione fornita, che, per \textit{Creator}, sara l'ADS stesso a generare una Proof per una o più chiavi, proprio in quanto è l'unica entità a conoscere le informazioni per farlo. A seguito della creazione, essa sarà un entità indipendente, in grado di aggiornarsi in parallelo rispetto agli update. I calcoli e le operazioni poi eseguite sulla Proof, sono indipendenti dall'ADS di partenza.
 		
-		Di fondamentale importanza è il requisito relativo alla possibilità di utilizzo dell'ADS in ambito concorrente. Deve essere possibile, dunque, poter operare operazioni in parallelo sull'ADS, senza che ci siano conflitti dovuti alla concorrenza. Pertanto è stato deciso di applicare un principio tipico del paradigma di programmazione funzionale, secondo cui i valori non vengono trovati cambiando lo stato dell'ADS, ma costruendo nuovi stati a partire dai precedenti. Per questo motivo le operazioni di scrittura, ovvero quelle che modificherebbero lo stato della struttura, lo fanno in maniera totalmente compatibile con quanto detto. Una spiegazione più dettagliata di come questo sia stato realizzato è posticipata in paragrafi successivi.
+		Di fondamentale importanza è il requisito relativo alla possibilità di utilizzo dell'ADS in ambito concorrente. Deve essere possibile, dunque, poter effettuare operazioni in parallelo sull'ADS, senza che ci siano conflitti dovuti alla concorrenza. Pertanto è stato deciso di applicare un principio tipico del paradigma di programmazione funzionale, secondo cui i valori non vengono trovati cambiando lo stato dell'ADS, ma costruendo nuovi stati a partire dai precedenti. Per questo motivo le operazioni di scrittura, ovvero quelle che modificherebbero lo stato della struttura, lo fanno in maniera totalmente compatibile con quanto detto. Una spiegazione più dettagliata di come questo sia stato realizzato è posticipata in paragrafi successivi.
 		
 		La scelta invece di disaccoppiare il momento dell'individuazione della operazioni di aggiunta, modifica o cancellazione, dal momento della loro effettiva applicazione, è da inquadrare in un contesto più ampio di utilizzo della libreria. Intuitivamente, questa funzionalità è fornita per permettere di gestire meglio gli stati in cui si può trovare la struttura stessa: ad esempio uno stato in cui può ricevere e accumulare update, piuttosto che uno stato in cui questi vengono applicati in blocco. Migliore è di conseguenza la gestione delle operazioni di lettura, in quanto per garantirne la consistenza, esse possono essere collocate in istanti temporali diversi, prima o dopo determinati stati della struttura.
 		
@@ -114,8 +114,8 @@
 		Le operazioni fornite dalla Proof, sulla base di requisiti e casi d'uso già discussi in fase di analisi, sono:
 		\begin{itemize}
 			\item \textbf{\textit{keys: Set<K>}}: insieme contenente tutte le chiavi per cui è valida la Proof.
-			\item \textbf{\textit{rootHash(): H}}: restituisce il \textit{Root Hash} della Proof. Questa, assieme alla successiva, sono requisiti funzionali già discussi in fase di analisi.
-			\item \textbf{\textit{rootHash(list: List<Pair<K, V>>): Proof<H, K, V>}}: applica gli aggiornamenti specificati nella lista di coppie chiave-valore \textit{list} e successivamente calcola e restituisce il nuovo \textit{Root Hash}.
+			\item \textbf{\textit{rootHash(): H}}: restituisce il Root Hash della Proof. Questa, assieme alla successiva, sono requisiti funzionali già discussi in fase di analisi.
+			\item \textbf{\textit{rootHash(list: List<Pair<K, V>{}>): Proof<H, K, V>}}: applica gli aggiornamenti specificati nella lista di coppie chiave-valore \textit{list} e successivamente calcola e restituisce il nuovo Root Hash.
 			\item \textbf{\textit{union(proof: Proof<H, K, V>): Proof<H, K, V>}}: effettua il \textit{merge} di due Proof relative allo stesso istante temporale della stessa struttura da cui sono state generate. Restituisce una nuova proof, cumulativa rispetto a quelle di partenza.
 		\end{itemize}
 		
