@@ -10,7 +10,7 @@
 %		Discutere qui dei problemi relativi a ciò che è stato realizzato (se presenti) e a suoi limiti, accennando alla possibile
 %		soluzione del prossimo paragrafo
 
-		Concettualmente parlando, come si è già detto, la Proof rappresenta una struttura a se stante dalla struttura di partenza dal momento in cui viene creata. Si è inoltre sottolineato come in realtà non ci sia nessuna conoscenza dell'ADS da parte della Proof a posteriori, tanto più considerando il caso in cui l'ADS sia memorizzata in persistenza.
+		Concettualmente parlando, come si è già detto, la Proof rappresenta una struttura a se stante dalla struttura di partenza, a partire dal momento in cui viene creata. Si è inoltre sottolineato come in realtà non ci sia nessuna conoscenza dell'ADS da parte della Proof a posteriori, tanto più considerando il caso in cui l'ADS sia memorizzata in persistenza.
 		Ebbene, nell'ambito dell'utilizzo delle librerie si vuole istanziare una Proof a partire da uno stato iniziale $ T_{0} $ della struttura. Successivamente alla ricezione e applicazione sull'ADS di blocchi di update, che può aver ricevuto, si vogliono riproporre tali aggiornamenti sulla Proof, parallelamente. Tuttavia l'attuale realizzazione consente questo solo nel caso in cui gli update riguardino aggiornamenti di chiavi già esistenti. Infatti update che aggiungono o cancellano chiavi, modificano la struttura, che, essendo inoltre randomica, può variare consistentemente nella sua interezza. Queste informazioni non sono più conosciute dalla Proof, dal momento che è una realtà ontologicamente indipendente, anche se sarebbero necessarie. Non è possibile per esempio sapere se il nodo \textit{HEAD} è variato, crescendo o decrescendo, rendendo inconsistente la stessa Proof, anche prima di applicare gli update.
 	
 	\subsection{Ipotesi di soluzione con Modello a ruoli}
@@ -28,7 +28,7 @@
 			\item \textbf{Plateau}. Nodo che non ha nulla al di sopra di se.
 			\item \textbf{Head<Proof>}. Nodo HEAD di riferimento per una particolare Proof, relativa ad un istante temporale precedente ad eventuali variazioni dell'ADS.
 			\item \textbf{PathProof<Proof>}. Nodo presente nel path di una determinata Proof.
-			\item \textbf(HashingNode<Proof>). Nodo non presente nel path, ma necessario per ricostruzione del \textit{Root Hash} per una determinata Proof.
+			\item \textbf{HashingNode<Proof>)}. Nodo non presente nel path, ma necessario per ricostruzione del RootHash per una determinata Proof.
 		\end{itemize}
 		
 	\subsection{Realizzazione progetto persistenza}
