@@ -73,9 +73,9 @@
 	
 		Questa scelta rende l'interfaccia applicabile parametricamente rispetto alla scelta dei suddetti tipi, caratteristica utile per garantire flessibilità. 
 
-		Le operazioni fornite dall'ADS, sulla base di requisiti e casi d'uso già discussi in fase di analisi, sono:
+		Le operazioni fornite dall'ADS, sulla base di requisiti e casi d'uso già discussi in fase di analisi, sono\footnote{Il punto interrogativo accanto ad un parametro sta ad indicare che quel parametro può essere anche nullo}:
 		\begin{description}
-			\item[getWithProof(k: K): Pair<V?\footnote{Il punto interrogativo accanto ad un parametro sta ad indicare che quel parametro può essere anche nullo}, Proof<H, K, V>{}>] Restituisce il valore $ v $ associato alla chiave $ k $, assieme alla \textit{Proof} per quella chiave. Questa operazione è necessaria per permettere di ottenere la Proof relativa ad una specifica coppia chiave-valore $ (k,v) $.
+			\item[getWithProof(k: K): Pair<V?, Proof<H, K, V>{}>] Restituisce il valore $ v $ associato alla chiave $ k $, assieme alla \textit{Proof} per quella chiave. Questa operazione è necessaria per permettere di ottenere la Proof relativa ad una specifica coppia chiave-valore $ (k,v) $.
 			\item[getProof(keys: Set<K>): Proof<H, K, V>] Restituisce la Proof relativa alle chiavi contenute nell'insieme \textit{keys}. Estende le possibilità di \textit{getWithProof(k)}, restituendo in un solo round una Proof cumulativa per un insieme di chiavi $ keys $, valida e utilizzabile per tutte le stesse. 
 			\item[getValue(k: K): V?] Data una chiave $ k $, restituisce il valore $ v $ associato ad essa. Questa operazione permette dunque le operazioni di lettura, \textit{read(k)}, richieste dai casi d'uso.
 			\item[add(k: K, v: V): H] Crea un \textit{delta} rispetto alla struttura corrente, il quale viene memorizzato. Il delta riguarda l'aggiunta o la modifica dell'elemento corrispondente alla chiave $ k $. L'operazione \underline{non} modifica la struttura corrente.
@@ -138,7 +138,7 @@
 
 	La scelta di tripartire all'interno del nodo le sezioni sopra menzionate, è stata presa sia per poter rispettare nella maniera più comoda e flessibile lo schema di hashing già discusso in fase di analisi, e sia per ridurre la quantità di operazioni per il refresh di tutta la struttura, a seguito di operazioni di update. Infatti a seguito di una operazione di inserimento, modifica o cancellazione, sarà necessario aggiornare solamente i campi strettamente interessati.
 	
-	Il campo \textit{down}, si precisa, che può essere sia una nodo, nella maggior parte dei casi, ma anche il valore vero e proprio, presente nello storage classico, legato a questo nodo. Sarà dunque solo ed esclusivamente questo nodo a conoscere questo valore e a memorizzare il suo hash nel campo \textit{first Hash}.
+	Il campo \textit{down}, si precisa, che può essere sia una nodo, nella maggior parte dei casi, ma anche il valore vero e proprio, presente nello storage classico, legato a questo nodo. Sarà dunque solo ed esclusivamente questo nodo a conoscere questo valore e a memorizzare il suo hash nel campo \textit{firstHash}.
 	
 	La classe che implementa il nodo, deve implementare l'interfaccia \textit{Serializable}, in quanto dovrà avere la caratteristica di essere, appunto, serializzabile. Questo è motivato dall'inserimento di oggetti di questo tipo all'interno di messaggi che dovranno essere spediti su rete, nell'ambito dell'utilizzo di questa API.
 	
@@ -146,7 +146,7 @@
 	E' stato ritenuto conveniente eliminare, per i nodi sulla Base List, il fatto che il campo \textit{secondHash}, nel caso in cui il nodo \textit{next} sia un nodo \textit{tower}, dovesse memorizzare l'hash relativo al valore sottostante il nodo \textit{next}. Questo permette di continuare a garantire l'esecuzione di tutte le operazioni che comportino un refresh degli hash della struttura, in un tempo che sia con alta probabilità, $\mathcal{O}(log{}n)$, piuttosto che in tempo lineare.
 	Inoltre, la proprietà di non-commutatività degli hash, si manifesta nel fatto che, per costruzione, se fosse invertito il valore presente nel campo \textit{firstHash}, con quello presente nel campo \textit{secondHash}, il cambiamento si ripercuoterebbe su tutti gli hash seguenti, fino ad arrivare alla modifica del Root Hash dell'intera struttura. Pertanto è fondamentale l'ordine e la posizione reciproca dei vari nodi.
 	
-	Per quanto riguarda più specificatamente le funzioni crittografiche di hash, si è deciso di delegare il compito di calcolo di hash, singoli o concatenati, ad un \textit{Singleton}, visibile a tutte le classi dell'API. Questa scelta ha permesso di rendere l'intera realizzazione totalmente flessibile e parametrica rispetto alla particolare funzione di hash che si volesse adottare, tra quelle disponibili elencate in fase di analisi. Risulta inoltre parametrico rispetto al tipo dell'hash stesso, sia esso una stringa di caratteri o un array di bytes.
+	Per quanto riguarda più specificatamente le funzioni crittografiche di hash, si è deciso di delegare il compito di calcolo di hash, singoli o concatenati, ad un Singleton, visibile a tutte le classi dell'API. Questa scelta ha permesso di rendere l'intera realizzazione totalmente flessibile e parametrica rispetto alla particolare funzione di hash che si volesse adottare, tra quelle disponibili elencate in fase di analisi. Risulta inoltre parametrico rispetto al tipo dell'hash stesso, sia esso una stringa di caratteri o un array di bytes.
 	
 	\begin{figure}
 		\centering
@@ -180,7 +180,7 @@
 	Segue la descrizione delle operazioni fornite, con enfasi sulle caratteristiche algoritmiche:
 	
 	\begin{description}
-		\item[getWithProof(k: String): Pair<Any?, Proof<ByteArray, String, Any>{}>] L'algoritmo alla base di questa funzione, può essere diviso in due parti. La prima parte effettua una semplice ricerca di $ k $ sulla base delle chiavi contenute nei nodi, costruendo contemporaneamente la pila, \textit{stack}, di cui un esempio è raffigurato in figura \ref{fig:stack+path}. Questa funzione, come tutte le operazioni di read offerte dalla Skip List Autenticata, si appoggiano su una serie di metodi per la ricerca, che oltre a restituire il nodo cercato, riempono la pila con opportuni dati per ogni passo effettutato. La seconda parte sfrutta proprio il contenuto di questa pila, per poter costruire la \textit{Proof} relativa alla chiave cercata $ k $. Infatti il contenuto della pila, analizzato a ritroso rispetto all'ordine di riempimento, rappresenta il percorso, \textit{path}, inverso, dal nodo allo \textit{start node.}. Per costruire la Proof necessaria ad ottenere il Root Hash, bisogna però "integrare" i nodi presenti nello stack, proprio per costruzione dello schema di hash adottato sulla struttura. Se, ad esempio, un nodo avesse come \textit{next} un \textit{plateau}, allora esso dovrà essere inserito nella \textit{Proof} in quanto sarà necessario nella computazione degli hash. Lo stesso vale per i nodi \textit{down} di ogni nodo, che non siano presenti già nel \textit{path}.
+		\item[getWithProof(key: String): Pair<Any?, Proof<ByteArray, String, Any>{}>] L'algoritmo alla base di questa funzione, può essere diviso in due parti. La prima parte effettua una semplice ricerca di $ k $ sulla base delle chiavi contenute nei nodi, costruendo contemporaneamente la pila, \textit{stack}, di cui un esempio è raffigurato in figura \ref{fig:stack+path}. Questa funzione, come tutte le operazioni di read offerte dalla Skip List Autenticata, si appoggiano su una serie di metodi per la ricerca, che oltre a restituire il nodo cercato, riempono la pila con opportuni dati per ogni passo effettutato. La seconda parte sfrutta proprio il contenuto di questa pila, per poter costruire la \textit{Proof} relativa alla chiave cercata $ k $. Infatti il contenuto della pila, analizzato a ritroso rispetto all'ordine di riempimento, rappresenta il percorso, \textit{path}, inverso, dal nodo allo \textit{start node.}. Per costruire la Proof necessaria ad ottenere il Root Hash, bisogna però "integrare" i nodi presenti nello stack, proprio per costruzione dello schema di hash adottato sulla struttura. Se, ad esempio, un nodo avesse come \textit{next} un \textit{plateau}, allora esso dovrà essere inserito nella \textit{Proof} in quanto sarà necessario nella computazione degli hash. Lo stesso vale per i nodi \textit{down} di ogni nodo, che non siano presenti già nel \textit{path}.
 		In base a quanto detto, una volta effettuata la ricerca dell'elemento, che indirettamente costituisce la pila, viene ripercorso il \textit{path} a ritroso partendo dall'elemento trovato, con opportune operazioni di pop. Ogni operazione di pop fornisce il successivo nodo presente nel \textit{path} e la direzione, in senso inverso, che deve essere intrapresa per raggiungerlo. Tramite questa seconda informazione è possibile distinguere il caso in cui, seguendo il \textit{path}, è necessario proseguire verso sinistra o verso l'alto. Nel primo caso sarà necessario integrare la \textit{Proof} con il nodo \textit{down} del successivo nodo del \textit{path}. Nel secondo caso, invece l'integrazione avviene solo nel caso in cui il nodo \textit{next} del successivo nodo del \textit{path} sia un \textit{plateau}.
 		
 		\item[getProof(keys: List<String>): Proof<ByteArray, String, Any>] Questa funzione in qualche modo estende la precedente, dando la possibilità, in un solo round, di richiedere ed ottenere una Proof valida per un insieme di chiavi passato come parametro. Ovviamente la lista passata dovrà necessariamente contenere solo chiavi presenti nella struttura.
@@ -241,7 +241,7 @@
 		\begin{description}
 			\item[rootHash(): ByteArray] L'operazione è analoga a quella della Skip List Autenticata appena descritta. Calcola e restituisce il Root Hash dell'intera proof. Il nodo \textit{HEAD} conterrà in ogni istante, nel campo \textit{firstHash}, il contributo in termini di concatenzioni di hash crittografici dato da tutti gli elementi correlati al campo \textit{down}, e nel campo \textit{secondHash}, il contributo in termini di concatenazioni di hash crittografici dato da tutti gli elementi correlati al campo \textit{next}. Viene, a questo punto, restituito l'hash derivato dalla concatenazione dei campi \textit{firstHash} e \textit{secondHash}.
 			
-			\item[rootHash(list: List<Pair<String, Any?>>): Pair<Proof<ByteArray, String, Any>\\, ByteArray>] Nel caso in cui tutti i valori passati siano nulli, l'operazione risulta equivalente a \verb|rootHash(): H|. Tramite la presenza di anche un solo valore non nullo, l'operazione diventerà di scrittura. Trattandosi di una operazione di scrittura, e dovendo innestarsi in un ambito di concorrenza già altrove menzionato, sarà necessario evitare di modificare direttamente lo stato della struttura. Dunque la struttura sarà clonata internamente e le modifiche agli hash saranno applicate sul clone. La struttura iniziale sarà dunque passibile di calcoli e computazioni anche contemporaneamente all'applicazione di queste modifiche. Il parametro che accetta è una lista di coppie chiave-valore, struttura che verrà processata iterativamente, rendendo superflua l'applicazione di una mappa di coppia chiave-valore. Nello specifico l'operazione processerà, per ogni chiave presente nella lista $ list $, il nodo corrispondente nella Proof, aggiornando gli hash, risalendo fino al nodo \textit{HEAD}. Al termine di questo elenco di queste operazioni, la funzione restituirà la nuova Proof, con le modifiche applicate e il nuovo Root Hash.
+			\item[rootHash(list: List<Pair<String, Any?>{}>): ByteArray] Nel caso in cui tutti i valori passati siano nulli, l'operazione risulta equivalente a \verb|rootHash(): H|. Tramite la presenza di anche un solo valore non nullo, l'operazione diventerà di scrittura. Trattandosi di una operazione di scrittura, e dovendo innestarsi in un ambito di concorrenza già altrove menzionato, sarà necessario evitare di modificare direttamente lo stato della struttura. Dunque la struttura sarà clonata internamente e le modifiche agli hash saranno applicate sul clone. La struttura iniziale sarà dunque passibile di calcoli e computazioni anche contemporaneamente all'applicazione di queste modifiche. Il parametro che accetta è una lista di coppie chiave-valore, struttura che verrà processata iterativamente, rendendo superflua l'applicazione di una mappa di coppia chiave-valore. Nello specifico l'operazione processerà, per ogni chiave presente nella lista $ list $, il nodo corrispondente nella Proof, aggiornando gli hash, risalendo fino al nodo \textit{HEAD}. Al termine di questo elenco di queste operazioni, la funzione restituirà la nuova Proof, con le modifiche applicate e il nuovo Root Hash.
 			
 			\item[union(proof: Proof<ByteArray, String, Any>): Proof<ByteArray, String, Any>] Trattandosi di una operazione di scrittura, e dovendo innestarsi in un ambito di concorrenza già altrove menzionato, sarà necessario evitare di modificare direttamente lo stato della struttura. Dunque la struttura sarà clonata internamente e l'unione verrà effettuta sul clone. L'unione consiste, intuitivamente, nell'integrazione della Proof su cui viene invocato il metodo, $ this $, con la Proof passata per parametro, $ proof $. Inizia, infatti, col trovare, tramite differenza tra insiemi, le chiavi presenti in $ proof $ che non sono presenti in $ this $. Per ognuna di queste chiavi risultato della differenza, se presenti, viene effettuata una iterazione parallela a partire dall'HEAD di $ this $ e dall'HEAD di $ proof $, che ha come fine quello di aggiungere a $ this $ i nodi per renderla valida per le ulteriori chiavi, contributo di $ proof $. E' mostrato in maniera più chiara nel seguente pseudocodice:
 			
@@ -285,11 +285,11 @@
 
 		Cassandra è un \textit{Database Management System} non relazionale e distribuito con licenza \textit{open source} e ottimizzato per la gestione di grandi quantità di dati. Fa parte della categoria di database NoSQL, ovvero di quei database dove la persistenza dei dati segue un meccanismo sostanzialmente diverso da quello appartenente al modello relazionale.  Tuttavia, rispetto allo standard dei NoSQL, garantisce consistenza e supporta il sistema di transazioni, entrambe caratteristiche molto importanti nell'ambito della memorizzazione in persistenza della struttura dati autenticata. Le componenti principali di Cassandra, di interesse per questa introduzione, sono le seguenti:
 		
-		\begin{itemize}
-			\item \textbf{Nodo}: Luogo dove sono memorizzati i dati.
-			\item \textbf{Centro dati}: Insieme di nodi correlati.
-			\item \textbf{Cluster}: Componente che contiene uno o più centri dati.
-		\end{itemize}
+		\begin{description}
+			\item[Nodo] Luogo dove sono memorizzati i dati.
+			\item[Centro Dati] Insieme di nodi correlati.
+			\item[Cluster] Componente che contiene uno o più centri dati.
+		\end{description}
 	
 		Si tratta di un sistema \textit{masterless}, ovvero tutti i nodi all'interno di un Cluster sono organizzati secondo uno schema ad anello e svolgono lo stesso ruolo, ovvero sono identici e contengono ognuno una replica dei dati. Ognuno di essi può dunque rispondere alle richieste di lettura e/o scrittura, al pari degli altri. Questo garantisce l'assenza di un \textit{single point of failure}. Allo stesso tempo però tutti i nodi all'interno di un cluster sono interconnessi, in base al \textit{Gossip Protocol}, garantendo la continuazione di servizio nel caso in cui uno o più nodi dovessero essere fuori uso.
 		
@@ -356,11 +356,11 @@
 	
 		La conversione tra formato ad oggetti, in memoria, a formato in persistenza e viceversa, nel progetto precedentemente illustrato è affidata al \textit{Translator}. 
 		
-		Le operazioni che fornisce sono banalmente due, e sono simmetriche:
-		\begin{itemize}
-			\item \verb!translateToPersistence(ads: AuthSkipList<ByteArray, String, Any>): List<Block>! E' necessaria la conoscenza della logica di schematizzazione dei blocchi vigente all'interno del database. In questo modo è possibile preparare nell'esatta sequenza i blocchi che saranno poi caricati sul database.
-			\item \verb!translateFromPersistence(blocks: List<Block>): AuthSkipList<ByteArray, String, Any>! Anche in questo caso è necessaria la conoscenza della logica di schematizzazione dei blocchi vigente all'interno del database. Infatti è possibile dedurre dai blocchi ricevuti dalla query, le informazioni necessarie a ricostruire la sezione di Skip List Autenticata. Come già detto infatti, in base all'operazione invocata sulla Skip List Autenticata, il Sistema provvederà a restituire soltanto i nodi che saranno toccati dall'operazione, ovvero solo quelli strettamente necessari all'esecuzione di quell'operazione.
-		\end{itemize}
+		Le operazioni che fornisce sono banalmente due, e sono simmetriche\footnote{Sottintesa la terna <ByteArray, String, Any> per i tipi della Skip List Autenticata.}:
+		\begin{description}
+			\item[translateToPersistence(ads: AuthSkipList<\dots>): List<Block>] E' necessaria la conoscenza della logica di schematizzazione dei blocchi vigente all'interno del database. In questo modo è possibile preparare nell'esatta sequenza i blocchi che saranno poi caricati sul database.
+			\item[translateFromPersistence(blocks: List<Block>): AuthSkipList<\dots>] Anche in questo caso è necessaria la conoscenza della logica di schematizzazione dei blocchi vigente all'interno del database. Infatti è possibile dedurre dai blocchi ricevuti dalla query, le informazioni necessarie a ricostruire la sezione di Skip List Autenticata. Come già detto infatti, in base all'operazione invocata sulla Skip List Autenticata, il Sistema provvederà a restituire soltanto i nodi che saranno toccati dall'operazione, ovvero solo quelli strettamente necessari all'esecuzione di quell'operazione.
+		\end{description}
 		
 	\subsection{CassandraConnector}
 	
@@ -369,24 +369,24 @@
 		Il \textit{CassandraConnector} ha il compito di stabilire la connessione vera a propria con il database, in base al particolare nodo e alla porta, entrambi specificati per parametro. Sarà dunque suo il compito di creare keyspace e tabelle necessarie alla memorizzazione della struttura dati, cosi come a fornire le primitive opportune per la gestione di operazioni di scrittura e lettura.
 		
 		Le operazioni principali che fornisce sono:
-		\begin{itemize}
+		\begin{description}
 			
-			\item \verb!connect(node: String, port: Integer)!. Stabilisce la connessione con il nodo $ node $ alla porta $ port $. Se non specificata, verrà utilizzata quella di default 9042.
-			\item \verb!close()!. Chiude la connessione.
-			\item \verb!createKeyspace(keyspaceName: String, replicationStrategy: String, replicationFactor: Int)!. Crea il Keyspace con nome $ keyspaceName $, fattore di replicazione dato da $ replicationFactor $ e strategia di replicazione data da $ replicationStrategy $. Questi due parametri stabiliscono il numero di repliche dei dati sui vari nodi e la strategia di distribuzione delle stesse all'interno dell'anello.
-			\item \verb!createTable(List<String>)!. Crea la Column Family relativa alla struttura. Può accettare come parametro la lista di tutte le chiavi presenti nella struttura iniziale, che possono essere altrimenti aggiunte progressivamente.
-			\item \verb!deleteKeyspace(keyspaceName: String)!. Elimina il Keyspace di nome $ keyspaceName $.
-			\item \verb!deleteTable()!. Elimina la Column Family relativa alla struttura.
-			\item \verb!storeADS(ads: List<Block>)!. Carica tutta la struttura passata per parametro. Funzione di utilità introdotta in base ad una specifica di utilizzo nell'ambito del protocollo, dove viene inizialmente creata una struttura iniziale, che dovrà dunque poter essere caricata in persistenza.
-			\item \verb!selectPathForKey(k: String, filter: Filter): List<Block>!. Restituisce la sequenza di blocchi costituenti il $ path $ dallo \textit{Start Node} al nodo contenente la chiave $ k $.
-			\item \verb!selectHead(): Block!. Restituisce i campi \textit{First Hash} e \textit{Second Hash} dello Start Node.
-			\item \verb!selectForAdd(k: String, filter: Filter): List<Block>!. Restituisce la sequenza di blocchi necessaria a poter eseguire un'inserimento o una modifica sulla struttura. Tiene conto dunque sia dell'eventualità di aggiunta di nuovi nodi, sia della modifica di nodi già presenti.
-			\item \verb!selectForDel(k: String, filter: Filter): List<Block>!. Restituisce la sequenza di blocchi necessaria a poter eseguire una cancellazione sulla struttura. Tiene conto dunque sia dei nodi che saranno rimossi, sia di quelli che subiranno una modifica a seguito della rimozione di una torre.
-			\item \verb!selectForProof(k: String, filter: Filter): List<Block>!. Restituisce la sequenza di blocchi necessaria per poter costruire la Proof relativa alla chiave $ k $. Questa funzione potrebbe essere utilizzata sia singolarmente per ottenere una Proof valida per una sola chiave, sia nell'ambito di una richiesta di una Proof cumulativa. In questo caso sarebbe necessario chiamare questa funzione tante volte quante sono le chiavi. E' possibile operare una ottimizzazione che restituisca la sequenza di blocchi necessari per poter ricostruire la Proof cumulativa per un insieme di chiavi. In tal caso la firma cambierebbe in: \verb!selectForProof(keys: Set<String>)!. 
-			\item \verb!alterTableByAdd(structure: List<Block>)!. Effettua la sovrascrittura su database dei blocchi modificati e la scrittura di blocchi eventualmente aggiunti. Le informazioni relative all'aggiunta devono essere opportunamente codificate all'interno di una stringa di caratteri, sotto forma di lista di blocchi, che sarà interpretata poi lato server.
-			\item \verb!alterTableByDel(structure: List<Block>)!. Effettua la sovrascrittura su database dei blocchi modificati e la cancellazione di quelli rimossi. Le informazioni relative all'aggiunta devono essere opportunamente codificate all'interno di una stringa di caratteri, sotto forma di lista di blocchi, che sarà interpretata poi lato server.
-			\item \verb!containsKey(k: String): Boolean!. Restituisce true se la chiave è presente in struttura, false altrimenti.
-		\end{itemize}
+			\item[connect(node: String, port: Integer)] Stabilisce la connessione con il nodo $ node $ alla porta $ port $. Se non specificata, verrà utilizzata quella di default 9042.
+			\item[close()] Chiude la connessione.
+			\item[createKeyspace(name: String, strategy: String, factor: Int)] Crea il Keyspace con nome $ keyspaceName $, fattore di replicazione dato da $ replicationFactor $ e strategia di replicazione data da $ replicationStrategy $. Questi due parametri stabiliscono il numero di repliche dei dati sui vari nodi e la strategia di distribuzione delle stesse all'interno dell'anello.
+			\item[createTable(List<String>)] Crea la Column Family relativa alla struttura. Può accettare come parametro la lista di tutte le chiavi presenti nella struttura iniziale, che possono essere altrimenti aggiunte progressivamente.
+			\item[deleteKeyspace(keyspaceName: String)] Elimina il Keyspace di nome $ keyspaceName $.
+			\item[deleteTable()] Elimina la Column Family relativa alla struttura.
+			\item[storeADS(ads: List<Block>)] Carica tutta la struttura passata per parametro. Funzione di utilità introdotta in base ad una specifica di utilizzo nell'ambito del protocollo, dove viene inizialmente creata una struttura iniziale, che dovrà dunque poter essere caricata in persistenza.
+			\item[selectPathForKey(k: String, filter: Filter): List<Block>] Restituisce la sequenza di blocchi costituenti il $ path $ dallo \textit{Start Node} al nodo contenente la chiave $ k $.
+			\item[selectHead(): Block] Restituisce i campi \textit{First Hash} e \textit{Second Hash} dello Start Node.
+			\item[selectForAdd(k: String, filter: Filter): List<Block>] Restituisce la sequenza di blocchi necessaria a poter eseguire un'inserimento o una modifica sulla struttura. Tiene conto dunque sia dell'eventualità di aggiunta di nuovi nodi, sia della modifica di nodi già presenti.
+			\item[selectForDel(k: String, filter: Filter): List<Block>] Restituisce la sequenza di blocchi necessaria a poter eseguire una cancellazione sulla struttura. Tiene conto dunque sia dei nodi che saranno rimossi, sia di quelli che subiranno una modifica a seguito della rimozione di una torre.
+			\item[selectForProof(k: String, filter: Filter): List<Block>] Restituisce la sequenza di blocchi necessaria per poter costruire la Proof relativa alla chiave $ k $. Questa funzione potrebbe essere utilizzata sia singolarmente per ottenere una Proof valida per una sola chiave, sia nell'ambito di una richiesta di una Proof cumulativa. In questo caso sarebbe necessario chiamare questa funzione tante volte quante sono le chiavi. E' possibile operare una ottimizzazione che restituisca la sequenza di blocchi necessari per poter ricostruire la Proof cumulativa per un insieme di chiavi. In tal caso la firma cambierebbe in: \verb!selectForProof(keys: Set<String>)!. 
+			\item[alterTableByAdd(structure: List<Block>)] Effettua la sovrascrittura su database dei blocchi modificati e la scrittura di blocchi eventualmente aggiunti. Le informazioni relative all'aggiunta devono essere opportunamente codificate all'interno di una stringa di caratteri, sotto forma di lista di blocchi, che sarà interpretata poi lato server.
+			\item[alterTableByDel(structure: List<Block>)] Effettua la sovrascrittura su database dei blocchi modificati e la cancellazione di quelli rimossi. Le informazioni relative all'aggiunta devono essere opportunamente codificate all'interno di una stringa di caratteri, sotto forma di lista di blocchi, che sarà interpretata poi lato server.
+			\item[containsKey(k: String): Boolean]. Restituisce true se la chiave è presente in struttura, false altrimenti.
+		\end{description}
 		
 	
 	\subsection{ADSService}
@@ -397,17 +397,17 @@
 		Come già deducibile da precedenti discussioni, l'\textit{ADSService} è un centro-stella per le altre parti progettuali. Essa, in base alle operazioni invocate sulla Skip List Autenticata, si occupa della cooperazione tra Translator e Connector per fornire le informazioni necessarie all'esecuzione delle operazioni stesse, da un lato, e per tenere aggiornata la struttura in persistenza, dall'altro.
 		
 		Le principali operazioni fornite sono:
-			\begin{itemize}
-			\item \verb!storeADS(ads: AuthSkipList<ByteArray, String, Any>)!. Funzione che permette il caricamento su database dell'intera struttura passata per parametro. La conversione di formato è delegata al Translator, e successivamente la sequenza ottenuta è passata al Connector che dovrà caricarla in persistenza.
-			\item \verb!retrievePath(k: String): AuthSkipList<ByteArray, String, Any>!. Funzione che permette l'ottenimento della struttura necessaria a costituire un $ path $. Utile dunque per permettere le operazioni di ricerca e verifica di contenimento di chiave.
-			\item \verb!retrieveForAdd(k: String): AuthSkipList<ByteArray, String, Any>!. Restituisce la struttura opportuna su cui potrà essere eseguita una modifica o una aggiunta sulla struttura.
-			\item \verb!retrieveForDel(k: String): AuthSkipList<ByteArray, String, Any>!. Restituisce la struttura opportuna su cui potrà essere eseguita una cancellazione sulla struttura.
-			\item \verb!getHead(): Node<String, ByteArray>!. Permette l'ottenimento dello Start Node. Utile dunque per tutte le operazioni della Skip List Autenticata che necessitano solo di quest'ultimo.
-			\item \verb!retrieveProof(keys: Set<String>): AuthSkipList<ByteArray, String, Any>!. Permette l'ottenimento della struttura da cui sarà possibile ricavare la Proof cumulativa per un insieme di chiavi $ keys $ passato per parametro.
-			\item \verb!executeAdd(structure: AuthSkipList<ByteArray, String, Any>)!. Permette l'aggiornamento del database a seguito di una operazione di aggiunta/modifica effettuata sulla struttura.
-			\item \verb!executeDel(structure: AuthSkipList<ByteArray, String, Any>)!. Permette l'aggiornamento del database a seguito di una operazione di cancellazione effettuata sulla struttura.		
-			\item \verb!containsKey(k: String): Boolean!. Permette di verificare la presenza di una chiave nella struttura.
-		\end{itemize}
+		\begin{description}
+			\item[storeADS(ads: AuthSkipList<ByteArray, String, Any>)] Funzione che permette il caricamento su database dell'intera struttura passata per parametro. La conversione di formato è delegata al Translator, e successivamente la sequenza ottenuta è passata al Connector che dovrà caricarla in persistenza.
+			\item[retrievePath(k: String): AuthSkipList<ByteArray, String, Any>] Funzione che permette l'ottenimento della struttura necessaria a costituire un $ path $. Utile dunque per permettere le operazioni di ricerca e verifica di contenimento di chiave.
+			\item[retrieveForAdd(k: String): AuthSkipList<ByteArray, String, Any>] Restituisce la struttura opportuna su cui potrà essere eseguita una modifica o una aggiunta sulla struttura.
+			\item[retrieveForDel(k: String): AuthSkipList<ByteArray, String, Any>] Restituisce la struttura opportuna su cui potrà essere eseguita una cancellazione sulla struttura.
+			\item[getHead(): Node<String, ByteArray>] Permette l'ottenimento dello Start Node. Utile dunque per tutte le operazioni della Skip List Autenticata che necessitano solo di quest'ultimo.
+			\item[retrieveProof(keys: Set<String>): AuthSkipList<ByteArray, String, Any>] Permette l'ottenimento della struttura da cui sarà possibile ricavare la Proof cumulativa per un insieme di chiavi $ keys $ passato per parametro.
+			\item[executeAdd(structure: AuthSkipList<ByteArray, String, Any>)] Permette l'aggiornamento del database a seguito di una operazione di aggiunta/modifica effettuata sulla struttura.
+			\item[executeDel(structure: AuthSkipList<ByteArray, String, Any>)] Permette l'aggiornamento del database a seguito di una operazione di cancellazione effettuata sulla struttura.		
+			\item[containsKey(k: String): Boolean] Permette di verificare la presenza di una chiave nella struttura.
+		\end{description}
 		
 	\subsection{Comportamento asincrono}
 	
