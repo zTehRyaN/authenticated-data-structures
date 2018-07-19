@@ -6,8 +6,6 @@
 %	progetto. Queste dovranno essere motivate e lo scopo di questa porzione di testo è di definire le varie parti e la loro 
 %	collaborazione GLOBALE (API + persistenza). Il livello di dettaglio non sarà massimo in quanto nelle successive sezioni 
 %	si entrerà nello specifico.
-%
-%	{Diagrammi} Class diagrams UML o analoghi più efficaci per il comportamento dinamico
 
 	A seguito della fase di analisi appena condotta, si passa all'ambito più strettamente progettuale. Scopo di questa sezione introduttiva è quello di riallacciarsi ai requisiti già esposti in fase di analisi, aggiungendo obiettivi specifici di progettazione. Per quanto riguarda l'API, si è già parlato dei requisiti funzionali, cosi come si è sottolineata la necessità di utilizzo in \textit{concorrenza}. \\
 	Si pone ora l'accento invece su alcuni obiettivi progettuali di cui si è tenuto conto:
@@ -203,12 +201,11 @@
 		La soluzione poi effettivamente adottata, consiste nell'utilizzo di \textit{Hash Map} di supporto, una per ogni livello della Skip List Autenticata, tutte di lunghezza pari alla dimensione della \textit{base list} della struttura e tutte contenenti \textit{entries} con tutte le chiavi della struttura. Iterando orizzontalmente su ogni livello, le Hash Map corrispondenti saranno riempite. A seconda del nodo scansionato, verrà aggiunto un riferimento a quest'ultimo nella \textit{entry} corrispondente nella Hash Map. Se per una determinata chiave non sarà presente il nodo corrispondente a quel determinato livello, verrà mantenuto il valore di quella \textit{entry} a null. Così facendo sarà possibile avere tutti i riferimenti ad ogni nodo, e allo stesso tempo conoscerne l'esatta collocazione reciproca. Sarà possibile poi clonare ogni singolo nodo, e sostituire il riferimento contenuto nei vari valori delle Hash Map con i vari cloni. A questo punto sarà necessario solo provvedere ai collegamenti, sia orizzontali che verticali. Per quanto riguarda i collegamenti verticali sarà sufficiente collegare tutti i nodi con stessa chiave su Hash Map corrispondenti a livelli adiacenti. Per quanto riguarda i collegamenti orizzontali sarà necessario collegare i nodi adiacenti all'interno di una stessa Hash Map, intervallati cioè da sole \textit{entries} con valori nulli.
 	\end{description}
 
-
-%	\begin{figure}
-%		\centering
-%		\includegraphics[scale=0.6]{figure/deltas.eps}
-%		\caption{Schema che mostra il funzionamento dei \textit{delta}. Tramite primitive di tipo \verb!add(k: K, v: V)! e/o \verb!del(k: K)! si popola la pila della struttura con dei blocchi, ordinati cronologicamente. L'uso di \verb!applyDeltas()! applica in ordine questi \textit{delta} e restituisce un'altra struttura, con stato di partenza equivalente al primo \textit{snapshot}, ma con tutti i $\Delta_{n}$ applicati. La pila viene svuotata, ed è dunque poi pronta ad accogliere nuovi \textit{delta}.}\label{fig:delta}
-%	\end{figure}
+	\begin{figure}
+		\centering
+		\includegraphics[scale=0.6]{figure/deltas.eps}
+		\caption{Schema che mostra il funzionamento dei delta. Tramite primitive di aggiunta e cancellazione è popolata la pula della struttura con dei blocchi, ordinati cronologicamente. L'uso successivo di \textit{applyDeltas()} applica in ordine questi delta e restituisce un'altra struttura, con stato di partenza equivalente al primo \textit{snapshot}, ma con tutti i $ \Delta_{n} $ applicati. La pila viene quindi svuotata, ed è dunque poi pronta ad accogliere nuovi delta.}\label{fig:deltas}
+	\end{figure}
 
 	\begin{figure}
 		\centering
